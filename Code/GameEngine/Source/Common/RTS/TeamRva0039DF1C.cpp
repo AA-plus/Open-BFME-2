@@ -1,5 +1,5 @@
 // cl: /DNDEBUG /MD
-// ?rva0039DF1C@Team@@QAE_NURva0039DF1CFilter@@0@Z 0x0039DF1C 107 Team member kind filter
+// ?rva0039DF1C@Team@@QAE_NVBfmeFixedStorage0004543D@@0@Z 0x0039DF1C 107 Team member kind filter
 // Retail walks via rowed iterate 0x263864 and advance 0x263526, skips dead
 // Object+0x438 bit0 and status Object+0x94 bit0, template +0x108 sign and
 // 0x2000000 plus +0x11A bit 0x10, then rowed isKindOfMulti 0x0030AD7D on the
@@ -19,10 +19,14 @@ public:
 	OBJCLASS *cur() const { return m_cur; }
 };
 
-struct Rva0039DF1CFilter
+// The by-value kind filter is the 28-byte storage the ledger names after
+// its copy constructor 0x0004543D, which every caller copies it through.
+class BfmeFixedStorage0004543D
 {
+public:
 	unsigned int w[7];
 };
+typedef BfmeFixedStorage0004543D Rva0039DF1CFilter;
 
 template<int N>
 class BitFlags

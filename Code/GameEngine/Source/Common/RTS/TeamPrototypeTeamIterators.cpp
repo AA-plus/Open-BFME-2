@@ -54,17 +54,17 @@ private:
 };
 typedef BitFlags<116> KindOfMaskType;
 
-struct Rva0039DDC2Filter
+// The by-value kind filters are the 28-byte storage the ledger names after
+// its copy constructor 0x0004543D (FixedStorageCopyBFME2.cpp), the callee
+// retail copies each argument through.
+class BfmeFixedStorage0004543D
 {
-	Rva0039DDC2Filter(const Rva0039DDC2Filter &other);
+public:
+	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other);
 	unsigned int w[7];
 };
-
-struct Rva0039DF1CFilter
-{
-	Rva0039DF1CFilter(const Rva0039DF1CFilter &other);
-	unsigned int w[7];
-};
+typedef BfmeFixedStorage0004543D Rva0039DDC2Filter;
+typedef BfmeFixedStorage0004543D Rva0039DF1CFilter;
 
 class Object;
 class BfmeTab1026;

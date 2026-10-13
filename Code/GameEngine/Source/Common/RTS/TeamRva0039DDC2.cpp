@@ -1,6 +1,6 @@
 // cl: /DNDEBUG /MD
 //
-// ?rva0039DDC2@Team@@QAE_NURva0039DDC2Filter@@_N@Z @0x0039DDC2 (132B).
+// ?rva0039DDC2@Team@@QAE_NVBfmeFixedStorage0004543D@@_N@Z @0x0039DDC2 (132B).
 // Team member scan returning true when a live member passes the 0x10E gate
 // plus the flag-gated 0x108/b3/b4 block then rowed Thing::isKindOfMulti on
 // the modified first filter plus default storage. Retail reads dead bit at
@@ -29,10 +29,14 @@ public:
 	OBJCLASS *cur() const { return m_cur; }
 };
 
-struct Rva0039DDC2Filter
+// The by-value kind filter is the 28-byte storage the ledger names after
+// its copy constructor 0x0004543D, which every caller copies it through.
+class BfmeFixedStorage0004543D
 {
+public:
 	unsigned int w[7];
 };
+typedef BfmeFixedStorage0004543D Rva0039DDC2Filter;
 
 template<int N>
 class BitFlags
@@ -55,7 +59,6 @@ public:
 	bool isKindOfMulti(const BitFlags<116> &mustBeSet, const BitFlags<116> &mustBeClear) const;
 };
 
-class BfmeFixedStorage0004543D;
 extern const BfmeFixedStorage0004543D g_defaultStorage009FEFA4;
 
 class Object

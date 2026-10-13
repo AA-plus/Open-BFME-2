@@ -47393,7 +47393,7 @@ _VP6_readTSC,,0x001B8E70,29,Code/Libraries/Source/VP6/CopyHelpers.cpp,matched,Cl
 ?rva005D2664@Rva005D2664@@QAEXH@Z,,0x005D2664,55,Code/GameEngine/Source/Common/Rva005D2664Method.cpp,matched,indexed clear with guarded Hide tail via 0x005C3E79
 ?rva005D269B@Rva005D2664@@QAEXXZ,,0x005D269B,23,Code/GameEngine/Source/Common/Rva005D2664Method.cpp,matched,loop 6x over sibling 0x005D2664
 ?rva0045D859@WeaponTemplateSetHead@@QAEPAV1@PAV1@@Z,,0x0045D859,46,Code/GameEngine/Source/Common/WeaponTemplateSetHeadRva0045D859.cpp,matched,copy this to temp via rowed copy ctor NOT 19 dwords placement-copy to out return out caller 0x45E2EE sibling intersect
-?rva0039DF1C@Team@@QAE_NURva0039DF1CFilter@@0@Z,,0x0039DF1C,107,Code/GameEngine/Source/Common/RTS/TeamRva0039DF1C.cpp,matched,Team kind filter via rowed iterate advance and multi
+?rva0039DF1C@Team@@QAE_NVBfmeFixedStorage0004543D@@0@Z,,0x0039DF1C,107,Code/GameEngine/Source/Common/RTS/TeamRva0039DF1C.cpp,matched,Team kind filter via rowed iterate advance and multi
 ?rva0039DF87@Team@@QAE_NPAVBfmeTab1026@@@Z,,0x0039DF87,113,Code/GameEngine/Source/Common/RTS/TeamGetControllingPlayer.cpp,matched,Team member scan via rowed iterate 0x263864 and DLINK pin plus bfmeHas1026 pin with same-TU ecx reuse
 ?rva0039DFF8@Team@@QAE_NXZ,,0x0039DFF8,74,Code/GameEngine/Source/Common/RTS/TeamRva0039DFF8.cpp,matched,Team AI ready scan via rowed iterate and DLINK pin with slot 0x1b8 virtual
 ?rva00058C6F@Rva000427195@@QAEPAU?$pair@$$CBVAsciiString@@UTreeHintPayload0005808E@@@_STL@@PBU23@@Z,,0x00058C6F,68,Code/Libraries/Source/WWVegas/WWLib/Rva00058C6FInsert.cpp,matched,hashtable insert via reserve bucketIndex and pinned New twin same table Rva000427195
@@ -47403,7 +47403,7 @@ _VP6_readTSC,,0x001B8E70,29,Code/Libraries/Source/VP6/CopyHelpers.cpp,matched,Cl
 ?rva005EA183@Rva005EA183@@QAEXXZ,,0x005EA183,46,Code/Libraries/Source/WWVegas/WWMath/Rva005EA183Method.cpp,matched,new AABTreeLink Set tail slot1 caller 0x005EA5BD
 ?rva005EA5BD@Rva005EA183@@QAEXXZ,,0x005EA5BD,17,Code/Libraries/Source/WWVegas/WWMath/Rva005EA183Method.cpp,matched,chain calls 0x005EA183 tail slot2
 ?rva0039DD4B@Team@@QAE_N_N@Z,,0x0039DD4B,119,Code/GameEngine/Source/Common/RTS/TeamRva0039DD4B.cpp,matched,Team flag-gated 0x10E and 0x108 scan via rowed iterate and DLINK pin
-?rva0039DDC2@Team@@QAE_NURva0039DDC2Filter@@_N@Z,,0x0039DDC2,132,Code/GameEngine/Source/Common/RTS/TeamRva0039DDC2.cpp,matched,Team flag-gated kind scan via rowed iterate plus rowed isKindOfMulti and default storage
+?rva0039DDC2@Team@@QAE_NVBfmeFixedStorage0004543D@@_N@Z,,0x0039DDC2,132,Code/GameEngine/Source/Common/RTS/TeamRva0039DDC2.cpp,matched,Team flag-gated kind scan via rowed iterate plus rowed isKindOfMulti and default storage
 ?onEnter@Rva005447ED@@UAE?AW4StateReturnType@@XZ,,0x00544133,124,Code/GameEngine/Source/Common/Rva005447EDOnEnter.cpp,matched,vslot slot4 onEnter TurretStateMachine goal BEC tri-call plus ignoreObstacle then base onEnter
 ??1Rva0059E3FA@@UAE@XZ,,0x0059E3FA,60,Code/GameEngine/Source/Common/Rva0059E3FADtor.cpp,matched,virtual dtor vector plus string via releaseBuffer
 ??1Rva0059E4D5@@UAE@XZ,,0x0059E4D5,60,Code/GameEngine/Source/Common/Rva0059E3FADtor.cpp,matched,virtual dtor vector plus string sibling of 0x0059E3FA
@@ -57876,18 +57876,18 @@ _io_debug,,0x00333E42,25,Code/Libraries/Source/Lua/luaB_debug.cpp,matched,placed
 ?healAllObjects@TeamPrototype@@QAEXXZ,,0x0039ED6C,48,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,ZH TeamPrototype::healAllObjects over DLINK team list
 ?rva0039ED9C@TeamPrototype@@QAEHP6AHPAVObject@@PAX@Z1@Z,,0x0039ED9C,69,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype iterate teams stop on Team 0x0039DD12 zero
 ?rva0039EDE1@TeamPrototype@@QAE_N_N@Z,,0x0039EDE1,64,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DD4B
-?rva0039EE21@TeamPrototype@@QAE_NURva0039DDC2Filter@@_N@Z,,0x0039EE21,79,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DDC2 filter by value
+?rva0039EE21@TeamPrototype@@QAE_NVBfmeFixedStorage0004543D@@_N@Z,,0x0039EE21,79,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DDC2 filter by value
 ?rva0039EE70@TeamPrototype@@QAE_NPAVBfmeTab1026@@_N@Z,,0x0039EE70,68,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DE46
 ?rva0039EEB4@TeamPrototype@@QAE_NXZ,,0x0039EEB4,58,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DEC4
-?rva0039EEEE@TeamPrototype@@QAE_NURva0039DF1CFilter@@0@Z,,0x0039EEEE,88,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DF1C two filters by value
+?rva0039EEEE@TeamPrototype@@QAE_NVBfmeFixedStorage0004543D@@0@Z,,0x0039EEEE,88,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DF1C two filters by value
 ?rva0039EF46@TeamPrototype@@QAE_NPAVBfmeTab1026@@@Z,,0x0039EF46,64,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039DF87
 ?hasAnyObjects@TeamPrototype@@QAE_N_N@Z,,0x0039EF86,64,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team::hasAnyObjects
 ?rva0039EFC6@TeamPrototype@@QAE_NXZ,,0x0039EFC6,58,Code/GameEngine/Source/Common/RTS/TeamPrototypeTeamIterators.cpp,matched,TeamPrototype any team Team 0x0039E815
 ?rva002AB260@Player@@QBE_N_N@Z,,0x002AB260,53,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EDE1
-?rva002AB295@Player@@QBE_NURva0039DDC2Filter@@_N@Z,,0x002AB295,68,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EE21
+?rva002AB295@Player@@QBE_NVBfmeFixedStorage0004543D@@_N@Z,,0x002AB295,68,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EE21
 ?rva002AB2D9@Player@@QBE_NPAVBfmeTab1026@@_N@Z,,0x002AB2D9,57,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EE70
 ?rva002AB312@Player@@QBE_NXZ,,0x002AB312,47,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EEB4
-?rva002AB341@Player@@QBE_NURva0039DF1CFilter@@0@Z,,0x002AB341,79,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EEEE
+?rva002AB341@Player@@QBE_NVBfmeFixedStorage0004543D@@0@Z,,0x002AB341,79,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EEEE
 ?rva002AB390@Player@@QBE_NPAVBfmeTab1026@@@Z,,0x002AB390,53,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EF46
 ?hasAnyObjects@Player@@QBE_N_N@Z,,0x002AB3C5,53,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any TeamPrototype::hasAnyObjects
 ?rva002AB3FA@Player@@QBE_NXZ,,0x002AB3FA,47,Code/GameEngine/Source/Common/RTS/PlayerTeamPrototypeQueries.cpp,matched,Player team prototype list any 0x0039EFC6

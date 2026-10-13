@@ -9,17 +9,17 @@
 typedef bool Bool;
 typedef int Int;
 
-struct Rva0039DDC2Filter
+// The by-value kind filters are the 28-byte storage the ledger names after
+// its copy constructor 0x0004543D (FixedStorageCopyBFME2.cpp), the callee
+// retail copies each argument through.
+class BfmeFixedStorage0004543D
 {
-	Rva0039DDC2Filter(const Rva0039DDC2Filter &other);
+public:
+	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other);
 	unsigned int w[7];
 };
-
-struct Rva0039DF1CFilter
-{
-	Rva0039DF1CFilter(const Rva0039DF1CFilter &other);
-	unsigned int w[7];
-};
+typedef BfmeFixedStorage0004543D Rva0039DDC2Filter;
+typedef BfmeFixedStorage0004543D Rva0039DF1CFilter;
 
 class BfmeTab1026;
 class ThingTemplate;
@@ -49,10 +49,11 @@ private:
 };
 
 // The 0x4C-byte search record of the rowed callback Rva002AA3D4Closest
-// (PlayerRva002AA3D4Closest.cpp); its constructor 0x002A991D is pinned.
-struct Rva002AA3D4Search
+// (PlayerRva002AA3D4Closest.cpp), named after its rowed constructor
+// 0x002A991D (Rva002A991DCtor.cpp).
+struct Rva002A991D
 {
-	Rva002AA3D4Search();
+	Rva002A991D();
 	KindOfMaskType m_mustBeSet;	// +0x00
 	KindOfMaskType m_mustBeClear;	// +0x1C
 	Coord3D m_pos;			// +0x38
@@ -261,7 +262,7 @@ Object *Player::findClosestByKindOf(Object *queryObject, KindOfMaskType setMask,
 {
 	if (queryObject == 0)
 		return 0;
-	Rva002AA3D4Search data;
+	Rva002A991D data;
 	data.m_mustBeSet = setMask;
 	data.m_mustBeClear = clearMask;
 	data.m_pos = *queryObject->getPosition();
@@ -271,7 +272,7 @@ Object *Player::findClosestByKindOf(Object *queryObject, KindOfMaskType setMask,
 
 Object *Player::findClosestToPosByKindOf(const Coord3D *pos, KindOfMaskType setMask, KindOfMaskType clearMask)
 {
-	Rva002AA3D4Search data;
+	Rva002A991D data;
 	data.m_mustBeSet = setMask;
 	data.m_mustBeClear = clearMask;
 	data.m_pos = *pos;
