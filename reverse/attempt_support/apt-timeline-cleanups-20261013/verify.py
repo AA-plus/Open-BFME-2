@@ -59,4 +59,11 @@ for rva, (size, parent) in CLEANUPS.items():
                         'native_target_rva': hex(address)})
     cleanups.append({'rva': hex(rva), 'size': size, 'label': label,
                      'full_bytes': result['bytes'].hex(), 'relocations': targets})
-print(json.dumps({'parents': parents, 'cleanups': cleanups}, indent=2))
+fold_name = '??0?$_Vector_base@URva00520211Element@@V?$allocator@URva00520211Element@@@_STL@@@_STL@@QAE@ABV?$allocator@URva00520211Element@@@1@@Z'
+fold = build.compile_function({'name': fold_name, 'target_rva': '0x00211E58',
+                               'target_size': '29', 'source': source, 'notes': ''},
+                              symbols, obj_path)
+assert not fold['masked'] and not fold['unresolved']
+assert fold['bytes'] == fold['target']
+print(json.dumps({'parents': parents, 'cleanups': cleanups,
+                  'whole_vector_base_fold': fold['bytes'].hex()}, indent=2))

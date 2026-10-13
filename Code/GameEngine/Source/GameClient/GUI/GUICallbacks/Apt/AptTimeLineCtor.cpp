@@ -88,10 +88,17 @@ struct Rva0051C0E7
 	unsigned char m_pad[0x30];
 };
 
+// Native destroy/fill helpers advance by 0x50; field identities stay opaque.
 struct Rva00520211Element
 {
+    unsigned char m_data[0x50];
 	~Rva00520211Element();
 };
+
+// Use the already owned whole destructor at 0x0052012B.
+namespace _STL {
+template<> vector<Rva00520211Element>::~vector();
+}
 
 struct RvaVector
 {
