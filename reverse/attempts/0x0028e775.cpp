@@ -1,4 +1,6 @@
 // ?ShroudHideIfFogged@Object@@UBE_NH@Z
+// partial score=0.85 date=2026-10-13
+// ?ShroudHideIfFogged@Object@@UBE_NH@Z
 // partial score=0.85 date=2026-10-06
 // cl: /O1 /DNDEBUG /MD
 // ?PartitionGetPlayerIndex@Object@@UBEHXZ, retail 0x0028E7F8 (82 bytes), and
