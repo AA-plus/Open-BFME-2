@@ -1,5 +1,5 @@
 // ?rva0026A05D@AIUpdateInterface@@QAE?AW4UpdateSleepTime@@XZ
-// partial score=0.85 date=2026-10-13
+// partial score=0.93 date=2026-10-13
 // ?rva0026A05D@AIUpdateInterface@@QAE?AW4UpdateSleepTime@@XZ
 // partial score=0.85 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include/Lib
@@ -256,10 +256,9 @@ UpdateSleepTime AIUpdateInterface::rva0026A05D()
 	((Rva00264069ObserverPrefix *)this)->refresh();
 	if (obj->m_25C && obj->m_25C->m_5C) {
 		if (obj->isEffectivelyDead()) {
-			if (getStateMachine()->getCurrentStateID() != 13 &&
-				!((BfmeSub932C *)getStateMachine())->bfmeQuery932C()) {
-				getStateMachine()->setState(13);
-			}
+			if (getStateMachine()->getCurrentStateID() == 13 || ((BfmeSub932C *)getStateMachine())->bfmeQuery932C())
+				return UPDATE_SLEEP_NONE;
+			getStateMachine()->setState(13);
 		} else {
 			if (getStateMachine()->getCurrentStateID() != 0) {
 				destroyPath();
