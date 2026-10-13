@@ -1,21 +1,15 @@
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
 // partial score=0.99467 date=2026-10-13
-// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// partial score=0.9543393929 date=2026-10-13
-// W7-SOL6 full WB4200B reread, proper AI owner source trial. Typed CountMap initialization removes Init link-only debt.
-// Visible92B building helper changes caller to1700B/frame1DC (worse); retained declaration-only receiver.
-// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
-// partial score=0.9543393929026057 date=2026-10-12
-// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHs /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfme2_ascii /Ireference/shims/bfmealloc
 // stlport
-// Native50366B..503D15:1706B and frame1D8 exact; 60 differing bytes,
-// all stack-slot operands. Every opcode/register/branch/call/EH state aligns.
-// Exposing the ordinary PlayerInfoMap/ArmyInfoMap/IntIntMap insert bodies
-// permits native-size allocation without the old placement experiments.
-// Both discarded insert results are now ordinary C++ expressions.
-// This is a bank, not a verified recovery. ArmyUnitTree now uses existing rowed CountMap ctor/dtor
-// rather than the unresolved Init view; same1706B/frame1D8/60 stack differences.
+// Native RVA50366B..503D15: whole1706B, frame1D8, all466 instructions align.
+// Partial: seven .text displacement bytes differ, plus two unwind-funclet bytes.
+// The named and converted 92-byte region pairs have their homes exchanged:
+// named ours -188 / retail -1E4; converted ours -1E4 / retail -188.
+// The block around buildings through both inserts fixes all other stack homes.
+// Evidence and rejected hypotheses: reverse/attempt_evidence/crack-a-20261013/50366b/.
+// Existing typed CountMap ctor/dtor providers remove the former Init-view debt.
+// This bank is not a matched row or a link/runtime claim.
 //
 // Identity: the WorldBuilder twin 0x012FDB20 is
 // LWAIWorldInformation::GatherWorldInformation in
