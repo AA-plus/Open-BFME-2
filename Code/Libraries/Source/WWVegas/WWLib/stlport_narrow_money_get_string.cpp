@@ -88,6 +88,9 @@ template <> __forceinline void allocator<unsigned short>::deallocate(unsigned sh
 
 #include <locale>
 #include <cstddef>
+// bfme link decl-only begin
+namespace _STL { template <> bool __get_monetary_value<istreambuf_iterator<char, char_traits<char> >, back_insert_iterator<basic_string<char, char_traits<char>, allocator<char> > >, char>(istreambuf_iterator<char, char_traits<char> > &, istreambuf_iterator<char, char_traits<char> >, back_insert_iterator<basic_string<char, char_traits<char>, allocator<char> > >, ctype<char> const &, char, int, char, basic_string<char, char_traits<char>, allocator<char> > const &, bool &); }
+// bfme link decl-only end
 // Suppress this TU's non-retail proxy<char> allocate copy (family2-LK3 row 30):
 // the kept copy serves the link. Plain declaration-only form (no __imp_).
 namespace _STL {

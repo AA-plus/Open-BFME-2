@@ -65,6 +65,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "Common/Team.h"
 #include "Lib/Trig.h"
 #include "GameLogic/TerrainLogic.h"
+// bfme link decl-only begin
+namespace _STL { template <> void _Base_bitset<4>::_M_do_and(_Base_bitset<4> const &); }
+// bfme link decl-only end
 
 class BFMERetailThingVTable
 {

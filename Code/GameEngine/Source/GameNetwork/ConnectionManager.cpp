@@ -95,6 +95,9 @@ static inline bool operator==(const _Rb_tree_iterator<T, LeftTraits>& a,
 #include "GameLogic/VictoryConditions.h"
 #include "GameClient/DisconnectMenu.h"
 #include "GameClient/InGameUI.h"
+// bfme link decl-only begin
+namespace _STL { template <> pair<_Rb_tree_iterator<pair<unsigned short const, unsigned char>, _Nonconst_traits<pair<unsigned short const, unsigned char> > >, bool> _Rb_tree<unsigned short, pair<unsigned short const, unsigned char>, _Select1st<pair<unsigned short const, unsigned char> >, less<unsigned short>, allocator<pair<unsigned short const, unsigned char> > >::insert_unique(pair<unsigned short const, unsigned char> const &); }
+// bfme link decl-only end
 
 class Rva004D272EMapHintInsert
 {

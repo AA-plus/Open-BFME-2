@@ -149,6 +149,9 @@ class CameraClass;
 #include "dx8rendererdebugger.h"
 #include <stdio.h>
 #include "wwprofile.h"
+// bfme link decl-only begin
+template <> VectorClass<Vector3>::VectorClass(int, Vector3 const *);
+// bfme link decl-only end
 
 
 bool MeshClass::Legacy_Meshes_Fogged = true;

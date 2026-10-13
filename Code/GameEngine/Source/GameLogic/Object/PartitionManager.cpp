@@ -99,6 +99,13 @@ template unsigned char *allocator<unsigned char>::allocate(unsigned int, const v
 
 #ifdef PM_CACHE_TERRAIN_HEIGHT
 #include "common/mapobject.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Bit_reference vector<bool, allocator<bool> >::operator[](unsigned int); }
+namespace _STL { template <> _Bit_iter<_Bit_reference, _Bit_reference *> & _Bit_iter<_Bit_reference, _Bit_reference *>::operator++(); }
+namespace _STL { template <> bool bitset<45>::_Unchecked_test(unsigned int) const; }
+namespace _STL { template <> unsigned int * allocator<unsigned int>::allocate(unsigned int, void const *) const; }
+namespace _STL { template <> void vector<bool, allocator<bool> >::resize(unsigned int, bool); }
+// bfme link decl-only end
 
 // BFME 2's Object keeps its behavior list at +0x244 (the matched
 // Object::findModule 0x0028B6D6 walks it there), its contain module at +0x250

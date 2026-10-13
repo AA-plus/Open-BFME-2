@@ -5,6 +5,9 @@
 // address as the signed-int tree but retail uses jb not jl.
 
 #include <map>
+// bfme link decl-only begin
+namespace _STL { template <> pair<_Rb_tree_iterator<pair<unsigned int const, void *>, _Nonconst_traits<pair<unsigned int const, void *> > >, bool> _Rb_tree<unsigned int, pair<unsigned int const, void *>, _Select1st<pair<unsigned int const, void *> >, less<unsigned int>, allocator<pair<unsigned int const, void *> > >::insert_unique(pair<unsigned int const, void *> const &); }
+// bfme link decl-only end
 
 // __malloc_alloc<0> allocate/deallocate otherwise instantiate per-TU
 // COMDATs (one byte shape per TU malloc/free wiring); explicit

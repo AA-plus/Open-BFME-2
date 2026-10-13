@@ -29,6 +29,10 @@
 #include <stl/_fstream.h>
 #include <stdio_streambuf>
 #include "aligned_buffer.h"
+// bfme link decl-only begin
+namespace _STL { template <> _Node_Alloc_Lock<1, 0>::~_Node_Alloc_Lock(); }
+namespace _STL { template <> void * __node_alloc<1, 0>::_S_refill(unsigned int); }
+// bfme link decl-only end
 
 // Retail's generic-widening init is owned by stlport_basic_ios_init.cpp.
 // Leave this specialization declared so this unit does not emit a different copy.

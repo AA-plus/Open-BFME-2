@@ -28,6 +28,11 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "PreRTS.h"
 
 #include <vector>
+// bfme link decl-only begin
+namespace _STL { template <> _Bit_reference vector<bool, allocator<bool> >::operator[](unsigned int); }
+namespace _STL { template <> _Bit_iter<_Bit_reference, _Bit_reference *> & _Bit_iter<_Bit_reference, _Bit_reference *>::operator++(); }
+namespace _STL { template <> void vector<bool, allocator<bool> >::resize(unsigned int, bool); }
+// bfme link decl-only end
 
 // RVA6D52A has a verified external provider; do not offer a wrong incidental copy.
 namespace _STL { template<> void vector<bool>::clear(); }

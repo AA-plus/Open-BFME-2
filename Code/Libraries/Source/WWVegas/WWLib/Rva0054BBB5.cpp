@@ -46,6 +46,9 @@ public:
 
 
 #include <algorithm>
+// bfme link decl-only begin
+namespace _STL { template <> void deque<BfmeE8, allocator<BfmeE8> >::_M_push_back_aux_v(BfmeE8 const &); }
+// bfme link decl-only end
 struct Foo00549DCB;
 struct BfmeCopyRecord8 {
  Foo00549DCB *a; float b;
