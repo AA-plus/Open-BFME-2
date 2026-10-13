@@ -1,4 +1,6 @@
 // ?rva003C4751@ScriptActions@@IAEXPAVParameter@@@Z
+// partial score=0.995 date=2026-10-13
+// ?rva003C4751@ScriptActions@@IAEXPAVParameter@@@Z
 // partial score=0.982 date=2026-10-11
 // ?rva003C4751@ScriptActions@@IAEXPAVParameter@@@Z
 // partial score=0.97 date=2026-10-10
@@ -968,6 +970,7 @@ void ScriptActions::rva003C4751(Parameter *teamParam)
 	Player *player = giver->getControllingPlayer();
 	if (!player)
 		return;
+	{
 	Object *best = 0;
 	float bestDist = 3.4028235e+38f;
 	Coord3D giverPos = *giver->getPosition();
@@ -1010,4 +1013,5 @@ void ScriptActions::rva003C4751(Parameter *teamParam)
 	}
 	if (best)
 		giver->rva0028E01F(power, best, 0x40000, 0);
+	}
 }
