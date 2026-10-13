@@ -82,41 +82,6 @@ struct CornerOffset006e
 };
 
 // ?Add_Line@Render2DClass@@QAEXABVVector2@@0MK@Z
-void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, BfmeUInt32 color)
-{
-	CornerOffset006e corner_offset;
-	corner_offset.X = a.Y - b.Y;
-	corner_offset.Y = b.X - a.X;
-	float len2 = corner_offset.X * corner_offset.X + corner_offset.Y * corner_offset.Y;
-	GeometryOutput006e output;
-	BfmeRenderVertex *vertices;
-	if (len2 == 0.0f)
-		return;
-
-	float oolen = WWMath::Inv_Sqrt(len2) * width * 0.5f;
-	corner_offset.X *= oolen;
-	corner_offset.Y = corner_offset.Y * oolen;
-
-	vertices = allocateGeometry006e(4, 6, &output.indices, &output.base);
-
-	convertPosition006e(vertices[0], a.X - corner_offset.X, a.Y - corner_offset.Y);
-	convertPosition006e(vertices[1], a.X + corner_offset.X, a.Y + corner_offset.Y);
-	convertPosition006e(vertices[2], b.X - corner_offset.X, b.Y - corner_offset.Y);
-	convertPosition006e(vertices[3], b.X + corner_offset.X, b.Y + corner_offset.Y);
-
-	vertices[0].u = vertices[1].u = vertices[0].v = vertices[2].v = 0.0f;
-	vertices[3].v = 1.0f;
-	vertices[2].u = vertices[3].u = vertices[1].v = 1.0f;
-
-	vertices[0].color = vertices[1].color = vertices[2].color = vertices[3].color =
-		(*(BfmeColorConverter *)&g_Va00DB5FC8)(color);
-
-	output.indices[0] = output.base + 0x00010000;
-	output.indices[1] = output.base + 0x00020002;
-	output.indices[2] = output.base + 0x00030001;
-}
-
-// ?Add_Line@Render2DClass@@QAEXABVVector2@@0MKK@Z
 void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, BfmeUInt32 color, BfmeUInt32 color2)
 {
 	GeometryOutput006e output;
@@ -149,4 +114,36 @@ void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, Bf
 	output.indices[2] = output.base + 0x00030001;
 }
 
+void Render2DClass::Add_Line(const Vector2 &a, const Vector2 &b, float width, BfmeUInt32 color)
+{
+	GeometryOutput006e output;
+	BfmeRenderVertex *vertices;
+	Vector2 corner_offset(a.Y - b.Y, b.X - a.X);
+	float len2 = corner_offset.Length2();
+	if (len2 == 0.0f)
+		return;
 
+	float oolen = WWMath::Inv_Sqrt(len2) * width * 0.5f;
+	corner_offset.X *= oolen;
+	corner_offset.Y = corner_offset.Y * oolen;
+
+	vertices = allocateGeometry006e(4, 6, &output.indices, &output.base);
+
+	convertPosition006e(vertices[0], a.X - corner_offset.X, a.Y - corner_offset.Y);
+	convertPosition006e(vertices[1], a.X + corner_offset.X, a.Y + corner_offset.Y);
+	convertPosition006e(vertices[2], b.X - corner_offset.X, b.Y - corner_offset.Y);
+	convertPosition006e(vertices[3], b.X + corner_offset.X, b.Y + corner_offset.Y);
+
+	vertices[0].u = vertices[1].u = vertices[0].v = vertices[2].v = 0.0f;
+	vertices[3].v = 1.0f;
+	vertices[2].u = vertices[3].u = vertices[1].v = 1.0f;
+
+	vertices[0].color = vertices[1].color = vertices[2].color = vertices[3].color =
+		(*(BfmeColorConverter *)&g_Va00DB5FC8)(color);
+
+	output.indices[0] = output.base + 0x00010000;
+	output.indices[1] = output.base + 0x00020002;
+	output.indices[2] = output.base + 0x00030001;
+}
+
+// ?Add_Line@Render2DClass@@QAEXABVVector2@@0MKK@Z
