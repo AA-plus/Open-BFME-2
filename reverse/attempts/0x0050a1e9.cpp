@@ -1,4 +1,6 @@
 // ?rva0050A1E9@Made002CC8A4@@QAEXPAXPAVObject@@@Z
+// partial score=0.9695 date=2026-10-13
+// ?rva0050A1E9@Made002CC8A4@@QAEXPAXPAVObject@@@Z
 // partial score=0.95078 date=2026-10-09
 // ?rva0050A1E9@Made002CC8A4@@QAEXPAXPAVObject@@@Z
 // partial score=0.88 date=2026-10-04
@@ -253,7 +255,7 @@ checkBit:
 		void *vp = (void *)*(int *)((char *)shooter + 4);
 		if (*(unsigned char *)((char *)vp + 0x113) & 4)
 		{
-			float r2 = GetGameLogicRandomValueReal(0.0f, g_00C6499C, (char *)"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\MetaImpactNugget.cpp", 0x1A4);
+			volatile float r2 = GetGameLogicRandomValueReal(0.0f, g_00C6499C, (char *)"C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\Object\\Update\\MetaImpactNugget.cpp", 0x1A4);
 			if (r2 < m_150)
 				return;
 		}
