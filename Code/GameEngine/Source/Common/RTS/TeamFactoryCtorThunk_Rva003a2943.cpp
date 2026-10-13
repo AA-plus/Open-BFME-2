@@ -167,22 +167,13 @@ private:
 	int m_uniqueTeamID;
 };
 
-// ??0TeamFactory@@QAE@XZ present-unmatched
-TeamFactory::TeamFactory()
-	: m_uniqueTeamPrototypeID(0), m_uniqueTeamID(0)
-{
-}
+// ??0TeamFactory@@QAE@XZ is defined in TeamFactoryCtor.cpp (rowed 0x003A25B1).
 
 // BFME nulls its singleton in the destructor; the store lands between clear()
 // and the map teardown at 0x000F7500.
 extern TeamFactory *TheTeamFactory;
 
-// ??1TeamFactory@@UAE@XZ present-unmatched
-TeamFactory::~TeamFactory()
-{
-	clear();
-	TheTeamFactory = NULL;
-}
+// ??1TeamFactory@@UAE@XZ is defined in TeamFactoryDtor.cpp (rowed 0x003A383A).
 
 // clear is defined and verified in TeamFactoryClear.cpp.
 
