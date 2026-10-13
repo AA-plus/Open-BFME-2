@@ -1,4 +1,6 @@
 // ?onEnter@AIAttackMeleeHordeApproachTargetState@@UAE?AW4StateReturnType@@XZ
+// partial score=0.93 date=2026-10-13
+// ?onEnter@AIAttackMeleeHordeApproachTargetState@@UAE?AW4StateReturnType@@XZ
 // partial score=0.97 date=2026-10-09
 // cl: /ICode/GameEngine/Source/Common /O1 /G7 /arch:SSE /DNDEBUG /MD
 //
@@ -648,7 +650,7 @@ class Object : public Thing
 public:
 	AIUpdateInterface *getAI() { return m_ai; }
 	ObjectID getID() const { return m_id; }
-	ContainModuleInterface *getContain() const { return m_contain; }
+	ContainModuleInterface *&getContain() { return m_contain; }
 	void *getBfme410() const { return m_bfme410; }
 	Bool testBfmeFlag94() const { return (m_bfmeFlags94 & 1) != 0; }
 	void setBfmeAngle1C0(Real angle) { m_bfmeAngle1C0 = angle; }
@@ -1553,9 +1555,10 @@ StateReturnType AIAttackMeleeHordeApproachTargetState::onEnter()
 	{
 		if (!((TurretStateMachine *)getMachine())->rva004D7ADD())
 		{
+			ContainModuleInterface *&contain = source->getContain();
 			HordeContainInterface *horde;
-			if (!(source->getContain() && !rva00344EB2Gate(source, victim) &&
-					(horde = source->getContain()->getHordeContainInterface()) != 0 &&
+			if (!(contain && !rva00344EB2Gate(source, victim) &&
+					(horde = contain->getHordeContainInterface()) != 0 &&
 					horde->isMeleeTargetReady(victim)))
 			{
 				if (!source->testStatus(OBJECT_STATUS_BFME_44) && !source->getAI()->m_bfmeFlag3CC)
