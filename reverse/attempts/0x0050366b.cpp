@@ -1,4 +1,6 @@
 // ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
+// partial score=0.99467 date=2026-10-13
+// ?GatherWorldInformation@LWAIWorldInformation@@QAEXXZ
 // partial score=0.9543393929 date=2026-10-13
 // W7-SOL6 full WB4200B reread, proper AI owner source trial. Typed CountMap initialization removes Init link-only debt.
 // Visible92B building helper changes caller to1700B/frame1DC (worse); retained declaration-only receiver.
@@ -339,6 +341,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 		info.m_40.clear();
 		((Rva00500804 *)&info.m_armies)->rva00500ACF();
 
+		{
 		_STL::vector<const ModuleData *> buildings;
 		((Rva003F287F *)region)->rva003F287F(buildings);
 		for (unsigned int j = 0; j < buildings.size(); ++j)
@@ -368,6 +371,7 @@ void LWAIWorldInformation::GatherWorldInformation()
 		_STL::pair<int, Rva00501656> regionPair(info.m_ownerID, info);
 		RegionInfoMap::iterator it = m_RegionInfo.insert(m_RegionInfo.begin(), regionPair);
 		m_RegionInfoByRegion.insert(m_RegionInfoByRegion.begin(), _STL::make_pair(info.m_regionID, (int)&it->second));
+		}
 	}
 
 	int playerCount = ((LWAILogicView *)TheLivingWorldLogic)->m_players.size();
