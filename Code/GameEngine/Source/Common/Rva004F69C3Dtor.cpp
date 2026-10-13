@@ -26,7 +26,10 @@ struct Rva004F69C3
 	~Rva004F69C3();
 };
 
-Rva004F69C3::~Rva004F69C3()
+// Select-any like the identical LivingWorldAutoResolveBattle.cpp copy (first in
+// link order); the identical bodies fold instead of duplicating at link time.
+// Referenced by the forwarder below, so the body stays emitted.
+inline Rva004F69C3::~Rva004F69C3()
 {
 	if (m_04)
 		ReleaseTreeHintRef00217D4C(&m_04->m_ac);

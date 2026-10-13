@@ -20,6 +20,16 @@ public:
 	~Rva00200667();
 };
 
-Rva00200667::~Rva00200667()
+// Select-any like the OpenContainModuleDataConstructor.cpp copy (this retail
+// body comes first in link order, so it is the copy the link keeps); the anchor
+// keeps the body emitted.
+inline Rva00200667::~Rva00200667()
 {
+}
+
+// Retain the inline body's ledger emission without changing its callers.
+// ?bfmeEmitRva00200667Dtor@@YAXPAVRva00200667@@@Z absent-from-retail
+void bfmeEmitRva00200667Dtor(Rva00200667 *p)
+{
+	p->Rva00200667::~Rva00200667();
 }
