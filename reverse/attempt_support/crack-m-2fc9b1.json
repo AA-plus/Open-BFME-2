@@ -1,0 +1,33 @@
+{
+  "rva": "0x002FC9B1",
+  "native_size": 1566,
+  "compiled_size": 1570,
+  "fitness": 0.9733066259845423,
+  "bank": "reverse/attempts/0x002fc9b1.cpp",
+  "status": "partial; not byte-exact",
+  "native_frame": "0x98",
+  "old_frame": "0xA0",
+  "target_evidence": [
+    "Native2FC9B1..2FCFCF and WB D64870",
+    "Visible real WorldToCell2E7875, allocator2E8B7A/2E6BA1, rowed Examine2F8B00, and partial helper2F83F5 jointly restore98 frame",
+    "Removing WorldToCell or Examine or2F83 independently returns A0 frame",
+    "Whole1803B native2F83F5 never reads its start-index pointer atEBP+20, explaining valid caller slot reuse",
+    "Canonical provider signature for2F8B00 takesICoord2D pointer rather than old bank reference",
+    "Nativeface globalDBD4AC isbool; bool type removes4B normalization",
+    "Helper2E8C23 returns nontrivial small Coord record through hidden return buffer"
+  ],
+  "source_changes": [
+    "Reuse initial parent pointer in loop to restore EDI initialization and loop value",
+    "Typed record result, bool face flag, WB rotate-in-place and independent return scopes",
+    "Visible BuildAttackPath scope toggles1BEB6 and obtains valid surfaces inside call preparation; descriptive helper name is an inference"
+  ],
+  "remaining": [
+    "1570B versus1566: store ordering, normalization SSE registers and flag-argument scheduling",
+    "Partial2F83F5 helper still1801/1803 withA4 frame versus90; its bank remains .773791",
+    "Further dependency2EA6581001B is held by w7-mp6; no edit attempted; repeat shared investigation after provider landing"
+  ],
+  "not_progress": [
+    "No Code, functions.csv, or new symbol pins for this target",
+    "Diagnostic fitness is not strict byte or relocation acceptance"
+  ]
+}
