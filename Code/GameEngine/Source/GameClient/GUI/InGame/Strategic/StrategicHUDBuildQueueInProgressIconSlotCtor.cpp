@@ -1,3 +1,6 @@
+// The complete native parents and associative EH code/data graphs prove
+// the naturally emitted handlers recorded with this unit. Each has one
+// primary owner and its full 10-byte extent.
 // cl: /G7 /arch:SSE /ICode/Libraries/Include/Lib /O1 /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 // InProgressIconSlot constructor (retail 0x005F775E, 967B), slot 7 of the
 // BuildQueueDetails movie clip's in-progress icon slots (C797F4 vtable).
