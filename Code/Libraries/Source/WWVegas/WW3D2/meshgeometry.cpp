@@ -2,9 +2,9 @@
 // Link view first: Vector4(x,y,z,w) stays inline without emitting an SSE
 // copy that competes with retail's integer-move owner (0x006D8A30).
 #include "../../../../../reference/shims/bfme_matrix3d_sse_link/vector4.h"
-// Link view first: Matrix3D(bool) and Matrix3D(const Matrix3D&) stay inline without
-// emitting /O2 copies that compete with retail's owners (0x0004C91A, 0x0006645C).
-#include "../../../../../reference/shims/bfme_matrix3d_copy_link/matrix3d_copy_link.h"
+// Link view first: Matrix3D(), Matrix3D(bool) and Matrix3D(const Matrix3D&) stay inline without
+// emitting /O2 copies that compete with retail's owners (0x000423C5, 0x0004C91A, 0x0006645C).
+#include "../../../../../reference/shims/bfme_matrix3d_full_link/matrix3d_full_link.h"
 // The compiler-generated vector constructor iterator (??_H) takes the
 // optimization state of the first function that needs it. Retail links one
 // copy, the /O1 body at 0x00001423; this unemitted anchor makes this unit's

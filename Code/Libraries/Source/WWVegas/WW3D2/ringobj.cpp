@@ -15,9 +15,9 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #pragma optimize("", on)
 
 // BFME 2 has no W3D memory pools (see Code/Libraries/Source/WWVegas/WWLib/always.h).
-// Link view first: Matrix3D(bool) stays inline without emitting an /O2 copy
-// that competes with retail's owner (0x0004C91A).
-#include "../../../../../reference/shims/bfme_matrix3d_bool_link/matrix3d.h"
+// Link view first: Matrix3D(), Matrix3D(bool) and Matrix3D(const Matrix3D&) stay inline without
+// emitting /O2 copies that compete with retail's owners (0x000423C5, 0x0004C91A, 0x0006645C).
+#include "../../../../../reference/shims/bfme_matrix3d_full_link/matrix3d_full_link.h"
 #include "always.h"
 #undef W3DMPO_GLUE
 #define W3DMPO_GLUE(ARGCLASS)
