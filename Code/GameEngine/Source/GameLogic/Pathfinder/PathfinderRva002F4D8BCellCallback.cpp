@@ -1,12 +1,10 @@
-// ?cellCallback@Rva002F4D8BInfo@@QAEHPAVPathfindCell@@0HH@Z
-// partial score=0.94 date=2026-10-13
-// ?cellCallback@Rva002F4D8BInfo@@QAEHPAVPathfindCell@@0HH@Z
-// partial score=0.9417158394 date=2026-10-09
 // cl: /ICode/Libraries/Include /O1 /DNDEBUG /MD /arch:SSE /G7
 // Native2F4D8B..2F4E54 RET16 full201; callback address independently
 // recovered from caller2F6C22. Layer/type bits at cell+C and opaque state
 // bytes1C..20 are target-observed. Existing QuickDoesPathExist pin owns
 // the four-argument target2F477E. No original names asserted for state bits.
+// WB debug shape: the two zero exits are separate return sites, not one ||
+// test, which is what keeps retail's single inline exit block.
 #include "Lib/Coord3D.h"
 typedef bool Bool;
 class Object;
@@ -29,7 +27,8 @@ int Rva002F4D8BInfo::cellCallback(PathfindCell *from,PathfindCell *to,int x,int 
 {
  unsigned flags=to->flags;
  if(((unsigned char)((flags>>17)&1)!=0 || (char)((flags>>4)&0x3F)>1) && !flag1D && !flag1E && flag1F)return 1;
- if((flags&0xF)==4 || ((char)((flags>>4)&0x3F)>1 && !flag1D && flag1E))return 0;
+ if((flags&0xF)==4)return 0;
+ if((char)((flags>>4)&0x3F)>1 && !flag1D && flag1E)return 0;
  flag1E=false;
  if(!((Rva002E6DC4 *)pathfinder)->rva002E6DC4(&position,to))return 0;
  Coord3D point;rva002EBC59(&point,object,x,y,to->layer());
