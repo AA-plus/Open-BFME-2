@@ -138,3 +138,7 @@ void bfmeAnchorSidesListDtor(SidesList *p)
 // Native SidesList action 0x77b9ce is the complete 20-byte C++
 // lifetime action of parent 0x32ec63, bound by the whole native
 // exception graph; its separately retired assembly copy is no longer needed.
+
+// Native SidesList action 0x77ba17 is the complete 22-byte C++
+// lifetime action of parent 0x32ec63, bound by the whole native
+// exception graph; its separately retired assembly copy is no longer needed.
