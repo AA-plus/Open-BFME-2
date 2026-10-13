@@ -41,7 +41,7 @@ void _STLP_alloc_proxy<_List_node<int> *, _List_node<int>, allocator<_List_node<
 }
 }
 
-extern "C" void __cdecl free(void *block);
+extern "C" void __cdecl free(void *block) throw(...);
 
 class SubsystemInterface
 {
@@ -73,16 +73,27 @@ struct Rva001DEF38Element
 	~Rva001DEF38Element();
 };
 
-void __cdecl dup_001ddbf3(void);
-
-struct Rva000427195Hash
+class Rva000427195 {public:void rva003A2A41();};
+struct Rva001DDBF3Buckets
 {
-	~Rva000427195Hash()
-	{
-		((void (__fastcall *)(void *))&dup_001ddbf3)(this);
-	}
-	char m_pad[20];
+	void **begin, **end, **capacity;
+	~Rva001DDBF3Buckets() { if (begin) free(begin); }
 };
+// Target1DDBF3 reads the bucket array at+4 and calls the rowed clear3A2A41;
+// parent1DF057 gives these two members a20-byte extent. Field meanings not
+// independently read by those bodies remain carried from the existing donor.
+struct Rva001DDBF3
+{
+	__declspec(noinline) ~Rva001DDBF3();
+	void *unknown00;
+	Rva001DDBF3Buckets buckets;
+	unsigned count;
+};
+// The complete storage destructor is defined in its approved Eva.cpp home.
+// This source relationship models the verified5B tail forwarder1DDEFF;
+// it does not assert the original application's base-class hierarchy.
+struct Rva000427195Hash : Rva001DDBF3 { ~Rva000427195Hash() {} };
+typedef char HashStorageExtent[(sizeof(Rva000427195Hash)==20)?1:-1];
 
 struct Rva001DF057Buf
 {

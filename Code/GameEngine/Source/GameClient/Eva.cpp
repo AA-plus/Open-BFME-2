@@ -1,4 +1,4 @@
-// cl: /O1 /G7 /EHsc /DNDEBUG /MD /arch:SSE /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
+// cl: /O1 /G7 /EHs /DNDEBUG /MD /arch:SSE /Ireference/shims/bfmelist /Ireference/shims/bfmealloc /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
 // Existing 80-byte status clearer at 0x001DCD3C, moved here so Eva's
 // element reset loop can see its register effects. Retail writes the 0x34-byte
@@ -545,4 +545,29 @@ template void vector<BfmePod52,allocator<BfmePod52> >::resize(unsigned int,BfmeP
 // Retain the served address identity until Eva's real status type is reconciled.
 void Rva001DEE92Member::rva001DEE92(int count) {
  reinterpret_cast<_STL::vector<BfmePod52,_STL::allocator<BfmePod52> >*>(this)->resize((unsigned int)count, BfmePod52());
+}
+
+// Native1DDBF3: the table clear3A2A41 followed by release of the bucket array+4.
+// Target1DF057 establishes the20-byte member extent; original class spelling
+// and unread field meanings remain neutral/carried from the existing view.
+// EHs preserves the retail state ending before free; all pre-existing Eva
+// bodies remain byte-exact under this matched-sibling setting.
+extern "C" void __cdecl free(void *block) throw(...);
+class Rva000427195 {public:void rva003A2A41();};
+struct Rva001DDBF3Buckets
+{
+	void **begin, **end, **capacity;
+	~Rva001DDBF3Buckets() { if (begin) free(begin); }
+};
+struct Rva001DDBF3
+{
+	__declspec(noinline) ~Rva001DDBF3();
+	void *unknown00;
+	Rva001DDBF3Buckets buckets;
+	unsigned count;
+};
+typedef char Rva001DDBF3Extent[(sizeof(Rva001DDBF3)==20)?1:-1];
+Rva001DDBF3::~Rva001DDBF3()
+{
+	((Rva000427195 *)this)->rva003A2A41();
 }
