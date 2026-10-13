@@ -116,9 +116,11 @@ class W3DShroud
 public:
 	Bool ReAcquireResources();
  void rva00073628(void *unused);
- void rva00073426(RECT *unused);
 	void init(WorldHeightMap *map, Real worldCellSizeX,
 		Real worldCellSizeY);
+
+protected:
+	void interpolateFogLevels(RECT *rect);
 
 private:
 	int m_numCellsX;
@@ -257,7 +259,7 @@ void W3DShroud::rva00073628(void *cam)
 	W3DRadarResetSurface surface =
 		reinterpret_cast<CursorTextureSlot *>(&m_dstTexture)->Get_Surface_Level();
 	RECT rect;
-	rva00073426(&rect);
+	interpolateFogLevels(&rect);
 	if(m_clearDstTexture) {
 		m_clearDstTexture=0;
 		reinterpret_cast<Rva00072B3A *>(this)->rva00072E84(m_borderShroudLevel,reinterpret_cast<Rva00116680 *>(&surface));

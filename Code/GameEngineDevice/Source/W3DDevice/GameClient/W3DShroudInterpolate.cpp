@@ -1,7 +1,15 @@
-// ?rva00073426@W3DShroud@@QAEXPAUtagRECT@@@Z
-// partial score=0.96 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /EHsc /MD /DNDEBUG /D_STLP_USE_STATIC_LIB /D_STLP_USE_MALLOC /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
+// W3DShroud::interpolateFogLevels, retail 0x00073426..0x00073628 (RET 4) and its
+// EH handler 0x0075EE4A.
+// Identity: Zero Hour W3DShroud.cpp interpolateFogLevels(RECT *) (protected; the
+// timeGetTime static, the 255 clamp, setShroudLevel(i, j, level, TRUE) per changed
+// cell) and the BFME 1 9cbfb551 W3DShroudBfme.cpp body of the same name, which adds
+// the m_dirty walk. Target evidence: WB 0x7FDD90 (unnamed) called from the shroud
+// render body WB 0x7FD800 = retail 0x00073628 with a local RECT address; retail
+// rate 0.255f, dirty flag +0x48, dirty set +0x4C.
+// Same-TU lever: the visible STLport push_back body proves it does not keep the
+// address of `index`, so retail holds the cell index in EBX across the appends.
 #include <set>
 #include <vector>
 typedef float Real;
@@ -12,22 +20,28 @@ class TextureClass;
 struct ShroudTextureHandle { TextureClass *m_p; };
 void Rva00030830GameFree(void *);
 namespace _STL { template<> inline void allocator<int>::deallocate(int *p, unsigned) const {
- if(p) Rva00030830GameFree(p);
+	if (p) Rva00030830GameFree(p);
 } }
+
+// The retiring list appends through the ICF-folded 4-byte pointer-vector
+// push_back (0x004DFCB0); the int instance at 0x00688940 is a different body.
 class ModuleData;
-namespace _STL { template<> void vector<const ModuleData*>::push_back(const ModuleData* const&); }
-struct Rva00072FE6 { unsigned rva000733D8(const int &); };
-inline void appendFogIndex(_STL::vector<int>& values, const int &index) {
- reinterpret_cast<_STL::vector<const ModuleData*>&>(values).push_back(
-  reinterpret_cast<const ModuleData* const&>(index));
+inline void appendFogIndex(_STL::vector<int> &values, const int &index)
+{
+	reinterpret_cast<_STL::vector<const ModuleData *> &>(values).push_back(
+		reinterpret_cast<const ModuleData * const &>(index));
 }
+
+// set<int>::erase(const key_type &), rowed at 0x000733D8.
+struct Rva00072FE6 { unsigned rva000733D8(const int &); };
+
 class W3DShroud
 {
 public:
-	Bool ReAcquireResources();
- void rva00073628(void *unused);
- void rva00073426(RECT *unused);
 	void setShroudLevel(int, int, unsigned char, bool);
+
+protected:
+	void interpolateFogLevels(RECT *rect);
 
 private:
 	int m_numCellsX;
@@ -49,15 +63,13 @@ private:
 	unsigned char m_pad37;
 	unsigned char *m_finalFogData;
 	unsigned char *m_currentFogData;
- unsigned char m_partialRenderer[8];
- unsigned char m_trackDirtyCells;
- unsigned char m_pad49[3];
- _STL::set<int> m_dirty;
+	unsigned char m_partialRenderer[8];
+	unsigned char m_trackDirtyCells;
+	unsigned char m_pad49[3];
+	_STL::set<int> m_dirty;
 };
 
-// BF1 9cbfb551 W3DShroudBfme interpolation semantic donor; native 73426..73628.
-// WB7FDD90 unnamed method; target dirty flag48/tree4C and rate0.255 are independently observed.
-void W3DShroud::rva00073426(RECT *rect)
+void W3DShroud::interpolateFogLevels(RECT *rect)
 {
 	static unsigned int prevTime = (unsigned int)timeGetTime();
 	unsigned int timeDiff = (unsigned int)timeGetTime() - prevTime;
@@ -85,9 +97,9 @@ void W3DShroud::rva00073426(RECT *rect)
 		{
 			int index = *it;
 			unsigned char *current = startLevel + index;
-   unsigned char *target = finalLevel + index;
-   unsigned char final = *target;
-   unsigned char start = *current;
+			unsigned char *target = finalLevel + index;
+			unsigned char start = *current;
+			unsigned char final = *target;
 
 			if (final != start)
 			{
