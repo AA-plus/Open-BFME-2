@@ -1,4 +1,4 @@
-// cl: /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// cl: /I. /G7 /Ireference/shims/bfme2_ascii /Ireference/shims/moduledata /ICode/GameEngine/Include /O1 /DNDEBUG /MD /EHsc /arch:SSE
 // ScriptActions members recovered from WorldBuilder leads
 // (reverse/wb_name_leads.csv) and Zero Hour's ScriptActions.cpp; retail
 // supplies the bytes. Only declared here: members other units row
@@ -20,9 +20,12 @@ enum EmotionType
 };
 
 class Parameter;
+class UpgradeTemplate;
 
 class ScriptActions
 {
+public:
+ void rva003C739D(Parameter *, Parameter *, Parameter *, Parameter *, Parameter *);
 protected:
 	void doFlashSpellStoreButton(int seconds);
 	void doPlaySoundEffect(const AsciiString &sound);
@@ -273,7 +276,7 @@ extern ScriptEngine *TheScriptEngine;
 
 enum ObjectID { INVALID_OBJECT_ID = 0 };
 
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 
 // BFME 2 copies a position field by field here (the fork's view gave Coord3D
 // a member-wise copy constructor; the canonical header is data-only).
@@ -297,6 +300,10 @@ public:
 class Object : public Thing
 {
 public:
+ bool rva002940B9(const UpgradeTemplate *);
+ bool rva00290D2B(const UpgradeTemplate *) const;
+ void rva00293077(const void *);
+ const ThingTemplate *getTemplate() const { return m_template; }
 	unsigned char m_pad00[0x04];
 	const class ThingTemplate *m_template;
 	unsigned char m_pad08[0x38 - 0x08];
@@ -461,6 +468,7 @@ private:
 class ThingTemplate
 {
 public:
+ bool isEquivalentTo(const ThingTemplate *) const;
 	int rva0033B479() const;
 };
 
@@ -1209,4 +1217,122 @@ void ScriptActions::rva003C4751(Parameter *teamParam)
   
  }
  
+}
+
+
+class UpgradeTemplate;
+class Rva000421C8
+{
+public:
+	Rva000421C8() : m_next(0) {}
+	virtual ~Rva000421C8() {}
+	virtual bool allow(Object *obj) = 0;
+	virtual int getPlayerMask();
+	Rva000421C8 *link(Rva000421C8 *next);	// 0x00625790
+	Rva000421C8 *m_next;
+};
+class Rva0026119DFilter : public Rva000421C8
+{
+public:
+	virtual bool allow(Object *obj);
+};
+class BfmeFixedStorage0004543D
+{
+public:
+	BfmeFixedStorage0004543D(int unused, int bit) throw();	// 0x00045411
+	BfmeFixedStorage0004543D(const BfmeFixedStorage0004543D &other) throw();
+private:
+	unsigned char m_bytes[28];
+};
+class Rva0004584D : public Rva000421C8
+{
+public:
+	Rva0004584D(const BfmeFixedStorage0004543D &a, const BfmeFixedStorage0004543D &b) throw();
+	virtual bool allow(Object *obj);
+	BfmeFixedStorage0004543D m_08;
+	BfmeFixedStorage0004543D m_24;
+};
+template<int N> class BitFlags;
+extern BitFlags<116> KINDOFMASK_NONE;
+
+#include "Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
+extern PartitionManager *ThePartitionManager;
+class UpgradeCenter
+{
+public:
+	const UpgradeTemplate *findUpgrade(const AsciiString &name) const;	// 0x0026F26D
+};
+class CastleBehavior
+{
+public:
+	static NameKeyType rva0003955DA();	// 0x003955DA
+	Object *rva00397429(const AsciiString &name);	// 0x00397429
+};
+class ObjectTypes
+{
+public:
+	unsigned int getListSize() const { return m_end - m_begin; }
+	AsciiString getNthInList(unsigned int index) const;	// 0x002041AC
+private:
+	char m_pad00[8];
+	AsciiString *m_begin;	// +0x08
+	AsciiString *m_end;	// +0x0C
+};
+
+// Native003C739D..003C75C2 and WB1017470 put upgrade/name application after the search loop.
+void ScriptActions::rva003C739D(Parameter *castleName, Parameter *upgradeParm, Parameter *typeParm,
+	Parameter *areaParm, Parameter *nameParm)
+{
+	Object *castle = TheScriptEngine->getUnitNamed(castleName);
+	if (!castle)
+		return;
+	CastleBehavior *behavior = (CastleBehavior *)castle->findModule(CastleBehavior::rva0003955DA());
+	if (!behavior)
+		return;
+	Object *center = behavior->rva00397429(areaParm->getString());
+	if (!center)
+		return;
+	const UpgradeTemplate *upgrade = TheUpgradeCenter->findUpgrade(upgradeParm->getString());
+	if (!upgrade)
+		return;
+	const ThingTemplate *templ = 0;
+	ObjectTypes *types = TheScriptEngine->getObjectTypes(typeParm->getString());
+	if (!types) {
+		templ = TheThingFactory->findTemplate(typeParm->getString());
+		if (!templ)
+			return;
+	}
+	Object *obj = 0;
+	BfmeWideResult hits = ThePartitionManager->iterateObjectsInRange(center->getPosition(), 1000.0f, 0,
+		Rva0004584D(BfmeFixedStorage0004543D(0, 7), *(const BfmeFixedStorage0004543D *)&KINDOFMASK_NONE)
+			.link(&Rva0026119DFilter()), 1);
+	while ((obj = hits.next()) != 0) {
+		if (!obj->rva002940B9(upgrade))
+			continue;
+		if (obj->rva00290D2B(upgrade))
+			continue;
+		const ThingTemplate *objTemplate = obj->getTemplate();
+		if (templ) {
+			if (!templ->isEquivalentTo(objTemplate))
+				continue;
+		} else if (types) {
+			bool matched = false;
+			for (unsigned int i = 0; i < types->getListSize(); ++i) {
+				const ThingTemplate *candidate = TheThingFactory->findTemplate(types->getNthInList(i));
+				if (candidate && candidate->isEquivalentTo(objTemplate)) {
+					matched = true;
+					break;
+				}
+			}
+			if (!matched)
+				continue;
+		}
+		break;
+	}
+	if (!obj)
+		return;
+	obj->rva00293077(upgrade);
+	AsciiString name = nameParm->getString();
+	if (!name.isEmpty())
+		TheScriptEngine->rva00208968(name, obj);
 }
