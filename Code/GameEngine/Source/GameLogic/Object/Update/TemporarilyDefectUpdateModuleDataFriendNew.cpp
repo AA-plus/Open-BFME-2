@@ -108,6 +108,13 @@ class DebugDisplayInterface;
 struct _iobuf;
 void __cdecl rva000B3FD0DebugDisplay(DebugDisplayInterface *, void *, _iobuf *);
 
+// ICF-folded twin of the 1-byte bodies at 0x000B3FD0: a cdecl empty body is
+// a bare ret like every other name folded there; this TU takes its address
+// as the initFromINIMultiProc callback, so it provides the spelling itself.
+void __cdecl rva000B3FD0DebugDisplay(DebugDisplayInterface *, void *, _iobuf *)
+{
+}
+
 // ?ModuleFactoryDataAt00255ED8@@YAPAVModuleData@@PAVINI@@@Z @0x00255ED8 (48B)
 ModuleData *ModuleFactoryDataAt00255ED8(INI *ini)
 {
