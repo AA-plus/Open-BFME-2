@@ -83,7 +83,8 @@ public:
 	virtual CanMakeType canMakeUnit(Object *builder, const ThingTemplate *whatToBuild, Int quantity);	// +0x60
 };
 
-extern Rva00A027B8 *g_00A027B8;	// Existing typed data owner at VA 0x00E027B8
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 
 class Rva0055B0CC
 {
@@ -152,7 +153,7 @@ CanMakeType AIBuildableUnit::canMake(Player *player)
 		{
 			const ThingTemplate *unitType = TheThingFactory->findTemplate(m_templateName);
 			Int quantity = player->m_productionQuantities.rva0037EE4C(unitType, -1, 0);
-			return g_00A027B8->canMakeUnit(factory, unitType, quantity);
+			return ((Rva00A027B8 *)TheBuildAssistant)->canMakeUnit(factory, unitType, quantity);
 		}
 		return CANMAKE_QUEUE_FULL;
 	}

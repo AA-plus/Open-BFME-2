@@ -61,7 +61,8 @@ public:
 	virtual void slot25();
 	virtual void slot26(void *arg);
 };
-extern class Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 
 class ScriptActions
 {
@@ -78,5 +79,5 @@ void ScriptActions::doSellBuildingOnFoundation(Parameter *param)
 	void *res = iface->s06();
 	if (res == 0)
 		return;
-	g_00A027B8->slot26(res);
+	((Rva00A027B8 *)TheBuildAssistant)->slot26(res);
 }

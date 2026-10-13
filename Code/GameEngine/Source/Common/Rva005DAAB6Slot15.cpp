@@ -4,7 +4,8 @@
 class ThingTemplate;
 extern class ThingFactory *TheThingFactory;
 extern class GameLogic *TheGameLogic;
-extern class Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 // g_00A027B8: matched references place it at VA 0xe027b8 (zero-filled .bss).
 // defined in Rva005DAB30Build.cpp; a second definition here blocked linking.
 
@@ -98,7 +99,7 @@ bool Rva005DAAB6::rva005DABD5(bool arg)
 	if (p1 == 0 || o2 == 0)
 		return false;
 	float f = m_3C;
-	int r = g_00A027B8->slot14(o2, p1, &m_30, f, arg);
+	int r = ((Rva00A027B8 *)TheBuildAssistant)->slot14(o2, p1, &m_30, f, arg);
 	if (r == 0)
 		return false;
 	m_24 = *(ObjectID *)((char *)r + 0x74);

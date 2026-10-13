@@ -33,7 +33,8 @@ public:
                            bool option, Object **terminalHub);
 };
 class Rva00A027B8;
-extern Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 
 class Rva0055ADD8
 {
@@ -74,7 +75,7 @@ bool AIBuildableWallSegment::build(Player *player)
         return AIBuildableStructure::build(player);
     Object *startNode = TheGameLogic->findObjectByID(m_startNodeID);
     Object *terminalHub = 0;
-    if (((BuildAssistant *)g_00A027B8)->buildWall(startNode, &startNode->m_position,
+    if (((BuildAssistant *)TheBuildAssistant)->buildWall(startNode, &startNode->m_position,
                             getWorldPosition(), player, false, &terminalHub))
     {
         m_producedObjectID = terminalHub->m_id;

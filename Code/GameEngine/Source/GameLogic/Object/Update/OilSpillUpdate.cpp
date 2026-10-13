@@ -186,7 +186,8 @@ public:
 		const Coord3D *pos, Real angle, Player *owningPlayer); // +0x38
 };
 
-extern Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 
 class FXList
 {
@@ -302,7 +303,7 @@ UpdateSleepTime OilSpillUpdate::update()
 			if (tmpl)
 			{
 				Object *obj = getObject();
-				g_00A027B8->buildObjectNow(obj, tmpl, &pos, 0.0f, obj->getControllingPlayer());
+				((Rva00A027B8 *)TheBuildAssistant)->buildObjectNow(obj, tmpl, &pos, 0.0f, obj->getControllingPlayer());
 				FXList::doFXPos(data->m_oilSpillFX, &pos, NULL, 0.0f, NULL);
 			}
 			m_breadcrumbs.push_back(pos);

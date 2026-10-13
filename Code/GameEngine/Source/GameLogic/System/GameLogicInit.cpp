@@ -4368,7 +4368,8 @@ extern bool TheLiteCRC;
 bool TheLiteCRC = false;
 extern void *g_00DFEFF0;
 extern GlobalWeatherSystem *TheGlobalWeatherSystem;
-extern Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 extern WeaponStore *TheWeaponStore;
 extern LocomotorStore *TheLocomotorStore;
 extern DelayedExperienceLevelGrantSystem *TheDelayedExperienceLevelGrantSystem;
@@ -4590,7 +4591,7 @@ void GameLogic::update(int phase)
 	if (phase == 5) {
 		TheShroudManager->update();
 		((SubsystemInterface *)TheTaintManager)->update();
-		g_00A027B8->update();
+		((Rva00A027B8 *)TheBuildAssistant)->update();
 		TheLargeGroupAudio->update();
 		processDestroyList();
 		TheWeaponStore->update();

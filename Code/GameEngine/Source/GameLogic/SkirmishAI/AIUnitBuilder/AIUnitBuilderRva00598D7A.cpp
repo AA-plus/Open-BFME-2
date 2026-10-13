@@ -336,7 +336,8 @@ public:
 #undef SLOT
  virtual bool slot25(Object *,const ThingTemplate *,int);
 };
-extern Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 // WB152CB70 explicitly names registerUnitFactory and assert127.
 // The native call4FF876 uses the existing int/int tree provider for these
 // 32-bit enum payloads; the home lower/upper bounds prove signed key ordering.
@@ -348,7 +349,7 @@ void AIUnitBuilder::registerUnitFactory(ObjectID id)
  for (_STL::vector<AsciiString *>::iterator i=config->unitNames.begin();i!=config->unitNames.end();++i) {
    AsciiString name=**i;
    const ThingTemplate *thing=TheThingFactory->findTemplate(name);
-   if (g_00A027B8->slot25(object,thing,-1)) {
+   if (((Rva00A027B8 *)TheBuildAssistant)->slot25(object,thing,-1)) {
      _STL::pair<int,int> item(TheNameKeyGenerator->nameToKey(name),id);
      ((_STL::multimap<int,int> *)&m_objects)->insert(item);
    }
@@ -357,7 +358,7 @@ void AIUnitBuilder::registerUnitFactory(ObjectID id)
    AsciiString name=*i;
    const ThingTemplate *thing=TheThingFactory->findTemplate(name);
    int count=((Rva0037EE4C *)((char *)m_30+0x738))->rva0037EE4C(thing,-1,0);
-   if (g_00A027B8->slot25(object,thing,count)) {
+   if (((Rva00A027B8 *)TheBuildAssistant)->slot25(object,thing,count)) {
      _STL::pair<int,int> item(TheNameKeyGenerator->nameToKey(name),id);
      ((_STL::multimap<int,int> *)&m_objects)->insert(item);
    }

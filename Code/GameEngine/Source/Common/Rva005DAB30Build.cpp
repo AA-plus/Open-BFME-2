@@ -4,9 +4,9 @@
 
 extern class ThingFactory *TheThingFactory;
 extern class GameLogic *TheGameLogic;
-extern class Rva00A027B8 *g_00A027B8;
-// g_00A027B8: matched references place it at VA 0xe027b8 (zero-filled .bss).
-class Rva00A027B8 * g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
+// Retail 0x00A027B8 is TheBuildAssistant, defined in BuildAssistant.cpp.
 
 
 #include "ascii_string.h"

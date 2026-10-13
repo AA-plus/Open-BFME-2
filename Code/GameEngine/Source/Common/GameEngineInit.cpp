@@ -244,7 +244,8 @@ extern LocomotorStore *TheLocomotorStore;
 extern SpecialPowerStore *TheSpecialPowerStore;
 extern DamageFXStore *TheDamageFXStore;
 extern ArmorStore *TheArmorStore;
-extern class Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 // VA 0x00E0307C (RVA 0x00A0307C, retail's zero-filled .data tail): the slot is
 // already defined in Common/CrowdResponseBlockParse.cpp, the unit that parses the
 // crowd-response blocks; the initSubsystem call below only assigns it.
@@ -751,7 +752,7 @@ void GameEngine::init(Int argc, char *argv[])
 		initSubsystem(TheSpecialPowerStore, "TheSpecialPowerStore", new SpecialPowerStore, (Xfer *)&xferCRC);
 		initSubsystem(TheDamageFXStore, "TheDamageFXStore", (DamageFXStore *)new Rva00360BB8Store, (Xfer *)&xferCRC);
 		initSubsystem(TheArmorStore, "TheArmorStore", (ArmorStore *)new Rva001D9670Store, (Xfer *)&xferCRC);
-		initSubsystem((reinterpret_cast<BuildAssistant *&>(g_00A027B8)), "TheBuildAssistant", new BuildAssistant, 0);
+		initSubsystem(TheBuildAssistant, "TheBuildAssistant", new BuildAssistant, 0);
 		initSubsystem(TheCrowdResponseStore, "TheCrowdResponseStore", new Rva0022A809Subsystem, 0);
 		initSubsystem((reinterpret_cast<Rva0022A87ESubsystem *&>(TheLivingWorldAutoResolveArmorStore)), "TheLivingWorldAutoResolveArmorStore", new Rva0022A87ESubsystem, (Xfer *)&xferCRC);
 		initSubsystem((reinterpret_cast<Rva0022A8F3Subsystem *&>(g_Va00E030C0)), "TheLivingWorldAutoResolveWeaponStore", new Rva0022A8F3Subsystem, (Xfer *)&xferCRC);

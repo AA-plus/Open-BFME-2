@@ -167,7 +167,8 @@ public:
 	virtual Int canMakeUnit(Object *obj, const ThingTemplate *what, Int unk) = 0; // 24
 };
 
-extern Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 
 class DozerAIUpdate : public AIUpdateInterface, public DozerAIInterface
 {
@@ -196,9 +197,9 @@ Object *DozerAIUpdate::construct(const ThingTemplate *what, const Coord3D *pos, 
 				goto create;
 		}
 	checks:
-		if (g_00A027B8->canMakeUnit(getObject(), what, -1) != 0)
+		if (((Rva00A027B8 *)TheBuildAssistant)->canMakeUnit(getObject(), what, -1) != 0)
 			return NULL;
-		if (g_00A027B8->isLocationLegalToBuild(pos, what, angle, 0x49F, getObject(), NULL) != 0)
+		if (((Rva00A027B8 *)TheBuildAssistant)->isLocationLegalToBuild(pos, what, angle, 0x49F, getObject(), NULL) != 0)
 			return NULL;
 	}
 create:

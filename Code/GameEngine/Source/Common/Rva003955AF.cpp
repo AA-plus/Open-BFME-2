@@ -5,7 +5,8 @@
 // The same caller loads module data into ECX at 0x00396487; WB 0x00EBCEE1
 // agrees. Retain an address-derived receiver type and the raw argument words.
 // The complete 43-byte body stays exact under its region flags.
-extern class Rva00A027B8 *g_00A027B8;
+class BuildAssistant;
+extern BuildAssistant *TheBuildAssistant;
 class Rva00A027B8
 {
 public:
@@ -34,5 +35,5 @@ public:
 };
 int Rva003955AFData::query(int a1, int a2, float f, int a4, int a5)
 {
-	return g_00A027B8->slot16(a1, a2, f, a4 | 0x100, a5, 0);
+	return ((Rva00A027B8 *)TheBuildAssistant)->slot16(a1, a2, f, a4 | 0x100, a5, 0);
 }
