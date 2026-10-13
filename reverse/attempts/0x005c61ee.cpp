@@ -1,8 +1,10 @@
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z
+// partial score=0.95145 date=2026-10-13
+// ?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.99 date=2026-10-13
 // ?reverseAnimateWindow@ProcessAnimateWindowSlideFromTopFast@@UAE_NPAVAnimateWindow@@@Z
 // partial score=0.99 date=2026-10-13
-// cl: /O1 /arch:SSE /G6 /Oy- /MD /ICode/Libraries/Include/Lib
+// cl: /G7 /O1 /arch:SSE /Oy- /MD /ICode/Libraries/Include/Lib /I.
 //
 // Retail 0x005C61EE (234B, ret 4): TopFast reverse. 234/234 size-exact in
 // SlideTopUpdate.cpp next to the rowed SlideFromTop update (0x005C6106,
@@ -19,7 +21,7 @@
 // bound local? different mul spelling?).
 struct Coord2D;
 struct RvaTopVelocity { float x,y; };
-#include "../../../../Libraries/Include/Lib/ICoord2D.h"
+#include "Code/Libraries/Include/Lib/ICoord2D.h"
 class GameWindow { public: int winSetPosition(int,int); };
 class AnimateWindow {
 public:

@@ -1,8 +1,10 @@
 // ?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z
+// partial score=0.96088 date=2026-10-13
+// ?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z
 // partial score=0.95 date=2026-10-09
 // ?CanMoveArmyMembers_internal@LivingWorldLogic@@QAE_NPAULivingWorldArmy@@ABV?$vector@HV?$allocator@H@_STL@@@_STL@@0PAH@Z
 // partial score=0.8 date=2026-10-08
-// cl: /O1 /DNDEBUG /MD /EHs /arch:SSE /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /G7 /O1 /arch:SSE /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 
 typedef int Int;
@@ -80,7 +82,7 @@ struct Rva002B5334ArmySet : public Rva002B5334Base, public Rva002B5334ArmyList
 {
 };
 
-#include "../Code/Libraries/Include/Lib/Coord2D.h"
+#include "Code/Libraries/Include/Lib/Coord2D.h"
 
 class LivingWorldRegionManager
 {

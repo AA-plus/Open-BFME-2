@@ -1,6 +1,8 @@
 // ?setString@PooledString@@AAEXPBD@Z
+// partial score=0.96585 date=2026-10-13
+// ?setString@PooledString@@AAEXPBD@Z
 // partial score=0.9512195121951219 date=2026-10-09
-// cl: /MD /EHsc 
+// cl: /O2 /arch:SSE /MD /EHsc /I.
 // Target PooledString::setString at6CB7C0: Ghidra489 omits trailing RET4;
 // full body ends6CB9AC (492B). Hash is owned at6CB780. Entry next0,
 // folded-case alias4 and text8 are established by target comparisons.
@@ -8,7 +10,7 @@
 // witnessed by Enter/LeaveCriticalSection imports. Original pool names unknown.
 #define _DLL
 #include <string.h>
-#include "../../../Include/Common/Rva00041004Lock.h"
+#include "Code/GameEngine/Include/Common/Rva00041004Lock.h"
 extern "C" {
 __declspec(dllimport) void __stdcall EnterCriticalSection(CRITICAL_SECTION *);
 __declspec(dllimport) void __stdcall LeaveCriticalSection(CRITICAL_SECTION *);

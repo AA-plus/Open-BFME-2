@@ -1,8 +1,10 @@
 // ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
+// partial score=0.7667 date=2026-10-13
+// ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
 // partial score=0.74 date=2026-10-13
 // ?rva000062FD@Region2D@@QBE_NABVCoord2D@@0@Z
 // partial score=0.74 date=2026-10-13 (r5b vmin+pminfirst: eager *pmin load fixes interleaving to single-esi reuse, 74 diff lines; 1.0f numbering xmm2-vs-xmm3 + band-mirror + epilogue-layout remain)
-// cl: /O1 /arch:SSE2 /G7 /ICode/GameEngine/Source/Common
+// cl: /G7 /O1 /arch:SSE /ICode/GameEngine/Source/Common /I.
 
 class Debug
 {
@@ -69,7 +71,7 @@ struct ICoord2DBase
     int y;
 };
 
-#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/Code/Libraries/Include/Lib/ICoord2D.h"
+#include "Code/Libraries/Include/Lib/ICoord2D.h"
 
 // Both integer expandBy members widen one axis at a time through this shared
 // three-argument worker rather than inlining the comparison pair. It is only
@@ -80,7 +82,7 @@ void expandRange(int *low, int value, int *high);
 
 Debug &operator<<(Debug &debug, const ICoord2DBase &coord);
 
-#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/Code/Libraries/Include/Lib/ICoord3D.h"
+#include "Code/Libraries/Include/Lib/ICoord3D.h"
 
 Debug &operator<<(Debug &debug, const ICoord3D &coord);
 
@@ -103,7 +105,7 @@ inline void Coord3D::scale(float scale)
 
 Debug &operator<<(Debug &debug, const Coord3D &coord);
 
-#include "/home/levy/projects/open-bfme2-local-fleet/w6-mo2/Code/Libraries/Include/Lib/Coord2D.h"
+#include "Code/Libraries/Include/Lib/Coord2D.h"
 
 Debug &operator<<(Debug &debug, const Coord2D &coord);
 

@@ -1,6 +1,8 @@
 // ?onUnitCreated@AIBuilder@@QAEXPAVObject@@0_N@Z
+// partial score=0.7618 date=2026-10-13
+// ?onUnitCreated@AIBuilder@@QAEXPAVObject@@0_N@Z
 // partial score=0.85 date=2026-10-08
-// cl: /O1 /G7 /MD /EHsc /Ireference/shims/bfme2_ascii
+// cl: /G7 /O1 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /I.
 // stlport
 // WB1370CA0 names AIBuilder::DoXfer; native4EC1D9..4EC276 is157B RET4.
 // Native (rather than WB's older version) transfers Version1/5, unsigned158
@@ -11,7 +13,7 @@
 // All layout offsets come from this native caller; no unseen embedded sizes
 // or member semantics are inferred. The new economy/wall/string providers
 // unlock these calls without speculative callee pins.
-#include "../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 #include "ascii_string.h"
 #include <list>
 class AsciiString;
@@ -63,7 +65,7 @@ virtual Xfer &xferBool(bool *);
 
 class AIDozerManager {public: void DoXfer(Xfer*);};
 class AIBaseBuilder {public: void DoXfer(Xfer*);};
-#include "AIEconomyBuilder/AIEconomyBuilderFarmLibrary.h"
+#include "Code/GameEngine/Source/GameLogic/SkirmishAI/AIEconomyBuilder/AIEconomyBuilderFarmLibrary.h"
 class AIWallBuilder {public: void DoXfer(Xfer*);};
 class Rva00598DA2 {public: void rva00598DA2(Xfer*);};
 class Rva0059761B {public: void rva0059761B(void*);};

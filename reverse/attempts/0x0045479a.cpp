@@ -1,12 +1,14 @@
 // ?rva0045479A@GettingBuiltBehavior@@QAEXXZ
+// partial score=0.84558 date=2026-10-13
+// ?rva0045479A@GettingBuiltBehavior@@QAEXXZ
 // partial score=0.91 date=2026-10-09
-// cl: /O1 /Ob2 /arch:SSE /DNDEBUG /MD /GX /Ireference/shims/bfme2_ascii
+// cl: /G7 /O1 /arch:SSE /Ob2 /DNDEBUG /MD /GX /Ireference/shims/bfme2_ascii /I.
 // Native45479A..45499B complete EH body, WB116FCD0 same call graph.
 // The primary GettingBuiltBehavior receiver and fields follow owned ctor
 // and interface sibling units. Original method name unknown.
 #include "ascii_string.h"
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
-#include "../../../Common/PartitionRangeQueryCallView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
 class Player;
 class Rva000421C8 {
 public:

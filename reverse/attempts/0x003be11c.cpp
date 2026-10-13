@@ -1,6 +1,8 @@
 // ?rva003BE11C@@YAXPAVObject@@PBVThingTemplate@@PBVCommandButton@@@Z
+// partial score=0.68049 date=2026-10-13
+// ?rva003BE11C@@YAXPAVObject@@PBVThingTemplate@@PBVCommandButton@@@Z
 // partial score=0.9 date=2026-10-12
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// cl: /G7 /O1 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /I.
 // BFME 2's "use a command button on the nearest object of a type" tail and its two callers
 // (the dispatcher 0x003CA4BE reaches them at 0x003CCBC7 and 0x003CCDC1):
 //
@@ -19,8 +21,8 @@
 // and called from this unit; so it and its callers stay together here.
 #include "ascii_string.h"
 
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
-#include "../../Common/PartitionRangeQueryCallView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
 
 class Parameter;
 class Player;

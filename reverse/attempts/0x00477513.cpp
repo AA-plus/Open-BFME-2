@@ -11,12 +11,12 @@
 // Both lists use the shared four-byte opaque element whose insertion chain
 // is independently recovered. Declared virtual slots are ABI views only;
 // this unit creates no interface objects or invented vtable data.
-// cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /O1 /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 #include <list>
 extern "C" void *__cdecl memcpy(void *,const void *,unsigned int);
 #pragma intrinsic(memcpy)
-#include "../../../../../Include/GameLogic/ContainmentListView.h"
+#include "Code/GameEngine/Include/GameLogic/ContainmentListView.h"
 typedef _STL::list<int> IntList;
 // Local comparison keeps this consumer from emitting a competing iterator.
 namespace _STL {
@@ -75,7 +75,7 @@ private:
     unsigned char prefix00[8];
     Rva0047727EObjectPositionView *m_object;
 };
-#include "../../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 class Thing { public: void setPosition(const Coord3D *position); };
 
 // Whole clean BF1 f98983a7 Object/Contain/HordeContainExitPosition.cpp

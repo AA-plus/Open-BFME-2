@@ -1,6 +1,8 @@
 // ?doLoadAllTransports@ScriptActions@@IAEXABVAsciiString@@@Z
+// partial score=0.7462 date=2026-10-13
+// ?doLoadAllTransports@ScriptActions@@IAEXABVAsciiString@@@Z
 // partial score=0.85 date=2026-10-08
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
+// cl: /G7 /O1 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHs /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc /I.
 // stlport
 //
 // ScriptActions::doLoadAllTransports, retail 0x003C8482 (487B), from
@@ -27,7 +29,7 @@
 
 #include "ascii_string.h"
 #include <vector>
-#include "../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 
 extern GameLogic *TheGameLogic;
 

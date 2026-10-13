@@ -1,6 +1,8 @@
 // ?onDie@DamageFilteredCreateObjectDie@@UAEXPBVDamageInfo@@@Z
+// partial score=0.829 date=2026-10-13
+// ?onDie@DamageFilteredCreateObjectDie@@UAEXPBVDamageInfo@@@Z
 // partial score=0.86 date=2026-10-09
-// cl: /DNDEBUG /MD
+// cl: /G7 /O1 /arch:SSE /DNDEBUG /MD /I.
 //
 // DamageFilteredCreateObjectDie's +0x14 damage-module interface overrides
 // (table 0x00C4AA84, installed by the matched ctor 0x00485F87, which also
@@ -13,8 +15,8 @@
 //   slot 1, retail 0x00485EF6 (7 bytes): clears the recorded frame; its
 //           argument is unused.
 // Slot names by address.
-#include "../../../Common/GameLogicObjectLookupView.h"
-#include "../../../../../Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
 class ObjectCreationList;
 class Player
 {

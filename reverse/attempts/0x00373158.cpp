@@ -1,8 +1,10 @@
 // ?rva00373158@Rva0037381C@@QAEXPAVRva00373373Portal@@H@Z
+// partial score=0.93899 date=2026-10-13
+// ?rva00373158@Rva0037381C@@QAEXPAVRva00373373Portal@@H@Z
 // partial score=0.94 date=2026-10-13
 // ?rva00373158@Rva0037381C@@QAEXPAVRva00373373Portal@@H@Z
 // partial score=0.94 date=2026-10-09
-// cl: /Oy- /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS
+// cl: /G7 /O1 /arch:SSE /Oy- /DNDEBUG /MD /EHsc /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /I.
 // stlport
 // ?rva000373109@MineshaftPortalBehaviour@@SA?AW4NameKeyType@@XZ @0x373109
 // (69B): cached pool-name key for MineshaftPortalBehaviour. The class
@@ -85,7 +87,7 @@ void Rva00373153::rva00373153()
 }
 
 #include <vector>
-#include "../../../Common/GameLogicObjectLookupView.h"
+#include "Code/GameEngine/Source/Common/GameLogicObjectLookupView.h"
 class Rva00373373Portal {
 public:
     virtual void *destroy(unsigned int flags);

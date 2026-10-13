@@ -1,6 +1,8 @@
 // ?rva003E59B0@ScriptConditions@@QAE_NPBVAsciiString@@0PAVParameter@@_N@Z
+// partial score=0.80174 date=2026-10-13
+// ?rva003E59B0@ScriptConditions@@QAE_NPBVAsciiString@@0PAVParameter@@_N@Z
 // partial score=0.97 date=2026-10-12
-// cl: /Ireference/shims/bfme2_ascii /O1 /DNDEBUG /MD /EHsc /arch:SSE
+// cl: /G7 /O1 /arch:SSE /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc /I.
 // ?rva003E59B0@ScriptConditions@@QAE_NPBVAsciiString@@0PAVParameter@@_N@Z, retail 0x003E59B0
 // (313 bytes, RET 0x10): the unit form of the castle area test in ScriptConditions_Rva003E6ED0.cpp
 // -- the named unit against the named castle or, with no castle name and a player parameter naming
@@ -54,8 +56,8 @@ public:
 };
 extern unsigned char g_00DFEFA4StoragePrototype[28];
 
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
-#include "../../Common/PartitionRangeQueryCallView.h"
+#include "Code/Libraries/Include/Lib/Coord3D.h"
+#include "Code/GameEngine/Source/Common/PartitionRangeQueryCallView.h"
 extern PartitionManager *ThePartitionManager;
 
 #define REALLY_FAR (100000 * 10.0f)
