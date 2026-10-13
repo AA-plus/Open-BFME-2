@@ -33,10 +33,9 @@ extern "C" void _ReadWriteBarrier();
 // deleted after an LNK2005 proof. This TU keeps GadgetListBoxSystem plus its
 // TU-local statics (getListboxEntryBasedOnCoord, removeSelection,
 // Rva00324B8FScrollTo, moveRowsDown, addEntry).
-// All nine existing bodies stay exact under /arch:SSE /EHsc. NEAR: the
-// GadgetListBoxSystem body matches all but two instructions in
-// GLM_UPDATE_DISPLAY at 0x00326B0C (retail sign-extends displayPos into EDX
-// and the cached displayHeight into ECX; cl swaps the two registers).
+// The matched system callback and image-entry helper stay exact under
+// /arch:SSE /EHsc. The helper is static beside its actual retail caller;
+// the former separate unit and synthetic forceAIE caller are retired.
 #include <string.h>
 #include "unicode_string.h"
 
@@ -412,7 +411,57 @@ void Rva00324AE5Update(GameWindow *window, Int adjustment, Bool updateSlider);
 void computeTotalHeight(GameWindow *window);
 void Rva00324B39Add(GameWindow *window, Short adjustment, Bool updateSlider);
 void Rva003248F5Show(GameWindow *window, Bool show);
-Int addImageEntry(const Image *image, Int color, Int row, Int column, GameWindow *window, Int width, Int height);
+// Retail addImageEntry 0x00324D84 reads resolution at GlobalData +0x30/+0x34.
+// Bind the canonical global while keeping this access view local.
+class GlobalData;
+extern GlobalData *TheWritableGlobalData;
+struct GadgetImageResolutionView
+{
+    unsigned char m_pad00[0x30];
+    Int m_xResolution;
+    Int m_yResolution;
+};
+
+// The native helper is TU-local; the real system callback supplies its caller.
+static Int addImageEntry(const Image *image, Int color, Int row, Int column, GameWindow *window, Int width, Int height)
+{
+	ListboxData *list = (ListboxData *)window->winGetUserData();
+	Int scaledWidth = ((GadgetImageResolutionView *)TheWritableGlobalData)->m_xResolution * width / 1024;
+	height = ((GadgetImageResolutionView *)TheWritableGlobalData)->m_yResolution * height / 768;
+
+	if (column >= list->columns || row >= list->listLength)
+		return -1;
+
+	if (row == -1)
+	{
+		row = list->insertPos;
+		list->insertPos++;
+		list->endPos++;
+	}
+	if (column == -1)
+		column = 0;
+
+	ListEntryRow *listRow = &list->listData[row];
+
+	if (!listRow->cell)
+	{
+		listRow->cell = new ListEntryCell[list->columns];
+		memset(listRow->cell, 0, list->columns * sizeof(ListEntryCell));
+	}
+	if (listRow->cell[column].cellType == LISTBOX_TEXT)
+		TheDisplayStringManager->freeDisplayString((DisplayString *)listRow->cell[column].data);
+
+	listRow->cell[column].cellType = LISTBOX_IMAGE;
+	listRow->cell[column].unknown04 = 0;
+	listRow->cell[column].data = (void *)image;
+	listRow->cell[column].color = color;
+	listRow->cell[column].height = height;
+	listRow->cell[column].width = scaledWidth;
+
+	computeTotalHeight(window);
+
+	return row;
+}
 
 static Int moveRowsDown(ListboxData *list, Int startingRow)
 {
