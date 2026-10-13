@@ -1,4 +1,6 @@
 // ?rva005A92DE@Rva005A9562@@QAEMPAX@Z
+// partial score=0.861 date=2026-10-13
+// ?rva005A92DE@Rva005A9562@@QAEMPAX@Z
 // partial score=0.861269 date=2026-10-10
 // cl: /I. /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/game/Libraries/Source/WWVegas/WWLib /Oi /ICode/Libraries/Include/Lib /O1 /Oy- /G7 /arch:SSE /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB
 // stlport
