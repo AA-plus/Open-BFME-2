@@ -102,7 +102,9 @@ public:
 typedef char BfmeDynamicVBBaseSize[(sizeof(BfmeDynamicVBBase)==28)?1:-1];
 typedef char BfmeDynamicNativeVBSize[(sizeof(BfmeDynamicNativeVB)==32)?1:-1];
 extern bool bfmeDynamicVBInUse[15];
-extern BfmeDynamicNativeVB *bfmeDynamicVBs[15];
+// The pool slot is owned by DynamicVBAccessClassDeinit.cpp; cast only the access view.
+class BfmeDynamicVB;
+extern BfmeDynamicVB *bfmeDynamicVBs[15];
 extern unsigned short bfmeDynamicVBSizes[15],bfmeDynamicVBOffsets[15];
 // bfmeDynamicFVFs: matched references place it at VA 0xbd2f04 (retail .rdata contents).
 unsigned bfmeDynamicFVFs[15] = {
@@ -154,7 +156,7 @@ void DynamicVBAccessClass::Allocate_DX8_Dynamic_Buffer()
  bfmeDynamicVBInUse[formatIndex]=true;
  if(vertexCount>bfmeDynamicVBSizes[formatIndex]) {
   if(bfmeDynamicVBs[formatIndex]) {
-   bfmeDynamicVBs[formatIndex]->ReleaseRef();
+   ((BfmeDynamicNativeVB *)bfmeDynamicVBs[formatIndex])->ReleaseRef();
    bfmeDynamicVBs[formatIndex]=0;
   }
   bfmeDynamicVBSizes[formatIndex]=vertexCount;
@@ -163,14 +165,14 @@ void DynamicVBAccessClass::Allocate_DX8_Dynamic_Buffer()
  if(!bfmeDynamicVBs[formatIndex]) {
   unsigned usage=1;
   if(bfmeDynamicCaps->supportNPatches) usage|=4;
-  bfmeDynamicVBs[formatIndex]=new BfmeDynamicNativeVB(bfmeDynamicFVFs[formatIndex],bfmeDynamicVBSizes[formatIndex],usage,0);
+  bfmeDynamicVBs[formatIndex]=(BfmeDynamicVB *)new BfmeDynamicNativeVB(bfmeDynamicFVFs[formatIndex],bfmeDynamicVBSizes[formatIndex],usage,0);
   bfmeDynamicVBOffsets[formatIndex]=0;
  }
- bfmeDynamicVBs[formatIndex]->usesDeclaration=declaration!=0;
+ ((BfmeDynamicNativeVB *)bfmeDynamicVBs[formatIndex])->usesDeclaration=declaration!=0;
  if((unsigned(vertexCount)+bfmeDynamicVBOffsets[formatIndex])>bfmeDynamicVBSizes[formatIndex]) bfmeDynamicVBOffsets[formatIndex]=0;
- if(bfmeDynamicVBs[formatIndex]) bfmeDynamicVBs[formatIndex]->AddRef();
+ if(bfmeDynamicVBs[formatIndex]) ((BfmeDynamicNativeVB *)bfmeDynamicVBs[formatIndex])->AddRef();
  if(buffer) buffer->ReleaseRef();
- buffer=bfmeDynamicVBs[formatIndex];
+ buffer=(BfmeDynamicNativeVB *)bfmeDynamicVBs[formatIndex];
  vertexOffset=bfmeDynamicVBOffsets[formatIndex];
 }
 void DynamicVBAccessClass::Allocate_Sorting_Dynamic_Buffer()
