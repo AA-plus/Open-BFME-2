@@ -1,6 +1,6 @@
 // cl: /MD
 // ?rva00426680@Rva00426713@@UAEXXZ @0x00426680 33B evidence: vslot 9 of vtable 0x0083C408 owned by Rva00426713 plus operator delete 0x0002FD60 plus caller none plus prev next share /O1
-extern const void *const g_00C3C408[];
+extern "C" const void *const __identifier("??_7Rva00426745@@6BSubsystemInterface@@@")[];
 
 class Inner00426680
 {

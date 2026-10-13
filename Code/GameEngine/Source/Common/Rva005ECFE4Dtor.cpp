@@ -2,7 +2,7 @@
 // ??1Rva005ECFE4@@MAE@XZ @ 0x005ECFE4 (11B): derived dtor stores vtable RVA
 // 0x008785B4 (image VA 0x00C785B4), then tail-jmps to base 0x005ECAD0.
 // Slot 0 of that vtable is the rowed deleting dtor at 0x005ECFC8.
-extern const void *const g_00C785B4[];
+extern "C" const void *const __identifier("??_7AutoResolve@Data@StrategicVeterancy@@6B@")[];
 
 class Rva005ECA91
 {
@@ -29,7 +29,7 @@ typedef char Rva005ECFE4SizeCheck[sizeof(Rva005ECFE4) == 0x1C ? 1 : -1];
 
 Rva005ECFE4::~Rva005ECFE4()
 {
-	*(const void **)this = g_00C785B4;
+	*(const void **)this = __identifier("??_7AutoResolve@Data@StrategicVeterancy@@6B@");
 }
 
 // Target 0x005ED15D (59B) allocates 0x1C bytes and forwards three stack

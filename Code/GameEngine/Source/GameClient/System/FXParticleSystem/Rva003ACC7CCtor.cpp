@@ -6,7 +6,7 @@
 extern const void *const g_00C1CB64[];
 extern "C" void *s_slot3E4first;
 extern const void *const g_00C1D788[];
-extern const void *const g_00C1CB54[];
+extern "C" const void *const __identifier("??_7Rva003AF57F@@6BLineEmissionVolumeInfo@FXParticleSystem@@@")[];
 class Rva003ABFE1
 {
 public:
@@ -23,5 +23,5 @@ Rva003ACC7C::Rva003ACC7C(void *a, void *b)
 	*(void **)this = (void *)g_00C1CB64;
 	*(void **)((char *)this + 0x14) = (void *)&s_slot3E4first;
 	*(void **)((char *)this + 0x18) = (void *)g_00C1D788;
-	*(void **)((char *)this + 0x1C) = (void *)g_00C1CB54;
+	*(void **)((char *)this + 0x1C) = (void *)__identifier("??_7Rva003AF57F@@6BLineEmissionVolumeInfo@FXParticleSystem@@@");
 }

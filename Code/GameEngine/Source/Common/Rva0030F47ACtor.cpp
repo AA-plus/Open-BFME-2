@@ -19,7 +19,7 @@ public:
 
 extern PlayerList *ThePlayerList;
 
-extern const void *const g_00C09840[];
+extern "C" const void *const __identifier("??_7GameMessage@@6B@")[];
 
 class Rva0030F47A
 {
@@ -39,7 +39,7 @@ private:
 
 Rva0030F47A::Rva0030F47A(void *arg)
 {
-	*(const void **)this = g_00C09840;
+	*(const void **)this = __identifier("??_7GameMessage@@6B@");
 	m_14 = ThePlayerList->m_10->m_54;
 	m_10 = arg;
 	m_1C = 0;

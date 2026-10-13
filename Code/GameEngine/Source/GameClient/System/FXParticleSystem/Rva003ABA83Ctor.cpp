@@ -7,7 +7,7 @@
 extern "C" void *s_slot3E4first;
 extern const void *const g_00C1C334[];
 extern const void *const g_00C1C780[];
-extern const void *const g_00C1C324[];
+extern "C" const void *const __identifier("??_7Rva003AE43F@@6B@")[];
 class T1Base_005F3750
 {
 public:
@@ -28,5 +28,5 @@ Rva003ABA83::Rva003ABA83(void *a, void *b) : T1Base_005F3750(a, b)
 {
 	*(void **)this = (void *)g_00C1C334;
 	m_14 = (void *)&s_slot3E4first;
-	m_18 = (void *)g_00C1C324;
+	m_18 = (void *)__identifier("??_7Rva003AE43F@@6B@");
 }

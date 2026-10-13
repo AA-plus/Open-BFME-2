@@ -10,7 +10,7 @@
 // Callers at 0x001EC15F 0x001EC3FA 0x001EC491 0x001ECD05 0x0040C354.
 #include <string.h>
 #include "ascii_string.h"
-extern const void *const g_00BDF158[];
+extern "C" const void *const __identifier("??_7CarryoverUnit@@6B@")[];
 class EmptyBase
 {
 public:
@@ -49,6 +49,6 @@ private:
 	int m_90;
 	Rva004E04FD m_94;
 };
-CarryoverUnit::CarryoverUnit() : m_vtable((unsigned int)g_00BDF158), m_s04(AsciiString::TheEmptyString), m_f08(0.0f), m_c0C(0), m_90(0)
+CarryoverUnit::CarryoverUnit() : m_vtable((unsigned int)__identifier("??_7CarryoverUnit@@6B@")), m_s04(AsciiString::TheEmptyString), m_f08(0.0f), m_c0C(0), m_90(0)
 {
 }

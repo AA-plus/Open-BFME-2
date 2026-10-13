@@ -73,11 +73,11 @@ struct GameSpyStagingRoom
 	virtual ~GameSpyStagingRoom();
 };
 
-extern const void *const g_00C19230[];
+extern "C" const void *const __identifier("??_7Rva00381D78@@6B@")[];
 
 struct Rva00386374Base
 {
-	virtual ~Rva00386374Base() { *(const void **)this = g_00C19230; }
+	virtual ~Rva00386374Base() { *(const void **)this = __identifier("??_7Rva00381D78@@6B@"); }
 };
 
 class Rva00386374 : public Rva00386374Base

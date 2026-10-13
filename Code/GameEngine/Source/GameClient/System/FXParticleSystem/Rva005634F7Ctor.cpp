@@ -3,8 +3,8 @@
 // Evidence: pinned ParticleModule005F2CA0 base 0x0055C86D then vtable 0xC1D4F4 plus s_slot3E4first at +0x14 plus RenderObjectDrawModuleInfo at +0x18 with vtable 0xC1D4E4 then bytes dwords strings from info plus 8 at +0x58.
 #include "ascii_string.h"
 
-extern const void *const g_00C1D4F4[];
-extern const void *const g_00C1D4E4[];
+extern "C" const void *const __identifier("??_7Rva003AE6A9@@6BModuleInfoHeadBase_3AE6A9@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AE6A9@@6B@")[];
 extern "C" int s_slot3E4first;
 
 class ParticleModule005F2CA0
@@ -87,9 +87,9 @@ Rva005634F7::Rva005634F7(void *a, DrawInfo2 *b)
 	: ParticleModule005F2CA0(a, b)
 	, m_18()
 {
-	*(const void **)this = g_00C1D4F4;
+	*(const void **)this = __identifier("??_7Rva003AE6A9@@6BModuleInfoHeadBase_3AE6A9@@@");
 	m_14 = (void *)&s_slot3E4first;
-	*(const void **)((char *)this + 0x18) = g_00C1D4E4;
+	*(const void **)((char *)this + 0x18) = __identifier("??_7Rva003AE6A9@@6B@");
 	*(unsigned char *)((char *)this + 0x24) = b->m_14;
 	((StringBase<char> *)((char *)this + 0x28))->set(*(const StringBase<char> *)&b->m_18);
 	*(int *)((char *)this + 0x2c) = b->m_1c;

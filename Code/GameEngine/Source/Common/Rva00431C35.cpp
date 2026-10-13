@@ -23,7 +23,7 @@ public:
 };
 
 extern MessageStream *MessageStreamSubsystem;
-extern const void *const g_00C3C97C[];
+extern "C" const void *const __identifier("??_7Rva004318FC@@6B@")[];
 
 struct Rva00431C35Helper
 {
@@ -78,7 +78,7 @@ void FormationTranslator::WaitForSecondButtonDownStateHandler::Restart(void *p)
 	{
 		h = (Rva00431C35Helper *)mem;
 		h->m_parent = m_04;
-		h->m_vptr = (void *)g_00C3C97C;
+		h->m_vptr = (void *)__identifier("??_7Rva004318FC@@6B@");
 	}
 	else
 	{

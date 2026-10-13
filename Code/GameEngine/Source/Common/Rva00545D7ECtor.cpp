@@ -28,7 +28,7 @@ struct Rva00545D7EExitConditions
 	UnsignedInt m_04;
 };
 extern const void *const g_00C6A198[];
-extern const void *const g_00C6A13C[];
+extern "C" const void *const __identifier("??_7Rva00545D43@@6B@")[];
 class Rva00545D7E : public State
 {
 public:
@@ -43,7 +43,7 @@ Rva00545D7E::Rva00545D7E(StateMachine *machine)
 {
 	_ReadWriteBarrier();
 	m_exit.m_04 = 0;
-	m_exit.m_vptr = g_00C6A13C;
+	m_exit.m_vptr = __identifier("??_7Rva00545D43@@6B@");
 	_ReadWriteBarrier();
 	m_28 = 0;
 }

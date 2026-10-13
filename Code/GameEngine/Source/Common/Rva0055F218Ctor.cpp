@@ -27,8 +27,8 @@ private:
 	void *m_v8;
 };
 
-extern const void *const g_00C1D1D4[];
-extern const void *const g_00C1D1E4[];
+extern "C" const void *const __identifier("??_7Rva003ADE58@@6BV3Vt01111D90@@@")[];
+extern "C" const void *const __identifier("??_7Rva003ADE58@@6B@")[];
 extern const void *const g_00C1D1F4[];
 extern "C" char s_slot3E4first;
 
@@ -60,9 +60,9 @@ public:
 Rva0055F218::Rva0055F218(unsigned int a, struct Src0055F218 &src)
 	: Rva0055EFE1(a), Rva0055F218Sub()
 {
-	*(void **)this = (void *)g_00C1D1D4;
+	*(void **)this = (void *)__identifier("??_7Rva003ADE58@@6BV3Vt01111D90@@@");
 	*(void **)((char *)this + 8) = (void *)&s_slot3E4first;
-	m_v = (void *)g_00C1D1E4;
+	m_v = (void *)__identifier("??_7Rva003ADE58@@6B@");
 	float v = src.m_var30.getValue();
 	m_f = v;
 	m_b14 = src.m_3C;

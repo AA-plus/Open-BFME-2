@@ -5,7 +5,7 @@
 // sole matched caller LookupTablePostEffect ctor 0x111B87 constructs this
 // base; vtable 0x00BCFB24.
 
-extern const void *const g_00BCFB24[];
+extern "C" const void *const __identifier("??_7Rva001164B6@@6B@")[];
 
 class BfmeModuleDataSnapshotBase
 {
@@ -18,6 +18,6 @@ private:
 
 BfmeModuleDataSnapshotBase::BfmeModuleDataSnapshotBase()
 {
-	*(const void **)this = g_00BCFB24;
+	*(const void **)this = __identifier("??_7Rva001164B6@@6B@");
 	m_04 = 0;
 }

@@ -7,7 +7,7 @@
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceFrequency(__int64 *frequency);
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64 *counter);
 
-extern const void *const g_00BF6040[];
+extern "C" const void *const __identifier("??_7Rva0025E4CD@@6B@")[];
 
 // 0x001B4E63 is the rowed SubsystemInterface ctor.
 class SubsystemInterface { public: SubsystemInterface(); };
@@ -43,7 +43,7 @@ void *BFME2NativeNetwork::construct(void)
 	m_stallTimerRunning = false;
 	m_stallCount = 0;
 	m_flag38 = false;
-	m_vtable = (void *)g_00BF6040;
+	m_vtable = (void *)__identifier("??_7Rva0025E4CD@@6B@");
 	QueryPerformanceFrequency(&m_performanceFrequency);
 	QueryPerformanceCounter(&m_lastPerformanceCounter);
 	return this;

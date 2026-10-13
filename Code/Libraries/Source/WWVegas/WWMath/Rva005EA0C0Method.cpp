@@ -31,7 +31,7 @@ private:
   char m_pad[0x14];
   Rva00575674 m_holder;
 };
-extern const void *const g_00C78174[];
+extern "C" const void *const __identifier("??_7Rva005EA026@@6B@")[];
 struct Rva005EA0C0Link
 {
   const void *m_vptr;
@@ -44,7 +44,7 @@ struct Rva005EA0C0Link
 };
 void Rva005EA183::rva005EA0C0()
 {
-  Rva005EA0C0Link *link = new Rva005EA0C0Link(this, (const void *)g_00C78174);
+  Rva005EA0C0Link *link = new Rva005EA0C0Link(this, (const void *)__identifier("??_7Rva005EA026@@6B@"));
   m_holder.rva00575674((Object *)link);
   return m_holder.m_ptr->f1();
 }

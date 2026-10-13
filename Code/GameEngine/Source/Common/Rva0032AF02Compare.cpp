@@ -8,8 +8,8 @@ public:
 	virtual void Read(void *buf, int offset, int size);
 };
 
-extern const void *const g_00BFDC60[];
-extern const void *const g_00C0D938[];
+extern "C" const void *const __identifier("??_7Rva002AAD77@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva0032A3C6@@6B@")[];
 
 int Rva002AADB6Compare(Rva002AADB6Reader *a, Rva002AADB6Reader *b, int unused);
 
@@ -18,7 +18,7 @@ class ReaderA0032AF02 : public Rva002AADB6Reader
 public:
 	ReaderA0032AF02(const void *p)
 	{
-		*(const void *const **)this = g_00BFDC60;
+		*(const void *const **)this = __identifier("??_7Rva002AAD77@@6B@");
 		m_arg = p;
 	}
 	virtual ~ReaderA0032AF02() {}
@@ -30,7 +30,7 @@ class ReaderB0032AF02 : public Rva002AADB6Reader
 public:
 	ReaderB0032AF02(const void *p)
 	{
-		*(const void *const **)this = g_00C0D938;
+		*(const void *const **)this = __identifier("??_7Rva0032A3C6@@6B@");
 		m_arg = p;
 	}
 	virtual ~ReaderB0032AF02() {}

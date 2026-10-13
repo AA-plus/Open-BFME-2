@@ -6,7 +6,7 @@
 // LineEmissionVolumeModuleTemplate sub vtbl at VA 0x00C1BB10, outer at 0x00C1BB20;
 // +4 slot reuses s_slot3E4first at VA 0x00C1C780 (?vftable_0112B89C).
 extern const void *const g_00C1BB10[];
-extern const void *const g_00C1BB20[];
+extern "C" const void *const __identifier("??_7LineEmissionVolumeModuleTemplate@FXParticleSystem@@6BModuleTemplate@1@@")[];
 extern "C" char s_slot3E4first;
 
 namespace FXParticleSystem
@@ -48,7 +48,7 @@ LineEmissionVolumeModuleTemplate::LineEmissionVolumeModuleTemplate(
 	sub->construct_from(sub_src);
 	// Sub vtbl then outer dual vtbls (retail store order).
 	*(void **)sub = (void *)g_00C1BB10;
-	m_v0 = (void *)g_00C1BB20;
+	m_v0 = (void *)__identifier("??_7LineEmissionVolumeModuleTemplate@FXParticleSystem@@6BModuleTemplate@1@@");
 	m_v4 = (void *)&s_slot3E4first;
 }
 }

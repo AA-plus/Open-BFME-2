@@ -4,7 +4,7 @@
 // the base vtable, free the node chain through the null-tolerant deleteInstance(0) plus operator delete
 // path, clear the head, and tell the listener (its slot 0x40) that this object is gone. Whether this is the
 // destructor proper is unproven, so it stays a plain member with an address name.
-extern const void *const g_00C09840[];
+extern "C" const void *const __identifier("??_7GameMessage@@6B@")[];
 
 class Rva0030F4AFNode
 {
@@ -53,7 +53,7 @@ private:
 
 void Rva0030F47A::rva0030F4AF()
 {
-	*(const void **)this = g_00C09840;
+	*(const void **)this = __identifier("??_7GameMessage@@6B@");
 	if (m_nodes) {
 		Rva0030F4AFNode *node = m_nodes;
 		do {

@@ -1,7 +1,7 @@
 // cl: /MD /EHsc
 // ??0Rva00431F61@@QAE@XZ @0x00431F61 84B: ctor storing vtable 0x0083C9B8 then helper new 8B with vtable 0x0083C97C plus parent then global. Evidence: unlock lane; EH_prolog row 0x00629188; new row 0x0002FDA0; vtables g_00C3C9B8 g_00C3C97C; global g_00E0322C; caller 0x0023A541.
-extern const void *const g_00C3C9B8[];
-extern const void *const g_00C3C97C[];
+extern "C" const void *const __identifier("??_7Rva00431FB5@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva004318FC@@6B@")[];
 
 struct Rva00431F61Helper
 {
@@ -36,7 +36,7 @@ void *__cdecl operator new(unsigned int size);
 
 FormationTranslator::FormationTranslator()
 {
-	m_vptr = (void *)g_00C3C9B8;
+	m_vptr = (void *)__identifier("??_7Rva00431FB5@@6B@");
 	m_04 = 0;
 	m_05 = 0;
 	void *mem = operator new(8);
@@ -45,7 +45,7 @@ FormationTranslator::FormationTranslator()
 	{
 		h = (Rva00431F61Helper *)mem;
 		h->m_parent = this;
-		h->m_vptr = (void *)g_00C3C97C;
+		h->m_vptr = (void *)__identifier("??_7Rva004318FC@@6B@");
 	}
 	else
 	{

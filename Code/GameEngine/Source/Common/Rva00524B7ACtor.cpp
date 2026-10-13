@@ -24,7 +24,7 @@ class PlaybackOpenVirtualView:public MovieSlots<9>{public:virtual void clearMovi
 // baseConstruct through a cast. Calls rowed base 0x001B4E63; sole caller
 // Locomotor 0x005C9716 at +0x218. Single-class keeps source order per
 // Rva005A7A90Ctor precedent. Honest owner.
-extern const void *const g_00C67DFC[];
+extern "C" const void *const __identifier("??_7Rva00524BB4@@6B@")[];
 
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
@@ -69,7 +69,7 @@ MovieWindowPlayback::MovieWindowPlayback()
 	m_20 = 0;
 	m_2C = 0;
 	m_30 = 0;
-	m_vtable = (void *)g_00C67DFC;
+	m_vtable = (void *)__identifier("??_7Rva00524BB4@@6B@");
 	_ReadWriteBarrier();
 	m_34 = 0;
 	m_38 = 0;

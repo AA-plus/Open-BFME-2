@@ -5,8 +5,8 @@
 // immediates (vtable g_00C1C7EC member vtable g_00C1C80C s_slot at +0x14 and
 // g_00C1C7E8 at +0x18). Evidence: neg sbb and select; sibling Rva003ABFE1Ctor.
 extern "C" void *s_slot3E4first;
-extern const void *const g_00C1C7EC[];
-extern const void *const g_00C1C80C[];
+extern "C" const void *const __identifier("??_7Rva003AF7FE@@6BModuleInfoHeadBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF7FE@@6BLineEmissionVolumeInfo@FXParticleSystem@@@")[];
 extern const void *const g_00C1C7E8[];
 namespace FXParticleSystem
 {
@@ -39,8 +39,8 @@ Rva003AC0DA::Rva003AC0DA(void *a, void *b)
 	: FXParticleSystem::DefaultParticleModule<5>(a, b)
 	, m_1C(*(FXParticleSystem::LineEmissionVolumeInfo *)(b ? (char *)b + 8 : 0))
 {
-	*(void **)&m_1C = (void *)g_00C1C80C;
-	*(void **)this = (void *)g_00C1C7EC;
+	*(void **)&m_1C = (void *)__identifier("??_7Rva003AF7FE@@6BLineEmissionVolumeInfo@FXParticleSystem@@@");
+	*(void **)this = (void *)__identifier("??_7Rva003AF7FE@@6BModuleInfoHeadBase@@@");
 	m_14 = (void *)&s_slot3E4first;
 	m_18 = (void *)g_00C1C7E8;
 }

@@ -8,7 +8,7 @@
 
 int Rva00381452Get(void);
 
-extern const void *const g_00C728B8[];
+extern "C" const void *const __identifier("??_7Rva005AFE3F@@6B@")[];
 
 struct Rva002BA8F1Listener
 {
@@ -48,7 +48,7 @@ private:
 
 Rva005AFE86::Rva005AFE86(void *p)
 	: EmptyBase005AFE86()
-	, m_vtable(g_00C728B8)
+	, m_vtable(__identifier("??_7Rva005AFE3F@@6B@"))
 	, m_04(p)
 {
 	m_08 = 0;

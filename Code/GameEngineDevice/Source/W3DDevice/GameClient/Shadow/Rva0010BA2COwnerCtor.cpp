@@ -16,7 +16,7 @@ class Rva000F0F2B
 public:
     Rva000F0F2B();
 };
-extern const void *const g_00BCF9E0[];
+extern "C" const void *const __identifier("??_7Rva007AFF00Owner@@6B@")[];
 class Rva0010BA2COwner : public Rva000F0F2B
 {
 public:
@@ -25,6 +25,6 @@ public:
 };
 Rva0010BA2COwner::Rva0010BA2COwner()
 {
-    *(const void *const **)this = g_00BCF9E0;
+    *(const void *const **)this = __identifier("??_7Rva007AFF00Owner@@6B@");
     rva00108895();
 }

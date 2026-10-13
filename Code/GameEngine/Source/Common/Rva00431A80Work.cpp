@@ -9,8 +9,8 @@ public:
 
 bool __cdecl Rva004318A8Guard();
 
-extern const void *const g_00C3C988[];
-extern const void *const g_00C3C97C[];
+extern "C" const void *const __identifier("??_7Rva0043190E@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva004318FC@@6B@")[];
 
 void *__cdecl operator new(unsigned int size);
 
@@ -38,7 +38,7 @@ void Rva00431A80::work()
 	if (mem != 0) {
 		h = (Rva00431A80Helper *)mem;
 		h->m_parent = m_04;
-		h->m_vptr = (void *)g_00C3C988;
+		h->m_vptr = (void *)__identifier("??_7Rva0043190E@@6B@");
 	} else {
 		h = 0;
 	}
@@ -65,7 +65,7 @@ void Rva00431AB6::work()
 	if (mem != 0) {
 		h = (Rva00431A80Helper *)mem;
 		h->m_parent = m_04;
-		h->m_vptr = (void *)g_00C3C97C;
+		h->m_vptr = (void *)__identifier("??_7Rva004318FC@@6B@");
 	} else {
 		h = 0;
 	}
@@ -92,7 +92,7 @@ void Rva00431ED6::work()
 	if (mem != 0) {
 		h = (Rva00431A80Helper *)mem;
 		h->m_parent = m_04;
-		h->m_vptr = (void *)g_00C3C97C;
+		h->m_vptr = (void *)__identifier("??_7Rva004318FC@@6B@");
 	} else {
 		h = 0;
 	}

@@ -5,8 +5,8 @@
 // immediates (vtable g_00C1C750 member vtable g_00C1C770 s_slot at +0x14 and
 // g_ data at +0x18). Evidence: neg sbb and select; neighbours /O1.
 extern "C" void *s_slot3E4first;
-extern const void *const g_00C1C750[];
-extern const void *const g_00C1C770[];
+extern "C" const void *const __identifier("??_7Rva003AF5AC@@6BModuleInfoHeadBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF5AC@@6BLineEmissionVolumeInfo@FXParticleSystem@@@")[];
 extern const void *const g_00C1D788[];
 namespace FXParticleSystem
 {
@@ -39,8 +39,8 @@ Rva003ABFE1::Rva003ABFE1(void *a, void *b)
 	: FXParticleSystem::DefaultParticleModule<5>(a, b)
 	, m_1C(*(FXParticleSystem::LineEmissionVolumeInfo *)(b ? (char *)b + 8 : 0))
 {
-	*(void **)&m_1C = (void *)g_00C1C770;
-	*(void **)this = (void *)g_00C1C750;
+	*(void **)&m_1C = (void *)__identifier("??_7Rva003AF5AC@@6BLineEmissionVolumeInfo@FXParticleSystem@@@");
+	*(void **)this = (void *)__identifier("??_7Rva003AF5AC@@6BModuleInfoHeadBase@@@");
 	m_14 = (void *)&s_slot3E4first;
 	m_18 = (void *)g_00C1D788;
 }

@@ -8,8 +8,8 @@ public:
 };
 
 extern const void *const g_00BBB554[];
-extern const void *const g_00C3ADD8[];
-extern const void *const g_00C3ADC8[];
+extern "C" const void *const __identifier("??_7Rva0041B790@@6BSubsystemInterface@@@")[];
+extern "C" const void *const __identifier("??_7Rva0041B790@@6BSnapshot@@@")[];
 
 // 0x001B4E63 is the rowed SubsystemInterface ctor.
 class SubsystemInterface { public: SubsystemInterface(); };
@@ -26,6 +26,6 @@ Rva0041AC6A::Rva0041AC6A()
 {
 	reinterpret_cast<SubsystemInterface *>(this)->SubsystemInterface::SubsystemInterface();
 	m_secondVptr = (const void *)g_00BBB554;
-	*(const void **)this = (const void *)g_00C3ADD8;
-	m_secondVptr = (const void *)g_00C3ADC8;
+	*(const void **)this = (const void *)__identifier("??_7Rva0041B790@@6BSubsystemInterface@@@");
+	m_secondVptr = (const void *)__identifier("??_7Rva0041B790@@6BSnapshot@@@");
 }

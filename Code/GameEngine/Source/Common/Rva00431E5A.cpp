@@ -3,7 +3,7 @@
 int __cdecl Rva004319D4Get();
 void __cdecl Rva004319F2Update();
 
-extern const void *const g_00C3C97C[];
+extern "C" const void *const __identifier("??_7Rva004318FC@@6B@")[];
 
 struct Rva00431E5AHelper
 {
@@ -39,7 +39,7 @@ void Rva00431E5A::rva00431E5A()
 	{
 		h = (Rva00431E5AHelper *)mem;
 		h->m_parent = m_04;
-		h->m_vptr = (void *)g_00C3C97C;
+		h->m_vptr = (void *)__identifier("??_7Rva004318FC@@6B@");
 	}
 	else
 	{

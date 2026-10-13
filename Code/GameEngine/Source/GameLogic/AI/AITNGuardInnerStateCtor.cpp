@@ -54,7 +54,7 @@ struct TunnelNetworkExitConditions
 	const void *m_vptr;
 	UnsignedInt m_attackGiveUpFrame; // +0x04 (state +0x24)
 };
-extern const void *const g_00C6A13C[];
+extern "C" const void *const __identifier("??_7Rva00545D43@@6B@")[];
 class AITNGuardMachine;
 class AITNGuardInnerState : public State
 {
@@ -74,5 +74,5 @@ AITNGuardInnerState::AITNGuardInnerState(StateMachine *machine)
 {
 	_ReadWriteBarrier();
 	m_exitConditions.m_attackGiveUpFrame = 0;
-	m_exitConditions.m_vptr = g_00C6A13C;
+	m_exitConditions.m_vptr = __identifier("??_7Rva00545D43@@6B@");
 }

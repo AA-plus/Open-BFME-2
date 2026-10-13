@@ -67,7 +67,7 @@ private:
 	ArmorHashtable003A3959 m_table;
 };
 
-extern const void *const g_00C1ADFC[];
+extern "C" const void *const __identifier("??_7TeamRelationMap@@6B@")[];
 
 // Empty base with inline empty ctor but declared-only dtor: no base call is
 // emitted, but the base is unwindable, so retail arms EH state 0 before the
@@ -90,6 +90,6 @@ private:
 
 Rva003A3959::Rva003A3959()
 	: Rva003A3959Base()
-	, m_vtable(g_00C1ADFC)
+	, m_vtable(__identifier("??_7TeamRelationMap@@6B@"))
 {
 }

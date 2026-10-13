@@ -46,7 +46,7 @@ class LivingWorldLogic;
 extern LivingWorldLogic *TheLivingWorldLogic;
 #define g_009FEF10 ((Rva002BA8F1Logic *)TheLivingWorldLogic)
 extern const void *const g_00BE433C[];
-extern const void *const g_00BE4320[];
+extern "C" const void *const __identifier("??_7Rva0020E394@@6B@")[];
 
 struct EmptyBase20EBA0
 {
@@ -65,7 +65,7 @@ struct TmpBE433C : EmptyBase20EBA0
 struct TmpBE4320 : EmptyBase20EBA0
 {
 	const void *v;
-	TmpBE4320() : v(g_00BE4320) {}
+	TmpBE4320() : v(__identifier("??_7Rva0020E394@@6B@")) {}
 	~TmpBE4320() {}
 };
 

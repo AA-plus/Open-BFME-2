@@ -46,70 +46,70 @@ extern const void *const g_00C1BFB4[];
 extern const void *const g_00C1C09C[];
 extern const void *const g_00C1C0C0[];
 extern const void *const g_00C1C150[];
-extern const void *const g_00C1C378[];
+extern "C" const void *const __identifier("??_7Rva003AE4E5@@6B@")[];
 extern const void *const g_00C1C388[];
 extern const void *const g_00C1C3C8[];
 extern const void *const g_00C1C404[];
 extern const void *const g_00C1C538[];
 extern const void *const g_00C1C53C[];
-extern const void *const g_00C1C574[];
-extern const void *const g_00C1C5B8[];
-extern const void *const g_00C1C608[];
-extern const void *const g_00C1C60C[];
-extern const void *const g_00C1C61C[];
+extern "C" const void *const __identifier("??_7Rva003ABD20@@6BDefaultModuleSecondBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003ABD81@@6BDefaultModuleSecondBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AECE6@@6BRva003AECE6Slot1@@@")[];
+extern "C" const void *const __identifier("??_7Rva005FEAD0DefaultModule7@FXParticleSystem@@6BRva005FEA50PrimaryBase@1@@")[];
+extern "C" const void *const __identifier("??_7Rva003AEDE9@@6BDefaultModuleSecondBase_3AEE16@@@")[];
 extern const void *const g_00C1C620[];
-extern const void *const g_00C1C6CC[];
+extern "C" const void *const __identifier("??_7Rva003AF89A@@6BRva003AF8C7B1C@@@")[];
 extern const void *const g_00C1C6DC[];
 extern const void *const g_00C1C72C[];
 extern const void *const g_00C1C780[];
-extern const void *const g_00C1C950[];
-extern const void *const g_00C1CB24[];
-extern const void *const g_00C1CB54[];
+extern "C" const void *const __identifier("??_7?$ConcreteModuleTemplate@V?$DefaultModuleTag@$0A@@FXParticleSystem@@@FXParticleSystem@@6BSecondaryModuleBase@1@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF47D@@6BEmissionVolumeInfo4AA@FXParticleSystem@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF57F@@6BLineEmissionVolumeInfo@FXParticleSystem@@@")[];
 extern const void *const g_00C1CC54[];
-extern const void *const g_00C1CC58[];
-extern const void *const g_00C1CC84[];
+extern "C" const void *const __identifier("??_7Rva003AE4E5@@6BModuleInfoHeadBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AE56F@@6B@")[];
 extern const void *const g_00C1CC94[];
-extern const void *const g_00C1CC98[];
-extern const void *const g_00C1CCC4[];
+extern "C" const void *const __identifier("??_7Rva003AE56F@@6BModuleInfoHeadBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AE5F9@@6B@")[];
 extern const void *const g_00C1CCD4[];
-extern const void *const g_00C1CCD8[];
+extern "C" const void *const __identifier("??_7Rva003AE5F9@@6BModuleInfoHeadBase@@@")[];
 extern const void *const g_00C1CDE0[];
 extern const void *const g_00C1CDF0[];
 extern const void *const g_00C1CE1C[];
-extern const void *const g_00C1CE54[];
+extern "C" const void *const __identifier("??_7Rva003ABD20@@6B@")[];
 extern const void *const g_00C1CE64[];
-extern const void *const g_00C1CE88[];
+extern "C" const void *const __identifier("??_7Rva003ABD81@@6B@")[];
 extern const void *const g_00C1CE98[];
 extern const void *const g_00C1CEE8[];
-extern const void *const g_00C1CF08[];
-extern const void *const g_00C1CEF8[];
-extern const void *const g_00C1D00C[];
-extern const void *const g_00C1D02C[];
-extern const void *const g_00C1D0BC[];
+extern "C" const void *const __identifier("??_7Rva003AEDE9@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva003AECE6@@6BRva003AECE6Slot0@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF47D@@6BModuleInfoHeadBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF57F@@6BModuleInfoHeadBase@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AF89A@@6BRva003AF8C7B00@@@")[];
 extern const void *const g_00C1D788[];
 extern const void *const g_00C1C444[];
-extern const void *const g_00C1CD04[];
+extern "C" const void *const __identifier("??_7Rva003AE683@@6B@")[];
 extern const void *const g_00C1C620[];
-extern const void *const g_00C1C61C[];
-extern const void *const g_00C1CF08[];
-extern const void *const g_00C1CD14[];
+extern "C" const void *const __identifier("??_7Rva003AEDE9@@6BDefaultModuleSecondBase_3AEE16@@@")[];
+extern "C" const void *const __identifier("??_7Rva003AEDE9@@6B@")[];
+extern "C" const void *const __identifier("??_7Rva003AE683@@6BModuleInfoHeadBase_3AE683@@@")[];
 extern const void *const g_00C1C26C[];
 extern const void *const g_00C1CDCC[];
 extern const void *const g_00C1C900[];
-extern const void *const g_00C1CF18[];
+extern "C" const void *const __identifier("??_7Rva003AEDE9@@6BDefaultModuleHeadBase_3AEE16@@@")[];
 extern const void *const g_00C1CA00[];
 extern const void *const g_00C1CF38[];
 extern const void *const g_00C1CA3C[];
-extern const void *const g_00C1CF68[];
+extern "C" const void *const __identifier("??_7Gen005ED0D0@@6BDefaultModuleHeadBase_3AEE16@@@")[];
 extern const void *const g_00C1CAA0[];
-extern const void *const g_00C1CD54[];
+extern "C" const void *const __identifier("??_7Rva005EBCC0Object@@6BV3Slot0@@@")[];
 extern const void *const g_00C1CD50[];
-extern const void *const g_00C1CD90[];
+extern "C" const void *const __identifier("??_7Rva003AE928@@6BModuleInfoHeadBase_3AE94E@@@")[];
 extern const void *const g_00C1C290[];
 extern const void *const g_00C1C488[];
-extern const void *const g_00C1CD40[];
+extern "C" const void *const __identifier("??_7Rva005EBCC0Object@@6BV3Slot2@@@")[];
 extern const void *const g_00C1C4C8[];
-extern const void *const g_00C1CD80[];
+extern "C" const void *const __identifier("??_7Rva003AE928@@6B@")[];
 extern const void *const g_00C1C508[];
 extern const void *const g_00C1C504[];
 extern const void *const g_00C1CDBC[];
@@ -117,8 +117,8 @@ extern const void *const g_00C1C644[];
 extern const void *const g_00C1C640[];
 extern const void *const g_00C1CF28[];
 extern const void *const g_00C1C6A4[];
-extern const void *const g_00C1C6A0[];
-extern const void *const g_00C1C690[];
+extern "C" const void *const __identifier("??_7Gen005ED0D0@@6BDefaultModuleSecondBase_3AEE16@@@")[];
+extern "C" const void *const __identifier("??_7Gen005ED0D0@@6B@")[];
 
 struct Rva0055BF4BSrc;
 class RvaSmartPtr12;
@@ -200,7 +200,7 @@ Rva003ABAC3::Rva003ABAC3(void *a, void *b)
 {
 	STAMP(0x00, g_00C1C388);
 	STAMP(0x14, g_00C1C780);
-	STAMP(0x18, g_00C1C378);
+	STAMP(0x18, __identifier("??_7Rva003AE4E5@@6B@"));
 }
 
 class Rva003ABAF3 : public Rva00560A1B
@@ -214,7 +214,7 @@ Rva003ABAF3::Rva003ABAF3(void *a, void *b)
 {
 	STAMP(0x00, g_00C1C3C8);
 	STAMP(0x14, g_00C1C780);
-	STAMP(0x18, g_00C1CC84);
+	STAMP(0x18, __identifier("??_7Rva003AE56F@@6B@"));
 }
 
 class Rva003ABB23 : public Rva003AE61F
@@ -228,7 +228,7 @@ Rva003ABB23::Rva003ABB23(void *a, void *b)
 {
 	STAMP(0x00, g_00C1C404);
 	STAMP(0x14, g_00C1C780);
-	STAMP(0x18, g_00C1CCC4);
+	STAMP(0x18, __identifier("??_7Rva003AE5F9@@6B@"));
 }
 
 class Rva003ABCB5 : public Rva0055BF4B
@@ -256,8 +256,8 @@ Rva003ABDC8::Rva003ABDC8(void *a, void *b)
 	: FXParticleSystem::Rva005FEAD0DefaultModule7(*(FXParticleSystem::TrackingPtr<FXParticleSystem::ParticleSystem> *)a,
 		(const FXParticleSystem::DefaultModuleTemplate7 *)b)
 {
-	STAMP(0x00, g_00C1C60C);
-	STAMP(0x14, g_00C1C608);
+	STAMP(0x00, __identifier("??_7Rva005FEAD0DefaultModule7@FXParticleSystem@@6BRva005FEA50PrimaryBase@1@@"));
+	STAMP(0x14, __identifier("??_7Rva003AECE6@@6BRva003AECE6Slot1@@@"));
 	STAMP(0x18, g_00C1C780);
 	STAMP(0x1C, g_00C1CEE8);
 }
@@ -277,9 +277,9 @@ Rva003ABDF9::Rva003ABDF9(void *a, void *b)
     : Rva003AEE16(*(const RvaSmartPtr12 *)a, *(const Rva005641EDInput *)b)
 {
     STAMP(0x00, g_00C1C620);
-    STAMP(0x14, g_00C1C61C);
+    STAMP(0x14, __identifier("??_7Rva003AEDE9@@6BDefaultModuleSecondBase_3AEE16@@@"));
     STAMP(0x18, g_00C1C780);
-    STAMP(0x20, g_00C1CF08);
+    STAMP(0x20, __identifier("??_7Rva003AEDE9@@6B@"));
 }
 
 class Rva003ABECC : public FXParticleSystem::LightningEmissionModule
@@ -295,7 +295,7 @@ Rva003ABECC::Rva003ABECC(void *a, void *b)
 	STAMP(0x00, g_00C1C6DC);
 	STAMP(0x14, g_00C1C780);
 	STAMP(0x18, g_00C1D788);
-	STAMP(0x1C, g_00C1C6CC);
+	STAMP(0x1C, __identifier("??_7Rva003AF89A@@6BRva003AF8C7B1C@@@"));
 }
 
 // ---- module constructors the template factories call ----
@@ -310,9 +310,9 @@ public:
 Rva003ACDA0Module::Rva003ACDA0Module(void *a, Rva003AD71BTemplate *b)
 	: Rva003ABAC3(a, b)
 {
-	STAMP(0x00, g_00C1CC58);
+	STAMP(0x00, __identifier("??_7Rva003AE4E5@@6BModuleInfoHeadBase@@@"));
 	STAMP(0x14, g_00C1CC54);
-	STAMP(0x18, g_00C1C378);
+	STAMP(0x18, __identifier("??_7Rva003AE4E5@@6B@"));
 }
 
 class Rva003AD757Template;
@@ -325,9 +325,9 @@ public:
 Rva003ACDCFModule::Rva003ACDCFModule(void *a, Rva003AD757Template *b)
 	: Rva003ABAF3(a, b)
 {
-	STAMP(0x00, g_00C1CC98);
+	STAMP(0x00, __identifier("??_7Rva003AE56F@@6BModuleInfoHeadBase@@@"));
 	STAMP(0x14, g_00C1CC94);
-	STAMP(0x18, g_00C1CC84);
+	STAMP(0x18, __identifier("??_7Rva003AE56F@@6B@"));
 }
 
 class Rva003AD793Template;
@@ -340,9 +340,9 @@ public:
 Rva003ACDFEModule::Rva003ACDFEModule(void *a, Rva003AD793Template *b)
 	: Rva003ABB23(a, b)
 {
-	STAMP(0x00, g_00C1CCD8);
+	STAMP(0x00, __identifier("??_7Rva003AE5F9@@6BModuleInfoHeadBase@@@"));
 	STAMP(0x14, g_00C1CCD4);
-	STAMP(0x18, g_00C1CCC4);
+	STAMP(0x18, __identifier("??_7Rva003AE5F9@@6B@"));
 }
 
 class Rva003AD8C5Template;
@@ -357,7 +357,7 @@ Rva003ACF32Module::Rva003ACF32Module(void *a, Rva003AD8C5Template *b)
 {
 	STAMP(0x00, g_00C1CDF0);
 	STAMP(0x14, g_00C1C538);
-	STAMP(0x18, g_00C1C950);
+	STAMP(0x18, __identifier("??_7?$ConcreteModuleTemplate@V?$DefaultModuleTag@$0A@@FXParticleSystem@@@FXParticleSystem@@6BSecondaryModuleBase@1@@"));
 	STAMP(0x1C, g_00C1CDE0);
 }
 
@@ -372,9 +372,9 @@ Rva003ACFCFModule::Rva003ACFCFModule(void *a, Rva003AD904Template *b)
 	: Rva003ABD20(*(const RvaSmartPtr12 *)a, (int)b)
 {
 	STAMP(0x00, g_00C1CE64);
-	STAMP(0x14, g_00C1C574);
+	STAMP(0x14, __identifier("??_7Rva003ABD20@@6BDefaultModuleSecondBase@@@"));
 	STAMP(0x18, g_00C1CE1C);
-	STAMP(0x1C, g_00C1CE54);
+	STAMP(0x1C, __identifier("??_7Rva003ABD20@@6B@"));
 }
 
 class Rva003AD940Template;
@@ -388,9 +388,9 @@ Rva003AD005Module::Rva003AD005Module(void *a, Rva003AD940Template *b)
 	: Rva003ABD81(*(const RvaSmartPtr12 *)a, (int)b)
 {
 	STAMP(0x00, g_00C1CE98);
-	STAMP(0x14, g_00C1C5B8);
+	STAMP(0x14, __identifier("??_7Rva003ABD81@@6BDefaultModuleSecondBase@@@"));
 	STAMP(0x18, g_00C1BF80);
-	STAMP(0x1C, g_00C1CE88);
+	STAMP(0x1C, __identifier("??_7Rva003ABD81@@6B@"));
 }
 
 class Rva003AD97FTemplate;
@@ -403,8 +403,8 @@ public:
 Rva003AD094Module::Rva003AD094Module(void *a, Rva003AD97FTemplate *b)
 	: Rva003ABDC8(a, b)
 {
-	STAMP(0x00, g_00C1CEF8);
-	STAMP(0x14, g_00C1C608);
+	STAMP(0x00, __identifier("??_7Rva003AECE6@@6BRva003AECE6Slot0@@@"));
+	STAMP(0x14, __identifier("??_7Rva003AECE6@@6BRva003AECE6Slot1@@@"));
 	STAMP(0x18, g_00C1BFB4);
 	STAMP(0x1C, g_00C1CEE8);
 }
@@ -420,10 +420,10 @@ Rva003AD278Module::Rva003AD278Module(void *a, Rva003ADB21Template *b)
 	: Rva003ACC4B(*(FXParticleSystem::TrackingPtr<FXParticleSystem::ParticleSystem> *)a,
 		(const FXParticleSystem::PointEmissionVolumeModuleTemplate *)b)
 {
-	STAMP(0x00, g_00C1D00C);
+	STAMP(0x00, __identifier("??_7Rva003AF47D@@6BModuleInfoHeadBase@@@"));
 	STAMP(0x14, g_00C1C09C);
 	STAMP(0x18, g_00C1C72C);
-	STAMP(0x1C, g_00C1CB24);
+	STAMP(0x1C, __identifier("??_7Rva003AF47D@@6BEmissionVolumeInfo4AA@FXParticleSystem@@@"));
 }
 
 class Rva003ADB44Template;
@@ -436,10 +436,10 @@ public:
 Rva003AD2B3Module::Rva003AD2B3Module(void *a, Rva003ADB44Template *b)
 	: Rva003ACC7C(a, b)
 {
-	STAMP(0x00, g_00C1D02C);
+	STAMP(0x00, __identifier("??_7Rva003AF57F@@6BModuleInfoHeadBase@@@"));
 	STAMP(0x14, g_00C1C0C0);
 	STAMP(0x18, g_00C1D788);
-	STAMP(0x1C, g_00C1CB54);
+	STAMP(0x1C, __identifier("??_7Rva003AF57F@@6BLineEmissionVolumeInfo@FXParticleSystem@@@"));
 }
 
 class Rva003ADBD0Template;
@@ -452,10 +452,10 @@ public:
 Rva003AD38BModule::Rva003AD38BModule(void *a, Rva003ADBD0Template *b)
 	: Rva003ABECC(a, b)
 {
-	STAMP(0x00, g_00C1D0BC);
+	STAMP(0x00, __identifier("??_7Rva003AF89A@@6BRva003AF8C7B00@@@"));
 	STAMP(0x14, g_00C1C150);
 	STAMP(0x18, g_00C1D788);
-	STAMP(0x1C, g_00C1C6CC);
+	STAMP(0x1C, __identifier("??_7Rva003AF89A@@6BRva003AF8C7B1C@@@"));
 }
 
 // ---- five more intermediate constructors (same shape, rowed bases) ----
@@ -472,7 +472,7 @@ Rva003ABB93::Rva003ABB93(void *a, void *b)
 {
 	STAMP(0x00, g_00C1C488);
 	STAMP(0x14, g_00C1C780);
-	STAMP(0x18, g_00C1CD40);
+	STAMP(0x18, __identifier("??_7Rva005EBCC0Object@@6BV3Slot2@@@"));
 }
 
 class Rva003ABBCB : public Rva003AE94E
@@ -486,7 +486,7 @@ Rva003ABBCB::Rva003ABBCB(void *a, void *b)
 {
 	STAMP(0x00, g_00C1C4C8);
 	STAMP(0x14, g_00C1C780);
-	STAMP(0x18, g_00C1CD80);
+	STAMP(0x18, __identifier("??_7Rva003AE928@@6B@"));
 }
 
 class Rva003ABC6E : public Rva003AEA42
@@ -529,9 +529,9 @@ Rva003ABE8D::Rva003ABE8D(void *a, void *b)
 	: Rva003AF076(*(const RvaSmartPtr12 *)a, *(const Rva005648FEInput *)b)
 {
 	STAMP(0x00, g_00C1C6A4);
-	STAMP(0x14, g_00C1C6A0);
+	STAMP(0x14, __identifier("??_7Gen005ED0D0@@6BDefaultModuleSecondBase_3AEE16@@@"));
 	STAMP(0x18, g_00C1C780);
-	STAMP(0x20, g_00C1C690);
+	STAMP(0x20, __identifier("??_7Gen005ED0D0@@6B@"));
 }
 
 // ---- the two module constructors over 0x003ABB93 and 0x003ABBCB, under the
@@ -547,9 +547,9 @@ public:
 Rva003ACE5CModule::Rva003ACE5CModule(void *a, Rva003AD80BTemplate *b)
 	: Rva003ABB93(a, b)
 {
-	STAMP(0x00, g_00C1CD54);
+	STAMP(0x00, __identifier("??_7Rva005EBCC0Object@@6BV3Slot0@@@"));
 	STAMP(0x14, g_00C1CD50);
-	STAMP(0x18, g_00C1CD40);
+	STAMP(0x18, __identifier("??_7Rva005EBCC0Object@@6BV3Slot2@@@"));
 }
 
 class V3HostRva005E76E0;
@@ -562,9 +562,9 @@ public:
 Rva005E76E0Object::Rva005E76E0Object(void *a, V3HostRva005E76E0 *b)
 	: Rva003ABBCB(a, b)
 {
-	STAMP(0x00, g_00C1CD90);
+	STAMP(0x00, __identifier("??_7Rva003AE928@@6BModuleInfoHeadBase_3AE94E@@@"));
 	STAMP(0x14, g_00C1C290);
-	STAMP(0x18, g_00C1CD80);
+	STAMP(0x18, __identifier("??_7Rva003AE928@@6B@"));
 }
 
 // ---- two more intermediates over rowed bases, then the five module
@@ -581,7 +581,7 @@ Rva003ABB53::Rva003ABB53(void *a, void *b)
 {
 	STAMP(0x00, g_00C1C444);
 	STAMP(0x14, g_00C1C780);
-	STAMP(0x18, g_00C1CD04);
+	STAMP(0x18, __identifier("??_7Rva003AE683@@6B@"));
 }
 
 class V3HostRva005E7420;
@@ -594,9 +594,9 @@ public:
 Rva005E7420Object::Rva005E7420Object(void *a, V3HostRva005E7420 *b)
 	: Rva003ABB53(a, b)
 {
-	STAMP(0x00, g_00C1CD14);
+	STAMP(0x00, __identifier("??_7Rva003AE683@@6BModuleInfoHeadBase_3AE683@@@"));
 	STAMP(0x14, g_00C1C26C);
-	STAMP(0x18, g_00C1CD04);
+	STAMP(0x18, __identifier("??_7Rva003AE683@@6B@"));
 }
 
 class Rva003AD886Template;
@@ -625,10 +625,10 @@ public:
 Rva003AD0CAModule::Rva003AD0CAModule(void *a, Rva003AD9BBTemplate *b)
 	: Rva003ABDF9(a, b)
 {
-	STAMP(0x00, g_00C1CF18);
-	STAMP(0x14, g_00C1C61C);
+	STAMP(0x00, __identifier("??_7Rva003AEDE9@@6BDefaultModuleHeadBase_3AEE16@@@"));
+	STAMP(0x14, __identifier("??_7Rva003AEDE9@@6BDefaultModuleSecondBase_3AEE16@@@"));
 	STAMP(0x18, g_00C1CA00);
-	STAMP(0x20, g_00C1CF08);
+	STAMP(0x20, __identifier("??_7Rva003AEDE9@@6B@"));
 }
 
 class Rva003AD9F7Template;
@@ -657,8 +657,8 @@ public:
 Rva005E7AD0Object::Rva005E7AD0Object(void *a, V3HostRva005E7AD0 *b)
 	: Rva003ABE8D(a, b)
 {
-	STAMP(0x00, g_00C1CF68);
-	STAMP(0x14, g_00C1C6A0);
+	STAMP(0x00, __identifier("??_7Gen005ED0D0@@6BDefaultModuleHeadBase_3AEE16@@@"));
+	STAMP(0x14, __identifier("??_7Gen005ED0D0@@6BDefaultModuleSecondBase_3AEE16@@@"));
 	STAMP(0x18, g_00C1CAA0);
-	STAMP(0x20, g_00C1C690);
+	STAMP(0x20, __identifier("??_7Gen005ED0D0@@6B@"));
 }

@@ -13,8 +13,8 @@ public:
 	void rva0056AD80(void *arg);
 };
 
-extern const void *const g_00C6D14C[];
-extern const void *const g_00C6D110[];
+extern "C" const void *const __identifier("??_7Rva0056ACDF@@6BRva0056AC26@@@")[];
+extern "C" const void *const __identifier("??_7Rva0056ACDF@@6BRva0056ACDF_B1@@@")[];
 
 class Rva0056AF4B
 {
@@ -27,6 +27,6 @@ Rva0056AF4B::Rva0056AF4B(void *arg1, int arg2, int arg3)
 	((Rva0056AD80 *)this)->rva0056AD80(arg1);
 	*(int *)((char *)this + 0x14) = arg2;
 	*(int *)((char *)this + 0x18) = arg3;
-	*(unsigned int *)this = ((unsigned int)g_00C6D14C);
-	*(unsigned int *)((char *)this + 8) = ((unsigned int)g_00C6D110);
+	*(unsigned int *)this = ((unsigned int)__identifier("??_7Rva0056ACDF@@6BRva0056AC26@@@"));
+	*(unsigned int *)((char *)this + 8) = ((unsigned int)__identifier("??_7Rva0056ACDF@@6BRva0056ACDF_B1@@@"));
 }

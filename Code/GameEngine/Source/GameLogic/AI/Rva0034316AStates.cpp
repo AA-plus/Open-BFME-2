@@ -86,7 +86,7 @@ private:
 	char m_pad[0x20 - 4];
 };
 
-extern const void *const g_00C11AC0[];
+extern "C" const void *const __identifier("??_7Rva0033FAFA@@6B@")[];
 
 class Rva0034316A : public StateMachine
 {
@@ -97,7 +97,7 @@ public:
 Rva0034316A::Rva0034316A(Object *owner, int x, unsigned int name)
 	: StateMachine(owner, name, false)
 {
-	*(const void **)this = g_00C11AC0;
+	*(const void **)this = __identifier("??_7Rva0033FAFA@@6B@");
 	Rva00342A96 *s0 = new Rva00342A96((StateMachine *)this);
 	((StateMachine *)this)->defineState(0xE1, (State *)s0, 0xE2, 0x270F, (const StateConditionInfo *)0);
 	Rva00342AD6 *s1 = new Rva00342AD6((StateMachine *)this);
@@ -116,4 +116,3 @@ Rva0034316A::Rva0034316A(Object *owner, int x, unsigned int name)
 
 // The global below is defined elsewhere under another name at the same
 // address (the census owner of that DIR32 target); bind this unit's spelling.
-#pragma comment(linker, "/alternatename:?g_00C11AC0@@3QBQBXB=??_7Rva0034316A@@6B@")

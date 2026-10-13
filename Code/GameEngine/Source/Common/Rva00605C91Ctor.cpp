@@ -10,7 +10,7 @@ public:
 	virtual ~File();
 };
 
-extern const void *const g_00C7AB28[];
+extern "C" const void *const __identifier("??_7LocalFile@@6B@")[];
 
 class Rva00605C91 : public File
 {
@@ -25,5 +25,5 @@ Rva00605C91::Rva00605C91()
 	: File()
 {
 	m_handle |= -1;
-	*(const void * *)this = g_00C7AB28;
+	*(const void * *)this = __identifier("??_7LocalFile@@6B@");
 }

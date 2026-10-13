@@ -30,7 +30,7 @@ private:
 	char m_pad[0x58 - 4];
 };
 
-extern const void *const g_00C11C30[];
+extern "C" const void *const __identifier("??_7Rva0033FB95@@6B@")[];
 
 class Rva00343838 : public StateMachine
 {
@@ -42,11 +42,10 @@ Rva00343838::Rva00343838(Object *owner, int u, unsigned int name, bool flag)
 	: StateMachine(owner, name, flag)
 {
 	(void)u;
-	*(const void **)this = g_00C11C30;
+	*(const void **)this = __identifier("??_7Rva0033FB95@@6B@");
 	Rva00343042 *s0 = new Rva00343042((StateMachine *)this);
 	((StateMachine *)this)->defineState(0, (State *)s0, 0x270E, 0x270F, (const StateConditionInfo *)0);
 }
 
 // The global below is defined elsewhere under another name at the same
 // address (the census owner of that DIR32 target); bind this unit's spelling.
-#pragma comment(linker, "/alternatename:?g_00C11C30@@3QBQBXB=??_7Rva00343838@@6B@")

@@ -15,8 +15,8 @@ public:
 	void rva002D2C34();
 };
 
-extern const void *const g_00C659E8[];
-extern const void *const g_00C659E4[];
+extern "C" const void *const __identifier("??_7_bfme_AptGameWindow@@6BGameWindow@@@")[];
+extern "C" const void *const __identifier("??_7_bfme_AptGameWindow@@6BRva005248D0@@@")[];
 
 class _bfme_AptGameWindow
 {
@@ -35,8 +35,8 @@ _bfme_AptGameWindow::_bfme_AptGameWindow(void *context)
 {
 	Rva002D2C34 *sec = (Rva002D2C34 *)m_sec;
 	sec->rva002D2C34();
-	*(const void **)this = g_00C659E8;
-	*(const void **)sec = g_00C659E4;
+	*(const void **)this = __identifier("??_7_bfme_AptGameWindow@@6BGameWindow@@@");
+	*(const void **)sec = __identifier("??_7_bfme_AptGameWindow@@6BRva005248D0@@@");
 	m_270 = 0;
 	m_274 = -1;
 	m_278 = 0;

@@ -12,7 +12,7 @@ class Rva0020E7BD
 public:
 	void rva0020E7BD(void *p);
 };
-extern const void *const g_00C37310[];
+extern "C" const void *const __identifier("??_7Rva003F82E2@@6B@")[];
 class Rva003F81FDProxy
 {
 public:
@@ -28,7 +28,7 @@ struct Tmp003F830F : EmptyBase003F830F
 {
 	const void *v;
 	void *o;
-	Tmp003F830F(void *oo) : v(g_00C37310), o(oo) {}
+	Tmp003F830F(void *oo) : v(__identifier("??_7Rva003F82E2@@6B@")), o(oo) {}
 	~Tmp003F830F() {}
 };
 void Rva003F81FDProxy::rva003F830F(void *p)

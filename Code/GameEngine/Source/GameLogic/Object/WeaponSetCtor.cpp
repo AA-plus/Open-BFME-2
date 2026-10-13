@@ -30,11 +30,11 @@ private:
 	int m_3C;
 };
 
-extern const void *const g_00C0089C[];
+extern "C" const void *const __identifier("??_7WeaponSet@@6B@")[];
 
 WeaponSet::WeaponSet()
 {
-	m_vptr = g_00C0089C;
+	m_vptr = __identifier("??_7WeaponSet@@6B@");
 	m_20 = 0;
 	m_24 = 0;
 	m_templateSet = 0;

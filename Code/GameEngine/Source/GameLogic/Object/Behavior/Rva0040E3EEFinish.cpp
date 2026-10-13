@@ -6,7 +6,7 @@
 // constructor. The private view keeps its manual vptr store.
 #include <vector>
 #include "ascii_string.h"
-extern const void *const g_00C394F0[];
+extern "C" const void *const __identifier("??_7ArmySummary@@6B@")[];
 #include "../../../../../Libraries/Include/Lib/BfmeE16.h"
 class Rva00330757Member
 {
@@ -50,6 +50,6 @@ private:
 };
 
 ArmySummary::ArmySummary()
-	: Rva0040E3EEBase(), m_14((m_vtable = (const void *)g_00C394F0, (char)0)), m_18(AsciiString::TheEmptyString), m_1c(0), m_20(AsciiString::TheEmptyString), m_24(0xFF000000), m_28(0xFF000000), m_2c(1), m_30(0), m_34(0), m_38(0), m_3c(1), m_40(_STL::allocator<BfmeE16>()), m_4c(_STL::allocator<BfmeE16>()), m_58(0.0f), m_5c(0.0f), m_60(0), m_64(0)
+	: Rva0040E3EEBase(), m_14((m_vtable = (const void *)__identifier("??_7ArmySummary@@6B@"), (char)0)), m_18(AsciiString::TheEmptyString), m_1c(0), m_20(AsciiString::TheEmptyString), m_24(0xFF000000), m_28(0xFF000000), m_2c(1), m_30(0), m_34(0), m_38(0), m_3c(1), m_40(_STL::allocator<BfmeE16>()), m_4c(_STL::allocator<BfmeE16>()), m_58(0.0f), m_5c(0.0f), m_60(0), m_64(0)
 {
 }

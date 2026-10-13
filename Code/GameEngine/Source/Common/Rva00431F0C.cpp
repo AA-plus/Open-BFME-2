@@ -13,7 +13,7 @@ public:
 	void rva00431A4D(GameMessage *msg);
 };
 
-extern const void *const g_00C3C97C[];
+extern "C" const void *const __identifier("??_7Rva004318FC@@6B@")[];
 
 struct Rva00431F0CHelper
 {
@@ -53,7 +53,7 @@ int Rva00431F0C::rva00431F0C(GameMessage *msg)
 			{
 				h = (Rva00431F0CHelper *)mem;
 				h->m_parent = m_04;
-				h->m_vptr = (void *)g_00C3C97C;
+				h->m_vptr = (void *)__identifier("??_7Rva004318FC@@6B@");
 			}
 			else
 			{
