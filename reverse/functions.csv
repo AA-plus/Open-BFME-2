@@ -47163,7 +47163,7 @@ _rva0075B4C6D3DXQuaternionSlerp@16,,0x0075B4C6,6,Code/Libraries/Source/WWVegas/W
 ??0Rva005E74CF@@QAE@XZ,,0x005E74CF,90,Code/GameEngine/Source/Common/Bfme/Rva005E74CF.cpp,matched,ctor via temp BuildQueueDetailsPanel to base 0x221635 plus vtable 0x877EF4
 ??0Rva005E9FC1@@QAE@PAX@Z,,0x005E9FC1,58,Code/GameEngine/Source/Common/Rva005E9FC1Ctor.cpp,matched,ctor base stores arg at +4 vtable 0x878114 at +0 member 0x57416B at +8 caller 0x5EA15B
 ?rva005E8095@Rva005E8095@@QAEXI@Z,,0x005E8095,104,Code/GameEngine/Source/Common/Bfme/Rva005E8095Reserve.cpp,matched,vector reserve via 0x5E7229 plus clear 0x5E8077 plus allocator
-?Rva0027DC65Check@@YAEPAM@Z,,0x0027DC65,141,Code/GameEngine/Source/Common/Rva0027DC65Check.cpp,matched,TheTerrainLogic slots 0x20 0x34 0x4c via bounds and null
+?Rva0027DC65Check@@YA_NPAM@Z,,0x0027DC65,141,Code/GameEngine/Source/Common/Rva0027DC65Check.cpp,matched,TheTerrainLogic slots 0x20 0x34 0x4c via bounds and null
 ?Rva00075725Check@@YA_NHH@Z,,0x00075725,33,Code/GameEngine/Source/Common/Rva00075725Check.cpp,matched,indexed via g_00DE1F2C null check then virtual slot 4 caller 0x00085F6A tests al
 ?rva005EF5C2@Rva005EF5C2@@QAEXABVUnicodeString@@@Z,,0x005EF5C2,8,Code/GameEngine/Source/Common/Rva005EF557ArmyName.cpp,matched,forwarder to 0x005EF557 via inner at plus4
 ?rva005321D1@Rva005321D1@@QAEXGG@Z,,0x005321D1,94,Code/GameEngine/Source/Common/Rva005321D1Union.cpp,matched,union order remap rank via caller 0x00532470

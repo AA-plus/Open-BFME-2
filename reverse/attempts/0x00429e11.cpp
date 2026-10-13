@@ -816,7 +816,7 @@ class Rva0006EE7A : public BitFlags<69> { public: Rva0006EE7A(int,int,int); };
 struct Rva0029AEF9Item;
 bool __cdecl Rva0029C752Check();
 bool __stdcall Rva0029AEF9Check(Rva0029AEF9Item*,int,int,int,int,int);
-unsigned char Rva0027DC65Check(float*);
+bool Rva0027DC65Check(float*);
 struct Arg;
 class Rva00429007 { public: int rva00429007(Arg*,int); };
 class Rva00429093 { public: int rva00429093(Arg*,int); };
