@@ -1,12 +1,9 @@
-// ?rva00093B5B@W3DSnowManager@@QAEXXZ
-// partial score=0.97 date=2026-10-13
-// ?rva00093B5B@W3DSnowManager@@QAEXXZ
-// partial score=0.9716013071895424 date=2026-10-10
-// ?rva00093B5B@W3DSnowManager@@QAEXXZ
-// partial score=0.972 date=2026-10-09
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// Retail 0x00093B5B, 360 bytes: W3DSnowManager weather blend update (WB debug body gives the
+// override walk). Codegen: the from-chain temp is assigned after the barrier inside the f arm and
+// the to-chain is the !f ? 0 : (next ? FO : f) ternary, which places the f==0 block between the arms.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 class Overridable { public: void *vtable; const Overridable *m_nextOverride; const Overridable *getFinalOverride() const; };
 class WeatherSetting : public Overridable { public: char pad08[0x6c-8]; bool enabled; char pad6d[3]; int duration; };
 template<class T> struct OVERRIDE { const T *ptr; };
@@ -30,17 +27,9 @@ void W3DSnowManager::rva00093B5B() {
  const WeatherSetting *d= !f ? 0 : (f->m_nextOverride ? (const WeatherSetting *)f->m_nextOverride->getFinalOverride() : f);
  const WeatherSetting *from=0, *to;
  if (!d->enabled || !phase) return;
- if(f) {
-  const Overridable *next=f->m_nextOverride;
-  const WeatherSetting *first;
-  if(next) first=(const WeatherSetting *)next->getFinalOverride(); else first=f;
-  from=first;
-  if(next) to=(const WeatherSetting *)next->getFinalOverride(); else to=f;
-  _ReadWriteBarrier();
-  goto blend_phase;
- }
- to=0;
-blend_phase:
+ const Overridable *next=0;
+ if (f) { next=f->m_nextOverride; const WeatherSetting *ft=next ? (const WeatherSetting *)next->getFinalOverride() : f; _ReadWriteBarrier(); from=ft; }
+ to = !f ? 0 : (next ? (const WeatherSetting *)next->getFinalOverride() : f);
  float fraction=(float)(from->duration-frames)/(float)to->duration;
  if(fraction>1.0f) { ((Rva00093457 *)this)->rva00093457(); }
  else if(fraction>endFraction) {
