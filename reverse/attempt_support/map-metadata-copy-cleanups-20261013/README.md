@@ -38,3 +38,12 @@ source/header/flags/pin/global/alias/marker change is made. Existing alternatena
 and private-view debt is unchanged. Whole-file place_bodies reports zero extra
 bodies and zero pins. Byte proof alone does not establish a new linking result.
 Run the normal whole-file build before verify.py.
+
+The normal commit hooks verify 35/35 rows and all four EH graphs. Their shadow
+identity pass reports three definition discrepancies already emitted by this
+unchanged source: _List_iterator_base::operator==, AsciiString's scalar deleting
+destructor, and the faction-set tree's _M_erase. Neither new cleanup has a
+binding discrepancy. No baseline or check is weakened to hide those findings.
+The saved local linking index (6963cc017c, 2026-10-02) reports COMDAT/provider
+conflicts and zero linked bytes for this file; this old census is not evidence
+of a new regression or a current repository-wide linking result.
