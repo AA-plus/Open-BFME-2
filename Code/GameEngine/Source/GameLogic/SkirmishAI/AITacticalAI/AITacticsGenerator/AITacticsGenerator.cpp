@@ -129,7 +129,7 @@ public:
 	void rva004ECE1C();
 	bool start(Rva00506909Request *request, void *arg);
 	bool start(void *owner);
-	void rva004ED6D2(class Team *unit);
+	void NotifyTeamCreated(class Team *unit);
 	void NotifyTeamCancelled(class Team *unit);
 	char m_pad04[0x2C - 4];
 	AsciiString m_name;	// +0x2C
@@ -164,23 +164,23 @@ struct Rva00506909Gen
 		unsigned char m_data[size - sizeof(Rva00506909Gen)]; \
 	};
 
-RVA00506909_GEN(Rva005AA6B4, 0x58)
-RVA00506909_GEN(Rva005AA23E, 0x5C)
-RVA00506909_GEN(Rva005A9D33, 0x60)
-RVA00506909_GEN(Rva005A9C1E, 0x60)
-RVA00506909_GEN(Rva005A9988, 0x58)
+RVA00506909_GEN(AISimpleAttackTactic, 0x58)
+RVA00506909_GEN(AIFlankAttackTactic, 0x5C)
+RVA00506909_GEN(AISimpleSiegeTactic, 0x60)
+RVA00506909_GEN(AISiegeGatesTactic, 0x60)
+RVA00506909_GEN(AIBasePenetrationTroopsTactic, 0x58)
 
 // ... and the six 0x00506020 seeds +0x4C with.
-RVA00506909_GEN(Rva005ACF38, 0x64)
-RVA00506909_GEN(Rva005AC7EC, 0x68)
-RVA00506909_GEN(Rva005AB91D, 0x80)
-RVA00506909_GEN(Rva005AB3BE, 0x68)
-RVA00506909_GEN(Rva005AB1B4, 0x58)
-RVA00506909_GEN(Rva005AABC6, 0x5C)
+RVA00506909_GEN(AIFarmKillSquad, 0x64)
+RVA00506909_GEN(AIRingHeroTactic, 0x68)
+RVA00506909_GEN(AIStructureCreepTactic, 0x80)
+RVA00506909_GEN(AIReturnTheRingTactic, 0x68)
+RVA00506909_GEN(AIStartWoTRBattleTactic, 0x58)
+RVA00506909_GEN(AIRoamingDefenseTactic, 0x5C)
 
 // What 0x00505F80 and 0x00505FD0 seed +0x1C and +0x34 with when empty.
-RVA00506909_GEN(Rva005AA7DF, 0x58)
-RVA00506909_GEN(Rva005AA9DB, 0x60)
+RVA00506909_GEN(Rva005AA735, 0x58)
+RVA00506909_GEN(AISimpleExpansionTactic, 0x60)
 
 struct Rva00506909Request
 {
@@ -305,35 +305,35 @@ void Rva00506909::rva00505924()
 void Rva00506909::rva00505F80()
 {
 	if (m_1C.empty())
-		m_1C.push_back(new Rva005AA7DF);
+		m_1C.push_back(new Rva005AA735);
 }
 
 void Rva00506909::rva00505FD0()
 {
 	if (m_34.empty())
-		m_34.push_back(new Rva005AA9DB);
+		m_34.push_back(new AISimpleExpansionTactic);
 }
 
 void Rva00506909::rva00505E5D()
 {
 	if (m_04.empty()) {
-		m_04.push_back(new Rva005AA6B4);
-		m_04.push_back(new Rva005AA23E);
-		m_04.push_back(new Rva005A9D33);
-		m_04.push_back(new Rva005A9C1E);
-		m_04.push_back(new Rva005A9988);
+		m_04.push_back(new AISimpleAttackTactic);
+		m_04.push_back(new AIFlankAttackTactic);
+		m_04.push_back(new AISimpleSiegeTactic);
+		m_04.push_back(new AISiegeGatesTactic);
+		m_04.push_back(new AIBasePenetrationTroopsTactic);
 	}
 }
 
 void Rva00506909::rva00506020()
 {
 	if (m_4C.empty()) {
-		m_4C.push_back(new Rva005ACF38);
-		m_4C.push_back(new Rva005AC7EC);
-		m_4C.push_back(new Rva005AB91D);
-		m_4C.push_back(new Rva005AB3BE);
-		m_4C.push_back(new Rva005AB1B4);
-		m_4C.push_back(new Rva005AABC6);
+		m_4C.push_back(new AIFarmKillSquad);
+		m_4C.push_back(new AIRingHeroTactic);
+		m_4C.push_back(new AIStructureCreepTactic);
+		m_4C.push_back(new AIReturnTheRingTactic);
+		m_4C.push_back(new AIStartWoTRBattleTactic);
+		m_4C.push_back(new AIRoamingDefenseTactic);
 	}
 }
 
@@ -451,28 +451,28 @@ void Rva00506909::rva005059A1(Team *unit)
 	for (it = m_10.begin(); it != m_10.end(); ++it) {
 		Rva00506909Item *item = *it;
 		if (reinterpret_cast<AITactic *>(item)->m_id == unit->m_team->m_id) {
-			reinterpret_cast<AITactic *>(item)->rva004ED6D2(unit);
+			reinterpret_cast<AITactic *>(item)->NotifyTeamCreated(unit);
 			return;
 		}
 	}
 	for (it = m_28.begin(); it != m_28.end(); ++it) {
 		Rva00506909Item *item = *it;
 		if (reinterpret_cast<AITactic *>(item)->m_id == unit->m_team->m_id) {
-			reinterpret_cast<AITactic *>(item)->rva004ED6D2(unit);
+			reinterpret_cast<AITactic *>(item)->NotifyTeamCreated(unit);
 			return;
 		}
 	}
 	for (it = m_40.begin(); it != m_40.end(); ++it) {
 		Rva00506909Item *item = *it;
 		if (reinterpret_cast<AITactic *>(item)->m_id == unit->m_team->m_id) {
-			reinterpret_cast<AITactic *>(item)->rva004ED6D2(unit);
+			reinterpret_cast<AITactic *>(item)->NotifyTeamCreated(unit);
 			return;
 		}
 	}
 	for (it = m_58.begin(); it != m_58.end(); ++it) {
 		Rva00506909Item *item = *it;
 		if (reinterpret_cast<AITactic *>(item)->m_id == unit->m_team->m_id) {
-			reinterpret_cast<AITactic *>(item)->rva004ED6D2(unit);
+			reinterpret_cast<AITactic *>(item)->NotifyTeamCreated(unit);
 			return;
 		}
 	}

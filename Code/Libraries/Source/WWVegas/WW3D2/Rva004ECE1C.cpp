@@ -1,5 +1,7 @@
 // cl: /MD
-// ?rva004ECE1C@Rva004ECE1C@@QAEXXZ @ 0x004ECE1C, 69 bytes.
+// ?rva004ECE1C@AITactic@@QAEXXZ @ 0x004ECE1C, 69 bytes.
+// An AITactic member: AITacticsGenerator.cpp's 0x00505924 pass calls it on
+// each AITactic, in the AITactic.cpp range.
 // Early-return checks on +0x51 +0x28 +0x10 then GameLogic m_40 vs +0x54 with
 // threshold g_00E044B0 then tail-jmps to vtable slots 0x18 and 0x1c.
 // Evidence: xor-edx byte compares; TheGameLogic rowed name; g_ stopgap;
@@ -15,10 +17,10 @@ extern unsigned int g_00E044B0;
 // g_00E044B0: matched references place it at VA 0xe044b0 (zero-filled .bss).
 unsigned int g_00E044B0;
 
-class Rva004ECE1C
+class AITactic
 {
 public:
-	virtual ~Rva004ECE1C();
+	virtual ~AITactic();
 	virtual void v01();
 	virtual void v02();
 	virtual void v03();
@@ -38,7 +40,7 @@ private:
 	unsigned int m_54;
 };
 
-void Rva004ECE1C::rva004ECE1C()
+void AITactic::rva004ECE1C()
 {
 	if (m_51 == 0)
 		return;

@@ -1,6 +1,8 @@
 // cl: /MD /D_STLP_USE_STATIC_LIB /D_CRTIMP= /Ireference/shims/bfmealloc
 // stlport
-// ?rva00505AF1@Rva00505AF1@@QAEXXZ, retail 0x00505AF1, 201 bytes.
+// ?rva00505AF1@Rva00506909@@AAEXXZ, retail 0x00505AF1, 201 bytes.
+// A private member of the Rva00506909 object (AITacticsGenerator.cpp), whose
+// update pass 0x005069B4 calls it first.
 // Evidence: 4 voidptr vectors at +0x10 +0x28 +0x40 +0x58 pruned via byte at +0x28 virtual slot0(0) plus rowed delete 0x0002FD60 and rowed erase 0x001FF51F; caller 0x005069B7.
 #include <vector>
 
@@ -24,7 +26,7 @@ public:
 	unsigned char m_28;
 };
 
-class Rva00505AF1
+class Rva00506909
 {
 	char m_00[0x10];
 	_STL::vector<Rva00505AF1Elem *> m_10;
@@ -34,11 +36,10 @@ class Rva00505AF1
 	_STL::vector<Rva00505AF1Elem *> m_40;
 	char m_4C[12];
 	_STL::vector<Rva00505AF1Elem *> m_58;
-public:
 	void rva00505AF1();
 };
 
-void Rva00505AF1::rva00505AF1()
+void Rva00506909::rva00505AF1()
 {
 	for (_STL::vector<Rva00505AF1Elem *>::iterator it = m_10.begin(); it != m_10.end(); ) {
 		Rva00505AF1Elem *e = *it;

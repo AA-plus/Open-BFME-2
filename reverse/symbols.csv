@@ -11618,7 +11618,6 @@ name,address,notes
 ?rva004EC072@Player@@QAEXPAVTeamPrototype@@@Z,0x004EC072,Player entry taking this; read from REL32 at 0x003A2C06 in rva003A2BD4 0x003A2BD4
 ?rva004EC072@Rva004EC072@@QAEXPAUArg@@@Z,0x004EC072,second name for the 11-byte forwarder rowed at 0x004EC072 as ?fwd@Rva004EC072Owner@@QAEXPAX@Z (263b7dc5b1 dropped this row as a duplicate); TeamPrototype::rva003A2BD4 0x003A2BD4 still calls it by this name
 ?rva004EC07D@Rva002A8AB1Record@@QAEXPAVTeamPrototype@@@Z,0x004EC07D,Ghidra 11B add ecx 0x90 then jmp 0x0059A153; REL32 call at 0x003A0CF6 in TeamPrototype::rva003A0CD1 on the per-owner record
-?rva004ECE1C@AITactic@@QAEXXZ,0x004ECE1C,second per-item call of the Rva00506909 0x00505924 pass (REL32 at 0x00505939)
 ?rva004ECE93@Rva004ECE93@@QAEMPAX@Z,0x004ECE93,thiscall float-returning callee of 0x004EDDAA read from its REL32 displacement; body unrowed
 ?rva004ED1FD@Rva004ECECD@@QAEXHPBUCoord3D@@@Z,0x004ED1FD,AITactic member taking an int and a point (move the team there); REL32 at 0x005A9F32 in the SimpleSiege slot 7
 ?rva004ED342@Rva004ECECD@@QAEXPAX@Z,0x004ED342,AITactic member taking a point; REL32 at 0x005AA66A in the SimpleAttack slot 6
@@ -11646,8 +11645,6 @@ name,address,notes
 ?rva005016C3@Rva005016C3@@QAEXXZ,0x005016C3,tail jmp target of 8B forwarder 0x0050174A (ret 0); original name unknown
 ?rva005045E0@Rva005045E0@@QAEXPAVXfer@@@Z,0x005045E0,address-derived callee of matched slot 0x003FD321; retail REL32 targets 0x005045E0; Ghidra FUN bounds 162 bytes; thiscall on the +0x0C member (Xfer*) ret 4; callee body remains unclaimed; no named identity inferred
 ?rva005055DE@Rva0050542B@@AAEXXZ,0x005055DE,append the global +0x0C list to +0x14 (rowed under Rva005055DE); tail jmp at 0x0050590C
-?rva00505AF1@Rva00506909@@AAEXXZ,0x00505AF1,first pass of Rva00506909::rva005069B4 (REL32 at 0x005069B7); rowed under Rva00505AF1
-?rva00505D91@Rva00506909@@AAEPAURva00506909Item@@ABVAsciiString@@@Z,0x00505D91,+0x04 pool finder by generator name (rowed as Rva00505D91::rva00505D91); REL32 at 0x00506651 in Rva00506909::xfer
 ?rva00505E5D@Rva00506909@@AAEXXZ,0x00505E5D,first setup member called by the Rva00506909 ctor (REL32 at 0x00506989)
 ?rva00505F80@Rva00506909@@AAEXXZ,0x00505F80,second setup member called by the Rva00506909 ctor (REL32 at 0x00506990)
 ?rva00505FD0@Rva00506909@@AAEXXZ,0x00505FD0,third setup member called by the Rva00506909 ctor (REL32 at 0x00506997)
