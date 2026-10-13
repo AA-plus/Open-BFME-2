@@ -1,6 +1,8 @@
 // ?rva00405D7C@Rva00405B60@@UBE?AU?$Rva00567FBCHandle@VRva00405B60@@@@XZ
+// partial score=0.98 date=2026-10-13
+// ?rva00405D7C@Rva00405B60@@UBE?AU?$Rva00567FBCHandle@VRva00405B60@@@@XZ
 // partial score=0.93 date=2026-10-13
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHa
 //
 // ?rva00405D7C@Rva00405B60@@UBE?AU?$Rva00567FBCHandle@VRva00405B60@@@@XZ,
 // retail 0x00405D7C, 64 bytes.
