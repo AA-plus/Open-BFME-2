@@ -1,4 +1,6 @@
 // ?Rva006B3100@@YAPAURva006B3100Pair@@PAU1@PBURva006B3100Segment@@PBU1@@Z
+// partial score=0.94 date=2026-10-13
+// ?Rva006B3100@@YAPAURva006B3100Pair@@PAU1@PBURva006B3100Segment@@PBU1@@Z
 // partial score=0.94 date=2026-10-10
 #include <cstring>
 // ?Rva006B3100@@YAPAURva006B3100Pair@@PAU1@PBURva006B3100Segment@@PBU1@@Z

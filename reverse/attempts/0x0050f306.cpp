@@ -1,4 +1,6 @@
 // ?rva0050F306@Rva0050F0AB@@QAEXXZ
+// partial score=0.95 date=2026-10-13
+// ?rva0050F306@Rva0050F0AB@@QAEXXZ
 // partial score=0.93 date=2026-10-04
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /EHsc
 //
@@ -10,13 +12,14 @@ struct Player90
 	int m_00;
 	int m_04;
 };
-struct Player
+class Player
 {
+public:
 	char m_pad[0x90];
 	Player90 m_90;
 };
 class Rva002A8F24;
-class Rva002A8AB1Record;
+struct Rva002A8AB1Record;
 class Rva0050F041
 {
 public:
@@ -26,7 +29,7 @@ public:
 class Rva002A8F24
 {
 public:
-	void *rva002A8AB1(void *p);
+	Rva002A8AB1Record *rva002A8AB1(void *p);
 	void *rva002A8F24(Player *p);
 };
 
@@ -54,7 +57,7 @@ private:
 void Rva0050F0AB::rva0050F306()
 {
 	int v = pad1();
-	Player90 *p = &m_64->m_90;
+	Player90 *p = (Player90 *)((char *)m_64 + 0x90);
 	if (p)
 		v += p->m_04;
 	Rva002A8AB1Record *rec = (Rva002A8AB1Record *)g_00DFEEF8->rva002A8AB1((void *)m_64);

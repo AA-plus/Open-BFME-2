@@ -1,4 +1,6 @@
 // ?rva00093B5B@W3DSnowManager@@QAEXXZ
+// partial score=0.97 date=2026-10-13
+// ?rva00093B5B@W3DSnowManager@@QAEXXZ
 // partial score=0.9716013071895424 date=2026-10-10
 // ?rva00093B5B@W3DSnowManager@@QAEXXZ
 // partial score=0.972 date=2026-10-09
