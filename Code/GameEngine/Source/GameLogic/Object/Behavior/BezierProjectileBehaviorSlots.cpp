@@ -81,7 +81,7 @@ private:
 class GeometryInfo
 {
 public:
-	bool bfmeIntersects(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
+	bool CollidesWith(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
 };
 
 class Thing
@@ -410,7 +410,7 @@ void BezierProjectileBehavior::rva0045B9FB(Object *other)
 	while (collision && i++ <= 12)
 	{
 		cur.add(delta);
-		collision = geom->bfmeIntersects(cur, angle, *collisionGeometry(other),
+		collision = geom->CollidesWith(cur, angle, *collisionGeometry(other),
 			other->m_position, other->m_orientation);
 	}
 	cur.sub(delta);

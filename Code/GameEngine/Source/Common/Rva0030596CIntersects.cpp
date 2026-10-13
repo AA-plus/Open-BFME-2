@@ -1,11 +1,11 @@
 // cl: /MD /EHs-c-
-// ?Rva0030596CIntersects@@YA_NPAXUCoord3D@@M@Z @0x0030596C 137B via GhostObjectManager GhostProvider bfmeIntersects
-// Retail walks GhostObject list from TheGhostObjectManager slot 0x20 and tests GeometryInfo::bfmeIntersects.
+// ?Rva0030596CIntersects@@YA_NPAXUCoord3D@@M@Z @0x0030596C 137B via GhostObjectManager GhostProvider CollidesWith
+// Retail walks GhostObject list from TheGhostObjectManager slot 0x20 and tests GeometryInfo::CollidesWith.
 #include "../../../Libraries/Include/Lib/Coord3D.h"
 class GeometryInfo
 {
 public:
-	bool bfmeIntersects(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
+	bool CollidesWith(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
 };
 class GhostObject
 {
@@ -50,7 +50,7 @@ bool __cdecl Rva0030596CIntersects(void *self, Coord3D coord, float radius)
 			const GeometryInfo *gi = ((GhostProvider *)((char *)ghost + 8 + ghost->m_08[1]))->geometry();
 			const Coord3D *pos = ((GhostProvider *)((char *)ghost + 8 + ghost->m_08[1]))->position();
 			float ang = ((GhostProvider *)((char *)ghost + 8 + ghost->m_08[1]))->angle();
-			if (gi->bfmeIntersects(*pos, ang, *myGeom, coord, radius))
+			if (gi->CollidesWith(*pos, ang, *myGeom, coord, radius))
 				return true;
 		}
 	}

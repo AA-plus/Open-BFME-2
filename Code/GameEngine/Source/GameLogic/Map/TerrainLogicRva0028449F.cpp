@@ -4,8 +4,8 @@
 // 0x0048A15A. Builds a local cylinder GeometryInfo (rowed ctor 0x00050B74:
 // height 35 and radii 14) then walks the record pointers at +0x578/+0x57C
 // (same range as the rowed TerrainLogic::rva00283CE7). Every record with a
-// key at +0xC whose position the argument shape overlaps (pinned
-// GeometryInfo::bfmeIntersects 0x006BEB80 against the local shape at the
+// key at +0xC whose position the argument shape overlaps (rowed
+// GeometryInfo::CollidesWith 0x006BEB80 against the local shape at the
 // record with angle 0) is reported to TheTriggerManager (rowed 0x0028641F)
 // then reset (rowed 0x0027D098) and its key passed to g_00DFF080 slot +0x58
 // while +0x1910 takes TheGameLogic's frame. Finally g_00DFF080 slot +0x48
@@ -32,7 +32,7 @@ class GeometryInfo
 public:
 	GeometryInfo(GeometryType type, bool isSmall, Real height, Real majorRadius, Real minorRadius);
 	virtual ~GeometryInfo();
-	bool bfmeIntersects(const Coord3D &pos, Real angle, const GeometryInfo &other,
+	bool CollidesWith(const Coord3D &pos, Real angle, const GeometryInfo &other,
 		const Coord3D &otherPos, Real otherAngle) const;
 	bool getIsSmall() const { return m_isSmall; }
 
@@ -131,7 +131,7 @@ void TerrainLogic::rva0028449F(const Coord3D *pos, const GeometryInfo &geom, Rea
 		Rva0028449FRecordView *record = reinterpret_cast<Rva0028449FRecordView *>(*i);
 		if (record->key == 0)
 			continue;
-		if (geom.bfmeIntersects(*pos, angle, shape, record->pos, 0.0f))
+		if (geom.CollidesWith(*pos, angle, shape, record->pos, 0.0f))
 		{
 			unsigned int key = reinterpret_cast<Rva0028449FRecordView *>(*i)->key;
 			if (TheTriggerManager)

@@ -92,7 +92,7 @@ public:
 	GeometryInfo(GeometryType type, Bool is_small, Real height,
 		Real major_radius, Real minor_radius);
 
-	Bool bfmeIntersects(const Coord3D &this_pos, Real this_angle,
+	Bool CollidesWith(const Coord3D &this_pos, Real this_angle,
 		const GeometryInfo &that, const Coord3D &that_pos, Real that_angle) const;
 
 protected:
@@ -173,7 +173,7 @@ void W3DPropBuffer::removePropsForConstruction(const Coord3D *pos,
 		GeometryInfo info(GEOMETRY_CYLINDER, false,
 			5 * radius, 2 * radius, 2 * radius);
 
-		if (geom.bfmeIntersects(*pos, angle, info,
+		if (geom.CollidesWith(*pos, angle, info,
 			m_props[i].location, 0.0f))
 		{
 			m_props[i].location.set(0, 0, 0);

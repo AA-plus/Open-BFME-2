@@ -119,7 +119,7 @@ struct Coord3D;
 class GeometryInfo
 {
 public:
-	bool bfmeIntersects(const Coord3D &pos, float radius, const GeometryInfo &other, const Coord3D &otherPos, float otherRadius) const;	// 0x006BEB80
+	bool CollidesWith(const Coord3D &pos, float radius, const GeometryInfo &other, const Coord3D &otherPos, float otherRadius) const;	// 0x006BEB80
 };
 
 struct Rva00261603Object
@@ -145,7 +145,7 @@ private:
 
 bool Rva00261603::rva00261603(const Rva00261603Object *obj) const
 {
-	return m_geometry->bfmeIntersects(*(const Coord3D *)m_pos, m_radius, *(const GeometryInfo *)obj->m_geometry,
+	return m_geometry->CollidesWith(*(const Coord3D *)m_pos, m_radius, *(const GeometryInfo *)obj->m_geometry,
 		*(const Coord3D *)obj->m_pos, obj->m_44) == m_inside;
 }
 

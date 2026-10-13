@@ -49,7 +49,7 @@ public:
 
 class GeometryInfo {
 public:
-	bool bfmeIntersects(const Coord3D &pos, Real angle, const GeometryInfo &other,
+	bool CollidesWith(const Coord3D &pos, Real angle, const GeometryInfo &other,
 		const Coord3D &otherPos, Real otherAngle) const;
 	Real getBoundingCircleRadius() const { return m_boundingCircleRadius; }
 	char m_pad00[0x10];

@@ -669,7 +669,6 @@ Code/GameEngine/Source/Common/Rva002DB311Dtor.cpp	??1Rva002DB311@@UAE@XZ	??1Asci
 Code/GameEngine/Source/Common/Rva002E2504.cpp	?rva002E2504@Rva002E2504@@QAE_NPAVRva00318C32Ret@@PAV?$vector@PBVModuleData@@V?$allocator@PBVModuleData@@@_STL@@@_STL@@@Z	?rva00318C32@Rva00318C79Owner@@QAEPAVRva00318C32Ret@@XZ	0x00318C32	unowned
 Code/GameEngine/Source/Common/Rva002E3DE3Ctor.cpp	??0Rva002E3DE3@@QAE@HH@Z	??0Rva002E3D7BBase@@QAE@PAPAURva002E36D5Node@@HH@Z	0x002E3D7B	unowned
 Code/GameEngine/Source/Common/Rva00304DC7Permuted.cpp	??ARva00304DC7Map@@QAEAAVRva00304DC7Record@@ABVAsciiString@@@Z	??0Rva00304DC7Record@@QAE@XZ	0x003031D3	unowned
-Code/GameEngine/Source/Common/Rva0030596CIntersects.cpp	?Rva0030596CIntersects@@YA_NPAXUCoord3D@@M@Z	?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z	0x006BEB80	unowned
 Code/GameEngine/Source/Common/Rva0030E09AMethod.cpp	?rva0030E09A@Rva0030E09A@@QAEXXZ	?bfmeRunEYE@BfmeNodeEYE@@QAEXXZ	0x0030DEAE	unowned
 Code/GameEngine/Source/Common/Rva0031804DAssign.cpp	??4Rva0031804D@@QAEAAV0@ABV0@@Z	??4?$vector@HV?$allocator@H@_STL@@@_STL@@QAEAAV01@ABV01@@Z	0x0021C21B	divergent
 Code/GameEngine/Source/Common/Rva00318C79Wrap.cpp	?rva00318C79@Rva00318C79Owner@@QAEHXZ	?rva00318C32@Rva00318C79Owner@@QAEPAVRva00318C32Ret@@XZ	0x00318C32	unowned
@@ -950,7 +949,6 @@ Code/GameEngine/Source/Common/Rva009A5800Forward.cpp	?Rva009A5620DecodeFrame@@YA
 Code/GameEngine/Source/Common/Rva009F5970StateCtor.cpp	??0Rva009F5970State@@QAE@XZ	??1?$vector@UGen_p8cd@@V?$allocator@UGen_p8cd@@@_STL@@@_STL@@QAE@XZ	0x00142D70	wrong
 Code/GameEngine/Source/Common/Rva009F5970StateCtor.cpp	??0Rva009F5970State@@QAE@XZ	?m@T_009f59d0@@QAEXXZ	0x00627E40	unowned
 Code/GameEngine/Source/Common/Rva009F5970StateCtor.cpp	uw_007a78d0	??1?$vector@UGen_p8cd@@V?$allocator@UGen_p8cd@@@_STL@@@_STL@@QAE@XZ	0x00142D70	wrong
-Code/GameEngine/Source/Common/Rva009F66F0.cpp	?Rva009F66F0@@YAMPBUCoord3D@@PAVRva009F66F0Provider@@M@Z	?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z	0x006BEB80	unowned
 Code/GameEngine/Source/Common/Rva00DF6F94GapFillerDelete.cpp	?DeleteModelGapFiller@Rva00DF6F94GapFillerContext@@QAEXPAVMeshModelClass@@@Z	??1Rva001732C6@@QAE@XZ	0x0018C57C	unowned
 Code/GameEngine/Source/Common/RvaAdjustorDtorFamily.cpp	??1Rva00229487@@QAE@XZ	??1Rva002DFAD1Dtor@@QAE@XZ	0x002DFAD1	unowned
 Code/GameEngine/Source/Common/RvaAdjustorDtorFamily.cpp	??1Rva002A9ECA@@QAE@XZ	??1Rva00380459Dtor@@QAE@XZ	0x00380459	unowned
@@ -1834,7 +1832,6 @@ Code/GameEngine/Source/GameLogic/Object/ObjectIsInList.cpp	?rva0028B4CE@Object@@
 Code/GameEngine/Source/GameLogic/Object/ObjectRefreshThenSetTransform.cpp	?rva00291C84@Object@@QAEXPBVMatrix3D@@@Z	?bfmeOneTFB@BfmeThingTFB@@QAEXXZ	0x00291C20	unowned
 Code/GameEngine/Source/GameLogic/Object/ObjectRefreshThenSetTransform.cpp	?rva00291C84@Object@@QAEXPBVMatrix3D@@@Z	?setTransformMatrix@Object@@QAEXPBVMatrix3D@@@Z	0x0028D412	unowned
 Code/GameEngine/Source/GameLogic/Object/ObjectReleaseWeaponLock.cpp	?releaseWeaponLock@Object@@QAEXW4WeaponLockType@@@Z	?releaseWeaponLock@WeaponSet@@QAEXW4WeaponLockType@@@Z	0x002C8B9B	unowned
-Code/GameEngine/Source/GameLogic/Object/ObjectRva0028B35B.cpp	?rva0028B35B@Object@@QBE_NPBV1@@Z	?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z	0x006BEB80	unowned
 Code/GameEngine/Source/GameLogic/Object/ObjectRva0028C149.cpp	?rva0028C149@Object@@QAE_NHPAMH@Z	?rva00403382@AttributeModifierPoolUpdate@@QAE_NHPAMH@Z	0x00403382	unowned
 Code/GameEngine/Source/GameLogic/Object/ObjectRvaSmallGetters.cpp	?rva0028ACCA@Object@@QAEXH@Z	?rva004DE24B@Rva004DD843@@QAEXH@Z	0x004DE24B	unowned
 Code/GameEngine/Source/GameLogic/Object/ObjectRvaSmallGetters.cpp	?rva0028AD00@Object@@QAEXHMH@Z	?rva004DE109@Rva004DD843@@QAEXHMH@Z	0x004DE109	unowned
@@ -2423,7 +2420,6 @@ Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DGameClientFactories.cpp	?rv
 Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DGameClientFactories.cpp	?rva0004C8DD@Rva004C743@@QAEPAXXZ	??0Rva0009D55BProduct@@QAE@XZ	0x0009D55B	unowned
 Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DGameClientFactories.cpp	?rva0008EFD8@Rva0008EF3FProduct@@QAEPAXXZ	??0Rva0008B7CFProduct@@QAE@XZ	0x0008B7CF	unowned
 Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DMouseCursorSurfaceLevel.cpp	?FillLevelSurfaces@CursorTextureSlot@@QAEXXZ	?Rva00116990@W3DRadarResetSurface@@QAEXMMM@Z	0x00116990	unowned
-Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DPropBufferRemovePropsForConstruction.cpp	?removePropsForConstruction@W3DPropBuffer@@QAEXPBUCoord3D@@ABVGeometryInfo@@M@Z	?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z	0x006BEB80	unowned
 Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DRoadBuffer.cpp	??0W3DRoadBuffer@@QAE@XZ	?allocateRoadBuffers@W3DRoadBuffer@@IAEXXZ	0x000D77AE	unowned
 Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DRoadBuffer.cpp	?loadRoads@W3DRoadBuffer@@QAEXXZ	?addMapObjects@W3DRoadBuffer@@IAEXXZ	0x000DD47D	unowned
 Code/GameEngineDevice/Source/W3DDevice/GameClient/W3DRoadBuffer.cpp	?updateLighting@W3DRoadBuffer@@QAEXXZ	?updateSegLighting@RoadSegment@@QAEXXZ	0x000D4613	unowned

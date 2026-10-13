@@ -21,7 +21,7 @@ class GeometryInfo {
 public:
     GeometryInfo(GeometryType, bool, float, float, float);
     virtual ~GeometryInfo();
-    bool bfmeIntersects(const Coord3D &, float, const GeometryInfo &,
+    bool CollidesWith(const Coord3D &, float, const GeometryInfo &,
         const Coord3D &, float) const;
     void recompute() { calcBoundingStuff(); }
     char pad04[0x28];
@@ -44,7 +44,7 @@ float Rva009F66F0(const Coord3D *position, Rva009F66F0Provider *provider, float 
         geometry.first->majorRadius = (float)sqrt(radiusSquared);
     geometry.recompute();
     const GeometryInfo *target = provider->geometry();
-    if (target->bfmeIntersects(*provider->position(), provider->angle(),
+    if (target->CollidesWith(*provider->position(), provider->angle(),
         geometry, *position, 0.0f))
         return 0.0f;
     return FLT_MAX;

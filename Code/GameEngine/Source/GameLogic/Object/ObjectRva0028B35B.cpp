@@ -1,15 +1,15 @@
 // cl: /DNDEBUG /MD /EHsc
 // ?rva0028B35B@Object@@QBE_NPBV1@@Z, retail 0x0028B35B, 50 bytes.
-// Object geometry intersect test via GeometryInfo::bfmeIntersects.
+// Object geometry intersect test via GeometryInfo::CollidesWith.
 // Evidence: same +0x38 +0x44 +0xa8 layout as BFME1 ObjectGeometry.cpp
-// bfmeGeometryIntersects; rowed/pinned bfmeIntersects 0x006BEB80
-// ?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z; callers
+// bfmeGeometryIntersects; rowed GeometryInfo::CollidesWith 0x006BEB80
+// (WB assert strings name it); callers
 // 0x0028C0EA 0x004C601C; neighbours ObjectRva0028B31A/0028B38D.
 #include "../../../../Libraries/Include/Lib/Coord3D.h"
 class GeometryInfo
 {
 public:
-	bool bfmeIntersects(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
+	bool CollidesWith(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
 };
 class Object
 {
@@ -26,5 +26,5 @@ bool Object::rva0028B35B(const Object *other) const
 {
 	float otherAngle = other->m_orientation;
 	float thisAngle = m_orientation;
-	return m_geometryInfo.bfmeIntersects(m_position, thisAngle, other->m_geometryInfo, other->m_position, otherAngle);
+	return m_geometryInfo.CollidesWith(m_position, thisAngle, other->m_geometryInfo, other->m_position, otherAngle);
 }

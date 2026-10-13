@@ -250,7 +250,7 @@ public:
 	__forceinline Bool isSingleBox() const { return ((const BfmeThingTemplateShadowSelector *)this)->usePluralShadowName(); }
 	Real getMaxHeightAbovePosition() const;
 	void expandFootprint(Real radius);
-	bool bfmeIntersects(const Coord3D &pos, Real angle, const GeometryInfo &other, const Coord3D &otherPos, Real otherAngle) const;
+	bool CollidesWith(const Coord3D &pos, Real angle, const GeometryInfo &other, const Coord3D &otherPos, Real otherAngle) const;
 
 private:
 	unsigned char m_pad04[0x10 - 0x04];
@@ -2018,7 +2018,7 @@ LegalBuildCode BuildAssistant::isLocationLegalToBuild( const Coord3D *worldPos,
 			// yep, see if we would collide with an expanded version
 			GeometryInfo tooCloseGeom = tooClose->getGeometryInfo();
 			tooCloseGeom.expandFootprint( TheWritableGlobalData->m_supplyBuildBorder );
-			if( build->getTemplateGeometryInfo().bfmeIntersects( *worldPos, angle, tooCloseGeom,
+			if( build->getTemplateGeometryInfo().CollidesWith( *worldPos, angle, tooCloseGeom,
 						*tooClose->getPosition(), tooClose->getOrientation() ) )
 				return LBC_TOO_CLOSE_TO_SUPPLIES;
 		}

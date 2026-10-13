@@ -8192,7 +8192,6 @@ name,address,notes
 ?bfmeInsertV54@BfmeStrV54@@QAEXPAD0000@Z,0x0002AE50
 ?bfmeInsertV55@BfmeStrV55@@QAEXPAD0000@Z,0x0002B050
 ?bfmeInsertV56@BfmeStrV56@@QAEXPAD0000@Z,0x0002AE50
-?bfmeIntersects@GeometryInfo@@QBE_NABUCoord3D@@MABV1@0M@Z,0x006BEB80,address read from the REL32 site of the BFME1-donor Rva009F66F0 body at 0x00628A60 (bfme1_sweep T2 transfer b1 0x009F66F0; BFME1 ledger name)
 ?bfmeInvoke@Gen_0064C6A0Target@@QAEXPAX0@Z,0x0038B9F8,target member callee of ?bfmeDispatch_0064C6A0@@YAXPAX00PAVGen_0064C6A0Target@@@Z at retail 0x0038D494 read from its REL32 displacement; body unrowed
 ?bfmeIsBlocked@FXList@@QAE_NXZ,0x001E2EF1,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?bfmeIterSwapS4SortElem20@@YAXPAUS4SortElem20@@0@Z,0x003373D9,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1

@@ -17,7 +17,7 @@ class GeometryInfo {
 public:
  GeometryInfo(GeometryType, bool, Real, Real, Real);
  virtual ~GeometryInfo();
- bool bfmeIntersects(const Coord3D&, Real, const GeometryInfo&, const Coord3D&, Real) const;
+ bool CollidesWith(const Coord3D&, Real, const GeometryInfo&, const Coord3D&, Real) const;
 private:
  char data04[0x58];
 };
@@ -80,12 +80,12 @@ bool Rva00261D2EFilter::allow(Object *other)
   const ModuleData *data=otherTemplate->rva0033B3D7();
   if(data && useSpecial) {
    GeometryInfo special(GEOMETRY_CYLINDER,false,20.0f,data->radius,data->radius);
-   if(geometry->bfmeIntersects(position,angle,special,other->position,other->angle))
+   if(geometry->CollidesWith(position,angle,special,other->position,other->angle))
     return true;
   }
  }
  const Coord3D *otherPos=&other->position;
- bool result=geometry->bfmeIntersects(position,angle,other->geometry,*otherPos,other->angle)==desired;
+ bool result=geometry->CollidesWith(position,angle,other->geometry,*otherPos,other->angle)==desired;
  _ReadWriteBarrier();
  // Shared result tail preserves retail's memory predicate and return home.
  if(!result) {

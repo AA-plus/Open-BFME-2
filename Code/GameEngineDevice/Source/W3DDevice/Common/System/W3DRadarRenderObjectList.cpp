@@ -55,7 +55,7 @@ public:
 
 class GeometryInfo {
 public:
-	bool bfmeIntersects(const Coord3D &pos, Real angle, const GeometryInfo &other,
+	bool CollidesWith(const Coord3D &pos, Real angle, const GeometryInfo &other,
 		const Coord3D &otherPos, Real otherAngle) const;
 	Real getBoundingCircleRadius() const { return m_boundingCircleRadius; }
 	char m_pad00[0x10];
@@ -230,10 +230,10 @@ static void rva0004DF6F(const Object *obj, void *surface, Int width, Int height,
 			for (Int x = left; x < right; ++x)
 			{
 				pt.x = (center.x - x) * (1.0f / scaleX) + pos->x;
-				if (obj->getGeometryInfo().bfmeIntersects(*pos, obj->getOrientation(),
+				if (obj->getGeometryInfo().CollidesWith(*pos, obj->getOrientation(),
 					reinterpret_cast<const GeometryInfo &>(g_Va00DE1D00), pt, 0.0f))
 				{
-					if (obj->getGeometryInfo().bfmeIntersects(*pos, obj->getOrientation(),
+					if (obj->getGeometryInfo().CollidesWith(*pos, obj->getOrientation(),
 						reinterpret_cast<const GeometryInfo &>(g_Va00DE1D60), pt, 0.0f))
 						Rva0004DE72Blend(&row[x - left], color, 0xff);
 					else

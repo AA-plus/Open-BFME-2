@@ -61,7 +61,7 @@ class Drawable {public:ClientUpdateModule *findClientUpdateModule(NameKeyType);v
 class Thing {public:Drawable *getDrawable() const;};
 class Matrix3D;
 struct Rva0087DC00Vec{int x,y,z;};class Rva0087DC00{public:void get(Rva0087DC00Vec*);};
-class GeometryInfo {public:bool bfmeIntersects(const Coord3D&,float,const GeometryInfo&,const Coord3D&,float) const;};
+class GeometryInfo {public:bool CollidesWith(const Coord3D&,float,const GeometryInfo&,const Coord3D&,float) const;};
 class Player;enum ModelConditionFlagType{MODELCONDITION_INVALID=-1};
 class Object {public:Player *getControllingPlayer() const;void setSpecialModelConditionState(ModelConditionFlagType,unsigned);
  bool getSingleLogicalBonePosition(const char*,Coord3D*,Matrix3D*) const;

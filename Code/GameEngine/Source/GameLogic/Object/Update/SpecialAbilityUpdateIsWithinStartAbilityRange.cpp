@@ -15,7 +15,7 @@
 // Callees are all rowed or pinned: isEmpty 0x00001E2F,
 // getWorldspaceBestContactPoint 0x002904DC, 0x002C97E8, 0x0044E6B8,
 // 0x002615E3, 0x00263763, friend_getFinalOverride 0x00288609, testStatus
-// 0x0004E536, 0x001E435D, bfmeIntersects 0x006BEB80, filter allow
+// 0x0004E536, 0x001E435D, CollidesWith 0x006BEB80, filter allow
 // 0x002619C1 and 0x0026163A.
 #include "ascii_string.h"
 #include "Coord3D.h"
@@ -33,7 +33,7 @@ enum ObjectStatusTypes
 class GeometryInfo
 {
 public:
-	Bool bfmeIntersects(const Coord3D &pos, Real a, const GeometryInfo &other, const Coord3D &otherPos, Real otherAngle) const;
+	Bool CollidesWith(const Coord3D &pos, Real a, const GeometryInfo &other, const Coord3D &otherPos, Real otherAngle) const;
 };
 
 class ThingTemplate
@@ -258,7 +258,7 @@ Bool SpecialAbilityUpdate::isWithinStartAbilityRange()
 		{
 			if (!target)
 				return false;
-			if (self->getGeometryInfo().bfmeIntersects(*self->getPosition(), 0.0f, target->getGeometryInfo(), *target->getPosition(), target->getOrientation()))
+			if (self->getGeometryInfo().CollidesWith(*self->getPosition(), 0.0f, target->getGeometryInfo(), *target->getPosition(), target->getOrientation()))
 				return true;
 		}
 		else if (data->m_approachRequiresLOS)
@@ -321,7 +321,7 @@ Bool SpecialAbilityUpdate::isWithinAbilityAbortRange() const
 		{
 			if (!target)
 				return false;
-			if (!self->getGeometryInfo().bfmeIntersects(*self->getPosition(), 0.0f, target->getGeometryInfo(), *target->getPosition(), target->getOrientation()))
+			if (!self->getGeometryInfo().CollidesWith(*self->getPosition(), 0.0f, target->getGeometryInfo(), *target->getPosition(), target->getOrientation()))
 				return false;
 		}
 		return true;
