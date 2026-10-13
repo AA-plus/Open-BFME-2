@@ -21,6 +21,8 @@
 // kind-of mask across both calls), hence the hoisted template local.
 #include <map>
 #include "GameLogicObjectLookupView.h"
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // Compare nodes locally so this TU does not emit a conflicting iterator-base wrapper.
 namespace _STL {
 template <class T, class LeftTraits, class RightTraits>
@@ -144,7 +146,9 @@ typedef ObjectCountMap::iterator ObjectCountMapIt;
 
 struct ScoreKeeper
 {
-	char m_pad00[0x74];
+	char m_pad00[0x20];
+	int m_unitsDestroyed[20]; // +0x20
+	char m_pad70[0x74 - 0x70];
 	int m_74;
 	char m_pad01[0xcc - 0x74 - 4];
 	int m_totalBuildingsLost; // +0xCC
@@ -153,16 +157,20 @@ struct ScoreKeeper
 	int m_104;
 	int m_totalUnits; // +0x108
 	int m_totalStructures; // +0x10C
-	char m_pad03[0x16c - 0x10c - 4];
+	bool m_scoring; // +0x110
+	char m_pad03[0x16c - 0x111];
 	int m_16c;
-	char m_pad04[0x1c4 - 0x16c - 4];
+	int m_count170[20]; // +0x170
+	char m_pad04[0x1c4 - 0x1c0];
 	int m_1c4;
 	char m_pad05[0x1d4 - 0x1c4 - 4];
 	_STL::map<unsigned int, void *> m_map1d4;
-	char m_pad06[0x2ec - 0x1d4 - 12];
+	char m_pad06[0x1fc - 0x1d4 - 12];
+	ObjectCountMap m_objectsDestroyed[20]; // +0x1FC
 	_STL::map<unsigned int, void *> m_map2ec;
 	void addObjectLost(const Object *o);
 	void addObjectsLost(unsigned int key, int delta);
+	void addObjectsDestroyed(unsigned int key, Player *player, unsigned int count);
 };
 
 static KindOfMaskType scoringBuildingMask;
@@ -253,4 +261,20 @@ void ScoreKeeper::addObjectsLost(unsigned int key, int delta)
 	if (it2 != m_map1d4.end())
 		old2 = it2->second;
 	((ImageSubscriptMap *)&m_map1d4)->operator[](key) = (Image *)((char *)old2 + delta);
+}
+
+void ScoreKeeper::addObjectsDestroyed(unsigned int key, Player *player, unsigned int count)
+{
+	if (m_scoring)
+	{
+		int idx = player->getPlayerIndex();
+		m_unitsDestroyed[idx] += count;
+		m_count170[idx] += count;
+		ObjectCountMap &destroyed = m_objectsDestroyed[idx];
+		void *oldValue = 0;
+		ObjectCountMapIt it = destroyed.find(key);
+		if (it != destroyed.end())
+			oldValue = it->second;
+		((ImageSubscriptMap *)&destroyed)->operator[](key) = (Image *)((char *)oldValue + count);
+	}
 }
