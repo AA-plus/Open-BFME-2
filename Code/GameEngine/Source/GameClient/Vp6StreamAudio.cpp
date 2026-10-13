@@ -97,7 +97,7 @@ class AudioManager;extern AudioManager *TheAudio;
 class Rva007E3C20Vp6Stream {public:virtual int rva00091763(const AsciiString&);private:char pad04[0x58];int audio,music;};
 int Rva007E3C20Vp6Stream::rva00091763(const AsciiString &name) {
  int result=0;audio=1;music=1;
- AsciiString musicName(name);musicName.concat("_Music");
+ AsciiString musicName(name);reinterpret_cast<StringBase<char> *>(&musicName)->concat("_Music");
  if(TheAudio) {
   StreamAudioRef musicInfo=((Rva00091763AudioManager*)TheAudio)->getInfo(musicName);
   if(musicInfo.ptr) {
