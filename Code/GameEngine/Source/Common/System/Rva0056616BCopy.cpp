@@ -133,6 +133,17 @@ template <> vector<Rva004E32F2, allocator<Rva004E32F2> >::~vector()
 }
 }
 
+class Rva004E1A04;
+void __cdecl Rva0052CEDDClear(Rva004E1A04 *, Rva004E1A04 *);
+
+namespace _STL {
+template <> vector<BfmeE16, allocator<BfmeE16> >::~vector()
+{
+ Rva0052CEDDClear(reinterpret_cast<Rva004E1A04 *>(m_start),
+                       reinterpret_cast<Rva004E1A04 *>(m_finish));
+}
+}
+
 class Rva0056616B {
 public:
 	Rva0056616B(const Rva0056616B &other);
