@@ -51493,3 +51493,5 @@ __ehhandler$?rva0004F580@W3DRadar@@UAEXXZ	0x0075D584	10	landed	add_match verifie
 ?updateLoadProgress@ConnectionManager@@QAEXH@Z	0x004CF940	141	landed	add_match verified Code/GameEngine/Source/GameNetwork/ConnectionManager.cpp 141B
 ?findBestTarget@AITargetHeuristicTechBuilding@@QAEXPAVAITarget@@PAVPlayer@@1@Z	0x00572EFF	512	blocked	NEW target-supported selector bank 506/512 nd36 (.895) - partition best loop + registry934/fallback884 structure; prior 270B first attempt without donor. Needs more reconstruction; bank retained. t=3 model=deepseek-v4.1
 ??1LivingWorldManager@@UAE@XZ	0x00214405	691	landed	add_match verified Code/GameEngine/Source/Common/LivingWorldManagerDtor.cpp 691B
+?evaluateTeamStateIs@ScriptConditions@@IAE_NPAVParameter@@00@Z	0x003E4565	276	blocked	regalloc tie: retail splits player (EBX pre-loop, [ebp+8] in loop) and gives loop index EBX; donor shape keeps player in EBX; removing one player use flips. No new lever this session; bank retained. t=2 model=deepseek-v4.1
+??0GameSpyInfo@@QAE@XZ	0x00385FE1	270	landed	add_match verified Code/GameEngine/Source/GameNetwork/GameSpy/GameSpyInfoCtor.cpp 270B
