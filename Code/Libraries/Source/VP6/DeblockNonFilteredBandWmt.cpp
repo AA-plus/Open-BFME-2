@@ -1,5 +1,3 @@
-// _DeblockNonFilteredBand_WMT
-// partial score=0.996 date=2026-10-12
 // cl: /O2 /G6 /Z7 /MD
 // Clean room: reverse/vp6_cleanroom/specs/001d0340.md plus retail only.
 // No decoder source was consulted.
@@ -55,7 +53,9 @@ extern "C" void __cdecl DeblockNonFilteredBand_WMT(DeblockNonFilteredWmtContext 
 	int limit;
 	unsigned int s3;
 	unsigned int s5;
-	int p1;
+	unsigned int s6;
+	unsigned int s7;
+	unsigned int p1;
 
 	index = first;
 	p1 = stride;
@@ -434,20 +434,22 @@ extern "C" void __cdecl DeblockNonFilteredBand_WMT(DeblockNonFilteredWmtContext 
 			rows[72] = edge[4];
 			rows[1] = edge[stride - 5];
 			rows[73] = edge[stride + 4];
-			rows[2] = edge[stride * 2 - 5];
-			rows[74] = edge[stride * 2 + 4];
+			rows[2] = edge[p1 * 2 - 5];
+			rows[74] = edge[p1 * 2 + 4];
 			s3 = stride * 3;
 			rows[3] = edge[s3 - 5];
 			rows[75] = edge[s3 + 4];
-			rows[4] = edge[stride * 4 - 5];
-			rows[76] = edge[stride * 4 + 4];
+			rows[4] = edge[p1 * 4 - 5];
+			rows[76] = edge[p1 * 4 + 4];
 			s5 = stride * 5;
 			rows[5] = edge[s5 - 5];
 			rows[77] = edge[s5 + 4];
-			rows[6] = edge[stride * 6 - 5];
-			rows[78] = edge[stride * 6 + 4];
-			rows[7] = edge[stride * 7 - 5];
-			rows[79] = edge[stride * 7 + 4];
+			s6 = stride * 6;
+			rows[6] = edge[s6 - 5];
+			rows[78] = edge[s6 + 4];
+			s7 = stride * 7;
+			rows[7] = edge[s7 - 5];
+			rows[79] = edge[s7 + 4];
 			__asm {
 			push eax
 			push ecx
