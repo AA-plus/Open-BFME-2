@@ -4,7 +4,7 @@
 // retail: 1200 tree records of 0xE8 at +0x5C0 (count +0x44540, dirty byte
 // +0x44545, initialized +0x44554, type-added flag +0x44556), 64 types of 0x5C at
 // +0x44558 (count +0x45C58).
-#include "StringInline.h"
+#include "../../../../../reference/shims/bfme2_ascii/ascii_string.h"
 #include "vector3.h"
 #include "matrix3d.h"
 #include "sphere.h"
@@ -56,7 +56,9 @@ void W3DTreeBuffer::rva000ECF79(unsigned int id,Rva000ECF79Coord location,float 
  if(!initialized) return;
  int type=-2;
  for(int i=0;i<numTypes;++i) {
-  if(types[i].modelName.compareNoCase(data->modelName)==0 && types[i].nameC.compareNoCase(data->nameC)==0) {type=i;break;}
+  // Both retail calls use the StringBase<char> provider at 0x00006A00.
+  if(((const StringBase<char> *)&types[i].modelName)->compareNoCase(*(const StringBase<char> *)&data->modelName)==0 &&
+     ((const StringBase<char> *)&types[i].nameC)->compareNoCase(*(const StringBase<char> *)&data->nameC)==0) {type=i;break;}
  }
  if(type<0) {
   type=addTreeType(data->modelName,data->nameC,data,shadowKind,textureName,nameD);
@@ -103,4 +105,3 @@ void W3DTreeBuffer::rva000ECF79(unsigned int id,Rva000ECF79Coord location,float 
  ++numTrees;
  changed=true;
 }
-
