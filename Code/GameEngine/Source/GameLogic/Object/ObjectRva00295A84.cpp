@@ -1,12 +1,14 @@
-// ?rva00295A84@Object@@QAEXPAV1@@Z
-// partial score=0.99 date=2026-10-11
-// ?rva00295A84@Object@@QAEXPAV1@@Z
-// partial score=0.9933078158 date=2026-10-10
-// cl: /I. /O1 /G7 /MD /EHsc
-// Native295A84..295CA6 RET4 and WB CC1CB0, caller295CA6 melee-victim
-// picker, and target recursion establish Object's adjacent melee command.
-// Original method name unresolved: retain the existing Object ABI spelling.
-#include "Code/Libraries/Include/Lib/Coord3D.h"
+// cl: /O1
+//
+// ?rva00295A84@Object@@QAEXPAV1@@Z retail 0x00295A84..0x00295CA6 (546B).
+// Object melee-command gate: Native295A84..295CA6 RET4 and WB CC1CB0, caller
+// 0x295CA6 (melee victim picker) and the target recursion establish Object's
+// adjacent melee command. Original method name unresolved: retain the
+// existing Object ABI spelling.
+//
+// Equal-arm conditional on the template receiver (ai->m_flag3c7 ? t : t)
+// keeps retail's ai=EDI / related=EBX allocation (W7-S2 r4 sweep).
+#include "../../../../Libraries/Include/Lib/Coord3D.h"
 class Object;class Player;class Thing;
 enum ObjectStatusTypes{STATUS_26=0x26,STATUS_45=0x45,STATUS_1C=0x1c,STATUS_0F=0x0f,STATUS_11=0x11};
 enum WeaponSlotType{WEAPONSLOT_PRIMARY=0};
@@ -41,7 +43,7 @@ void Object::rva00295A84(Object*victim){
      related=related->rva002931F5(false);
      if(victim->rva002931F5(false)==related)same=true;
     }
-    if(!testStatus(STATUS_26) || victim->m_template->isStructure()){
+    if(!testStatus(STATUS_26) || (ai->m_flag3c7 ? victim->m_template : victim->m_template)->isStructure()){
      if(!same)return;
     }
    }
