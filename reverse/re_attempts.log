@@ -52847,3 +52847,4 @@ _Rva001118ECResampleRgb555	0x001118EC	281	landed	add_match verified Code/GameEng
 ?bfmeHas985C@BfmeArg985@@QAEDH@Z	0x002940B9	305	landed	add_match verified Code/GameEngine/Source/GameLogic/Object/ObjectAffectedByUpgrade.cpp 305B
 ?rva00577634@Rva005765D1@@QAEXH@Z	0x00577634	115	landed	add_match verified Code/GameEngine/Source/Common/Rva00577634Retarget.cpp 115B
 ?setString@PooledString@@AAEXPBD@Z	0x006CB7C0	492	landed	add_match verified Code/Libraries/Source/WWVegas/WWLib/PooledStringSetString.cpp 492B
+?canMake@AIBuildableWallSegment@@UAEHPAVPlayer@@@Z	0x00596E15	218	partial	T1+R1 full generator suite: 221 trials, nd 38->23 at 213B (retail 218) via the scope dummy and volatile member pair; residual EH-state/branch-layout/frame-slot/missing-extra, tail-merge dtor still shared score=0.8559 stash=reverse/attempts/0x00596e15.cpp
