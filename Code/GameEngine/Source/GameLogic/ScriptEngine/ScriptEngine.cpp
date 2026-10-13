@@ -211,7 +211,6 @@ public:
 	bool evaluateConditions(Script *pScript, Team *thisTeam, Player *player);
 	bool evaluateTimer(Condition *condition);
 	bool evaluateFlag(Condition *condition);
-	int rva00203693();	// 0x00203693, current mode mask (2 or 1)
 
 protected:
     enum TFade { FADE_NONE, FADE_SUBTRACT, FADE_ADD, FADE_SATURATE, FADE_MULTIPLY };
@@ -299,13 +298,22 @@ bool ScriptEngine::evaluateFlag(Condition *condition)
 	return false;
 }
 
+// 0x00203693, the engine's current mode mask (2 or 1), is rowed as
+// Rva00203693Host::rva00203693; evaluateCondition calls it through a view of
+// the engine.
+class Rva00203693Host
+{
+public:
+	int rva00203693();
+};
+
 // ScriptEngine::evaluateCondition, retail 0x002096E2 (102B): Zero Hour's
 // switch (ScriptEngine.cpp:7059) behind BFME2's test of the condition's mode
 // mask (0x003B275A) against the engine's (0x00203693), the executeActions
 // test's shape.
 bool ScriptEngine::evaluateCondition(Condition *pCondition)
 {
-	if ((pCondition->rva003B275A() & rva00203693()) == 0)
+	if ((pCondition->rva003B275A() & ((Rva00203693Host *)this)->rva00203693()) == 0)
 		return false;
 	switch (pCondition->getConditionType()) {
 		default:

@@ -17,12 +17,26 @@
 // they stay void* and the helpers keep address-derived names.
 #include "unicode_string.h"
 
+// 0x00203693 (the engine's current mode mask, 2 or 1) and 0x003B2832 (the
+// action template's mode mask) are rowed as Rva00203693Host::rva00203693 and
+// Rva003B2832::rva003B2832 (this-call, int result); called through views of
+// the engine and the action, as ScriptEngineEvaluateAndProgressAllSequentialScripts.cpp does.
+class Rva00203693Host
+{
+public:
+	int rva00203693();
+};
+class Rva003B2832
+{
+public:
+	int rva003B2832();
+};
+
 class ScriptAction
 {
 public:
 	int getActionType() { return m_actionType; }
 	ScriptAction *getNext() { return m_nextAction; }
-	int rva003B2832();				// 0x003B2832, action template's mode mask
 	void rva003B3D75(void *a, void *b);	// 0x003B3D75
 
 private:
@@ -59,7 +73,6 @@ class ScriptEngine
 public:
 	void callSubroutine(ScriptAction *pAction);
 	void setPriorityDefault(ScriptAction *pAction);
-	int rva00203693();				// 0x00203693, current mode mask (2 or 1)
 
 protected:
 	void setSway(ScriptAction *pAction);
@@ -85,7 +98,7 @@ void ScriptEngine::executeActions(ScriptAction *pActionHead, void *a, void *b)
 	ScriptAction *pCurAction;
 	UnicodeString uStr1;
 	for (pCurAction = pActionHead; pCurAction; pCurAction = pCurAction->getNext()) {
-		if ((pCurAction->rva003B2832() & rva00203693()) == 0)
+		if ((((Rva003B2832 *)pCurAction)->rva003B2832() & ((Rva00203693Host *)this)->rva00203693()) == 0)
 			continue;
 		pCurAction->rva003B3D75(a, b);
 		switch (pCurAction->getActionType()) {

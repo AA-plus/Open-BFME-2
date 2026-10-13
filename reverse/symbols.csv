@@ -15809,9 +15809,6 @@ _D3DXLoadSurfaceFromMemory@40,0x0062AF68,PE-named d3dx9_27.dll D3DXLoadSurfaceFr
 ?setCounterToThreat@ScriptEngine@@IAEXPAVScriptAction@@_N@Z,0x00209003,callee of ?executeActions@ScriptEngine@@IAEXPAVScriptAction@@PAX1@Z
 ?setFade@ScriptEngine@@IAEXPAVScriptAction@@@Z,0x00203777,callee of ?executeActions@ScriptEngine@@IAEXPAVScriptAction@@PAX1@Z
 ?setPriorityKind@ScriptEngine@@IAEXPAVScriptAction@@@Z,0x0020611D,callee of ?executeActions@ScriptEngine@@IAEXPAVScriptAction@@PAX1@Z
-?setPriorityThing@ScriptEngine@@IAEXPAVScriptAction@@@Z,0x00205EEC,callee of ?executeActions@ScriptEngine@@IAEXPAVScriptAction@@PAX1@Z
-?rva00203693@ScriptEngine@@QAEHXZ,0x00203693,callee of ?executeActions@ScriptEngine@@IAEXPAVScriptAction@@PAX1@Z
-?rva003B2832@ScriptAction@@QAEHXZ,0x003B2832,callee of ?executeActions@ScriptEngine@@IAEXPAVScriptAction@@PAX1@Z
 ?rva00358752@ScriptEngine@@QAEPAVObject@@VAsciiString@@@Z,0x00358752,callee of ?setCounterToThreat@ScriptEngine@@IAEXPAVScriptAction@@_N@Z
 ?_appendMessage@@YAXABVAsciiString@@_N1@Z,0x002053FA,callee of ?executeScript@ScriptEngine@@QAEXPAVScript@@ABVAsciiString@@@Z
 ?particleEditorUpdate@ScriptEngine@@IAEXXZ,0x00204032,callee of ?update@ScriptEngine@@UAEXXZ
