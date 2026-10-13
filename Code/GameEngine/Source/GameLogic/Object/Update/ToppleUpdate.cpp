@@ -2,12 +2,18 @@
 // BF1 ToppleUpdateApplyTopplingForce.cpp9cbfb551 and ZH ToppleUpdate.cpp
 // guide purpose/control flow; target4A83D7..4A86E7 supplies784B and all
 // BFME2 layouts/model masks. Target ctor4A8201/xfer4A86E7 prove58B module.
+// Keep MSVC's float math overloads local. Retail calls the external atan2f
+// provider, so give only the header's unused inline helper a private name.
+#define inline static inline
+#define atan2f toppleInlineAtan2f
+#include <math.h>
+#undef atan2f
+#undef inline
 #include "ascii_string.h"
 #include "../../../../../Libraries/Include/Lib/Coord3D.h"
 #include "matrix3d.h"
 #pragma function(memset)
 extern "C" void *memset(void *,int,unsigned);
-#include <math.h>
 extern "C" float atan2f(float,float);
 float normalizeAngle(float);float Cos(float);float Sin(float);
 static const float PI=3.14159265359f;

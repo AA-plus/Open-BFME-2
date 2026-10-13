@@ -14,7 +14,10 @@
 // (TheLuaScriptEngine 0x003360D2 with the trigger name) and to the trigger
 // (0x002E3777 / 0x002E3794).
 // class-gate: allow GameLogic canonical view lacks QueueForNotifyPathfindCellChanged (0x00241C25) and the +0x180 trigger-change frame this body writes
+// Keep MSVC's float math overloads local, preserving their inlined operations.
+#define inline static inline
 #include <math.h>
+#undef inline
 #include "ascii_string.h"
 
 typedef float Real;
