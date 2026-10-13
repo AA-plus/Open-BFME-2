@@ -11,7 +11,7 @@
 class Rva00224455
 {
 public:
-	int rva00224455(const AsciiString *key);
+	int RemoveCommandMap(const AsciiString *key);
 };
 
 class Rva00222A8BTarget;
@@ -61,7 +61,7 @@ void Rva005F2792::rva005F2792()
 	AsciiString key;
 	const char *mid = m_info->m_holder ? m_info->m_holder->m_name : "";
 	key.format("_level%u.%s_OnUnitIconSlotLoaded%d", m_info->m_level, mid, m_slot);
-	((Rva00224455 *)TheRva00222A8BTarget)->rva00224455(&key);
+	((Rva00224455 *)TheRva00222A8BTarget)->RemoveCommandMap(&key);
 }
 
 // Native 0x005F27F8..0x005F2897, RET4. The proven callback family supplies

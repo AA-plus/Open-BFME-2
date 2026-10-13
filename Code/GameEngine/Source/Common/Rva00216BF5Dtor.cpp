@@ -26,7 +26,7 @@ extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 class Rva00224455
 {
 public:
-	int rva00224455(const AsciiString *name);
+	int RemoveCommandMap(const AsciiString *name);
 };
 
 class SubsystemInterface
@@ -85,11 +85,11 @@ Rva00216BF5::~Rva00216BF5()
 		}
 		{
 			AsciiString name("AptBannerUI::OnInitialized");
-			((Rva00224455 *)g_pRva00224BC9)->rva00224455(&name);
+			((Rva00224455 *)g_pRva00224BC9)->RemoveCommandMap(&name);
 		}
 		{
 			AsciiString name("AptBannerUI::OnBttnBanner");
-			((Rva00224455 *)g_pRva00224BC9)->rva00224455(&name);
+			((Rva00224455 *)g_pRva00224BC9)->RemoveCommandMap(&name);
 		}
 	}
 }

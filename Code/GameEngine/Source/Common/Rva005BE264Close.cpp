@@ -1,6 +1,6 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 // ?rva005BE264@Rva005BE264Owner@@QAEXXZ @0x005BE264 110B
-// Evidence: AptTimeLine InitGadgets close plus SetPlayerFocus via TheRva00222A8BTarget rowed rva00224455; strings AptTimeLine::InitGadgets AptTimeLine::SetPlayerFocus write literals; callees rowed StringBase ctor 0x00037BA0 releaseBuffer 0x00036410 pinned _bfme_closeAptScreen; caller 0x0051E500 unblocks 0x0051E4B0; precedent BfmeAptScreenScoreDestructor plus Rva00224455 shared AsciiString.
+// Evidence: AptTimeLine InitGadgets close plus SetPlayerFocus via TheRva00222A8BTarget rowed RemoveCommandMap; strings AptTimeLine::InitGadgets AptTimeLine::SetPlayerFocus write literals; callees rowed StringBase ctor 0x00037BA0 releaseBuffer 0x00036410 pinned _bfme_closeAptScreen; caller 0x0051E500 unblocks 0x0051E4B0; precedent BfmeAptScreenScoreDestructor plus Rva00224455 shared AsciiString.
 // The only caller (0x0051E500) loads the owner into ecx (mov ecx,[esi+0x280];
 // test ecx,ecx; je; call), so the body is a member that ignores this, spelled
 // as the caller's pin names it.
@@ -12,7 +12,7 @@ extern Rva00222A8BTarget *TheRva00222A8BTarget;
 class Rva00224455
 {
 public:
-	int rva00224455(const AsciiString *key);
+	int RemoveCommandMap(const AsciiString *key);
 };
 
 void _bfme_closeAptScreen(const AsciiString &name);
@@ -31,6 +31,6 @@ void Rva005BE264Owner::rva005BE264()
 	}
 	{
 		AsciiString s2("AptTimeLine::SetPlayerFocus");
-		reinterpret_cast<Rva00224455 *>(TheRva00222A8BTarget)->rva00224455(&s2);
+		reinterpret_cast<Rva00224455 *>(TheRva00222A8BTarget)->RemoveCommandMap(&s2);
 	}
 }

@@ -244,8 +244,8 @@ extern GameWindowManager *TheWindowManager;
 extern unsigned g_Va00E03020;
 class BfmeAptWindowManager;
 extern BfmeAptWindowManager *g_bfmeAptWindowManager;
-class Rva002246B1 {public:int rva002246B1(const AsciiString*);};
-class Rva00224455 {public:int rva00224455(const AsciiString*);};
+class Rva002246B1 {public:int RemoveCustomRender(const AsciiString*);};
+class Rva00224455 {public:int RemoveCommandMap(const AsciiString*);};
 void _bfme_closeAptScreen(const AsciiString&);
 // Structural RE label for the pointer released during Apt shutdown; original
 // global/type names remain unknown. Native stores and initial data establish
@@ -268,20 +268,20 @@ void Rva00411B52() {
  ::operator delete(AptShutdownReceiverInstance?AptShutdownReceiverInstance->slot00(0):0);
  AptShutdownReceiverInstance=0;
  if(g_bfmeAptWindowManager) {
-  {AsciiString name("GameWindow");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("HorzSlider");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("ComboBox");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("ImageComboBox");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("CheckBox");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("TextEntry");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("ListBox");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("PushButton");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("BinkMovie");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("LivingWorldMap");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("View3D");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("ColorPicker");((Rva002246B1*)g_bfmeAptWindowManager)->rva002246B1(&name);}
-  {AsciiString name("DisableComponents");((Rva00224455*)g_bfmeAptWindowManager)->rva00224455(&name);}
-  {AsciiString name("EnableComponents");((Rva00224455*)g_bfmeAptWindowManager)->rva00224455(&name);}
+  {AsciiString name("GameWindow");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("HorzSlider");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("ComboBox");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("ImageComboBox");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("CheckBox");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("TextEntry");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("ListBox");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("PushButton");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("BinkMovie");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("LivingWorldMap");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("View3D");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("ColorPicker");((Rva002246B1*)g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
+  {AsciiString name("DisableComponents");((Rva00224455*)g_bfmeAptWindowManager)->RemoveCommandMap(&name);}
+  {AsciiString name("EnableComponents");((Rva00224455*)g_bfmeAptWindowManager)->RemoveCommandMap(&name);}
  }
  {AsciiString name("BinkMovieInit");_bfme_closeAptScreen(name);}
 }

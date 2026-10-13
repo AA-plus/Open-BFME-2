@@ -56,9 +56,9 @@ public:
 class BfmeAptWindowManager;
 extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 
-class Rva00224455 { public: int rva00224455(const AsciiString *name); };
+class Rva00224455 { public: int RemoveCommandMap(const AsciiString *name); };
 class AptPlayer { public: void RemoveOverButtonHandler(const AsciiString &name); };
-class Rva002246B1 { public: int rva002246B1(const AsciiString *name); };
+class Rva002246B1 { public: int RemoveCustomRender(const AsciiString *name); };
 class Rva00224705 { public: int rva00224705(const AsciiString *name); };
 
 class Rva0052416D : public Rva003769C2StringVector
@@ -77,7 +77,7 @@ void Rva0052416D::rva0052416D(const AsciiString &name)
 		AsciiString *it = (AsciiString *)Rva000BD22FFind((StringBase<char> *)begin(), (StringBase<char> *)end(), (const StringBase<char> &)name);
 		if (it != end())
 		{
-			((Rva00224455 *)g_bfmeAptWindowManager)->rva00224455(&name);
+			((Rva00224455 *)g_bfmeAptWindowManager)->RemoveCommandMap(&name);
 			erase(it);
 		}
 	}
@@ -103,7 +103,7 @@ void Rva0052416D::rva00524294(const AsciiString &name)
 		AsciiString *it = (AsciiString *)Rva000BD22FFind((StringBase<char> *)begin(), (StringBase<char> *)end(), (const StringBase<char> &)name);
 		if (it != end())
 		{
-			((Rva002246B1 *)g_bfmeAptWindowManager)->rva002246B1(&name);
+			((Rva002246B1 *)g_bfmeAptWindowManager)->RemoveCustomRender(&name);
 			erase(it);
 		}
 	}

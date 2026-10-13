@@ -16,7 +16,7 @@ void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *ref);
 class Rva002246B1
 {
 public:
-	int rva002246B1(const AsciiString *name);
+	int RemoveCustomRender(const AsciiString *name);
 };
 // One native manager datum at VA DFE4CC; cast to this unit's receiver view.
 class BfmeAptWindowManager;
@@ -76,7 +76,7 @@ private:
 
 static __forceinline void removeCustomRender(const AsciiString &key)
 {
-	reinterpret_cast<Rva002246B1 *>(g_bfmeAptWindowManager)->rva002246B1(&key);
+	reinterpret_cast<Rva002246B1 *>(g_bfmeAptWindowManager)->RemoveCustomRender(&key);
 }
 
 Rva00527827::~Rva00527827()

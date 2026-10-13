@@ -62,7 +62,7 @@ extern GameWindowTransitionsHandler *TheTransitionHandler;
 class Rva002246B1
 {
 public:
-	int rva002246B1(const AsciiString *name);
+	int RemoveCustomRender(const AsciiString *name);
 };
 class AptPlayer;
 // One native manager datum at VA DFE4CC; cast to this unit's receiver view.
@@ -127,7 +127,7 @@ AptCreateAHero::~AptCreateAHero()
 		}
 		{
 			AsciiString name("CreateAHero::DrawMapComponent");
-			((Rva002246B1 *)reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))->rva002246B1(&name);
+			((Rva002246B1 *)reinterpret_cast<AptPlayer *>(g_bfmeAptWindowManager))->RemoveCustomRender(&name);
 		}
 		TheGlobalDataView->m_68 = m_42e;
 		TheGlobalDataView->m_9A5 = true;

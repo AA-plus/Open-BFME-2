@@ -88,7 +88,7 @@ extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 class Rva002244CA
 {
 public:
-	int rva002244CA(const AsciiString *name);
+	int RemoveExternHandler(const AsciiString *name);
 };
 
 // Registers one extern handler for its own lifetime; keeps the name.
@@ -169,7 +169,7 @@ AptSingleExternHandlerAdder::AptSingleExternHandlerAdder(const AsciiString &name
 void AptSingleExternHandlerAdder::rva00523D5A()
 {
 	if (TheAptPlayer)
-		((Rva002244CA *)TheAptPlayer)->rva002244CA(&m_name);
+		((Rva002244CA *)TheAptPlayer)->RemoveExternHandler(&m_name);
 }
 
 // AptSingleExternHandlerAdder::~AptSingleExternHandlerAdder, retail

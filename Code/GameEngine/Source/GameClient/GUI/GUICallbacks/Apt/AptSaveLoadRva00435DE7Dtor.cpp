@@ -83,7 +83,7 @@ struct TreeHintOpaque0043671B
 class Rva002244CA
 {
 public:
-	int rva002244CA(const AsciiString *name);
+	int RemoveExternHandler(const AsciiString *name);
 };
 
 class Rva00222A8BTarget
@@ -232,7 +232,7 @@ Rva00435DE7::~Rva00435DE7()
 		for (int i = 0; i < 3; ++i)
 		{
 			AsciiString name(registrations[i]);
-			((Rva002244CA *)*(void **)&g_bfmeAptWindowManager)->rva002244CA(&name);
+			((Rva002244CA *)*(void **)&g_bfmeAptWindowManager)->RemoveExternHandler(&name);
 		}
 
 		_bfme_closeAptScreen(AsciiString("AptSaveLoad::InitGadgets"));

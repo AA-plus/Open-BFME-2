@@ -10,7 +10,7 @@ extern Rva00222A8BTarget *TheRva00222A8BTarget;
 class Rva002246B1
 {
 public:
-	int rva002246B1(const AsciiString *key);
+	int RemoveCustomRender(const AsciiString *key);
 };
 
 class Rva0052493F
@@ -39,7 +39,7 @@ void Rva0051E4B0::rva0051E4B0()
 {
 	{
 		AsciiString s("AptTimeLine::RenderGraph");
-		((Rva002246B1 *)TheRva00222A8BTarget)->rva002246B1(&s);
+		((Rva002246B1 *)TheRva00222A8BTarget)->RemoveCustomRender(&s);
 	}
 	((Rva0052493F *)((char *)this + 0x218))->rva0052493F();
 	if (m_280)

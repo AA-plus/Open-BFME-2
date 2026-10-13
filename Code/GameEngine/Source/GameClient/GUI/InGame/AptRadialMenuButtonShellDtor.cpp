@@ -15,7 +15,7 @@
 class Rva00224455
 {
 public:
-	int rva00224455(const AsciiString *name);
+	int RemoveCommandMap(const AsciiString *name);
 };
 // One native manager datum at VA DFE4CC; cast to this unit's receiver view.
 class BfmeAptWindowManager;
@@ -125,7 +125,7 @@ private:
 
 static __forceinline void removeCommandMap(const AsciiString &name)
 {
-	reinterpret_cast<Rva00224455 *>(g_bfmeAptWindowManager)->rva00224455(&name);
+	reinterpret_cast<Rva00224455 *>(g_bfmeAptWindowManager)->RemoveCommandMap(&name);
 }
 
 AptRadialMenu::Impl::ButtonShell::~ButtonShell()

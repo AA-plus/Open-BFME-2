@@ -424,13 +424,13 @@ void _bfme_closeAptScreen(const AsciiString &name);
 class Rva002246B1
 {
 public:
-	int rva002246B1(const AsciiString *name);
+	int RemoveCustomRender(const AsciiString *name);
 };
 
 class Rva002244CA
 {
 public:
-	int rva002244CA(const AsciiString *name);
+	int RemoveExternHandler(const AsciiString *name);
 };
 
 // The 0x00DFEF18 singleton (address-named view): the living-world map
@@ -803,7 +803,7 @@ void AptMapPreview::rva0057D5E5()
 {
 	{
 		AsciiString name("AptMapPreview::Picture");
-		((Rva002246B1 *)g_bfmeAptWindowManager)->rva002246B1(&name);
+		((Rva002246B1 *)g_bfmeAptWindowManager)->RemoveCustomRender(&name);
 	}
 	{
 		AsciiString name("AptMapPreview::MapGadgetInit");
@@ -811,7 +811,7 @@ void AptMapPreview::rva0057D5E5()
 	}
 	{
 		AsciiString name("AptMapPreview::GameMapType");
-		((Rva002244CA *)g_bfmeAptWindowManager)->rva002244CA(&name);
+		((Rva002244CA *)g_bfmeAptWindowManager)->RemoveExternHandler(&name);
 	}
 	m_currentMap = 0;
 	m_mapPicture = 0;

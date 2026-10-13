@@ -16,7 +16,7 @@ class BfmeAptWindowManager;
 extern BfmeAptWindowManager *g_bfmeAptWindowManager;
 class Rva00222A8BTarget {public:void rva002239FA(const AsciiString &,const AsciiString &);};
 class Rva00223A94 {public:int rva00223A94(const AsciiString *);};
-class Rva002246B1 {public:int rva002246B1(const AsciiString *);};
+class Rva002246B1 {public:int RemoveCustomRender(const AsciiString *);};
 struct TargetRef00217D4C;
 void __fastcall ReleaseTreeHintRef00217D4C(TargetRef00217D4C *);
 class __single_inheritance ResourceDrawTarget {};
@@ -103,7 +103,7 @@ Rva002D5188ResourceBar::Rva002D5188ResourceBar():unknown00(0),unknown04(0),flag0
 Rva002D5188ResourceBar::~Rva002D5188ResourceBar() {
  if(g_bfmeAptWindowManager) {
   {AsciiString name("ResourceBar/ResourceIcon");reinterpret_cast<Rva00223A94*>(g_bfmeAptWindowManager)->rva00223A94(&name);}
-  {AsciiString name("RenderFactionIcon");reinterpret_cast<Rva002246B1*>(g_bfmeAptWindowManager)->rva002246B1(&name);}
+  {AsciiString name("RenderFactionIcon");reinterpret_cast<Rva002246B1*>(g_bfmeAptWindowManager)->RemoveCustomRender(&name);}
   {AsciiString name("Palantir/ResourceBar/Resources/");reinterpret_cast<AptPlayer*>(g_bfmeAptWindowManager)->RemoveOverButtonHandler(name);}
   {AsciiString name("Palantir/ResourceBar/ResourceMultiplier/");reinterpret_cast<AptPlayer*>(g_bfmeAptWindowManager)->RemoveOverButtonHandler(name);}
   {AsciiString name("Palantir/ResourceBar/CommandPoints/");reinterpret_cast<AptPlayer*>(g_bfmeAptWindowManager)->RemoveOverButtonHandler(name);}

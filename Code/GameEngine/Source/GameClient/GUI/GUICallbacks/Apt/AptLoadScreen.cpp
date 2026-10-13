@@ -61,7 +61,7 @@ public:
 class Rva002244CA
 {
 public:
-	int rva002244CA(const AsciiString *);
+	int RemoveExternHandler(const AsciiString *);
 };
 class Rva00223A94
 {
@@ -144,7 +144,7 @@ AptLoadScreen::~AptLoadScreen()
 	for (int i = 0; i < 8; ++i)
 	{
 		colorName.format("GameLoading:PlayerColor:%d", i);
-		reinterpret_cast<Rva002244CA *>(g_bfmeAptWindowManager)->rva002244CA(&colorName);
+		reinterpret_cast<Rva002244CA *>(g_bfmeAptWindowManager)->RemoveExternHandler(&colorName);
 		clipName.format("UIClip/Level/%d", i);
 		reinterpret_cast<Rva00223A94 *>(g_bfmeAptWindowManager)->rva00223A94(&clipName);
 		clipName.format("UIClip/Fellowship/%d", i);
@@ -152,7 +152,7 @@ AptLoadScreen::~AptLoadScreen()
 	}
 	{
 		AsciiString typeName("GameLoadingType");
-		reinterpret_cast<Rva002244CA *>(g_bfmeAptWindowManager)->rva002244CA(&typeName);
+		reinterpret_cast<Rva002244CA *>(g_bfmeAptWindowManager)->RemoveExternHandler(&typeName);
 	}
 	reinterpret_cast<Rva00222A8BTarget *>(g_bfmeAptWindowManager)->rva00222F55(false);
 	reinterpret_cast<LoadPlayerView *>(g_bfmeAptWindowManager)->show(1);
