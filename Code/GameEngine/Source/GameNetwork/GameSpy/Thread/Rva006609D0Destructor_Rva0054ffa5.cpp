@@ -70,8 +70,12 @@ struct Rva006609D0LockHolder
 {
 	~Rva006609D0LockHolder()
 	{
-		if( m_lock )
-			delete m_lock;
+		// The shared retail clear body at 0x0009990D clears the owner before
+		// destroying the previous lock; omitting this store emits a wrong copy.
+		MutexClass::LockClass *old = m_lock;
+		m_lock = 0;
+		if( old )
+			delete old;
 	}
 
 	MutexClass::LockClass *m_lock;
