@@ -162,7 +162,8 @@ class Rva002BA8F1Logic {public:Rva002E2903Player *rva002B52A8(int);};
 struct Rva002B86AAKey; struct Rva002B86AAVal;
 class Rva002B86AA {public:bool rva002B86AA(Rva002B86AAKey*,Rva002B86AAVal*)const;};
 class Rva002104B6 {public:void *rva002104B6(void*);};
-class Rva002B2702B0 {public:bool rva0020EA58(void*,float*);};
+class Rva0020E89C;
+class LivingWorldRegionManager {public:bool GetRegionCenterPoint(Rva0020E89C*,Coord2D*);};
 struct Rva002B6A04Player; struct LivingWorldArmy;
 class LivingWorldLogic {public:
  void spawnCity(Rva004E3184*);
@@ -201,8 +202,8 @@ void Rva0056616B::rva005666C5() {
         Rva004E3184 temporary(0);
         reinterpret_cast<Rva004FAFF2*>(&temporary)->rva004FAFF2(*reinterpret_cast<const Rva004FAFF2*>(request));
         Coord2D center;
-        Rva002B2702B0 *centers=reinterpret_cast<Rva002B2702B0*>(TheLivingWorldLogic->regions);
-        if(!centers->rva0020EA58(region,&center.x)) return;
+        LivingWorldRegionManager *centers=reinterpret_cast<LivingWorldRegionManager*>(TheLivingWorldLogic->regions);
+        if(!centers->GetRegionCenterPoint((Rva0020E89C *)region,&center)) return;
         *reinterpret_cast<unsigned int *>(&temporary.m_20)=*reinterpret_cast<const unsigned int *>(&center.x); *reinterpret_cast<unsigned int *>(&temporary.m_24)=*reinterpret_cast<const unsigned int *>(&center.y);
         TheLivingWorldLogic->spawnArmy(&temporary,reinterpret_cast<Rva002B6A04Player*>(player),true);
        }

@@ -22,6 +22,7 @@ public:
 // Bind the existing NAT datum; retain this unit's access view at use sites.
 struct NAT;
 extern NAT *TheNAT;
+struct NAT { void rva005A6D47(); };
 
 #include "ascii_string.h"
 
@@ -72,7 +73,7 @@ private:
 void AptConnectionScreen::OnRetryConnections(const char *unused)
 {
 	if (TheNAT)
-		((Rva005A6D47 *)TheNAT)->rva005A6D47();
+		TheNAT->rva005A6D47();
 }
 
 // Retail 0x005DB630, 23 bytes. Name unknown. Refreshes all eight players.

@@ -88,10 +88,11 @@ class Drawable;
 
 // vftable 0x00BF9000, allow 0x002617E8 (ctor 0x00261790): the thing's
 // position and its radius scaled by a GlobalData factor, and a flag.
+class Arg00261790;
 class Rva00261790 : public Rva000421C8
 {
 public:
-	Rva00261790(Drawable *thing, bool flag);
+	Rva00261790(Arg00261790 *thing, bool flag);
 	virtual bool allow(Object *obj);
 	float m_pos[3];
 	float m_radius;
@@ -139,7 +140,7 @@ Object *Drawable::rva00272AD5()
 	Rva002611DDFilter second;
 	Rva0026137EFilter player(ThePlayerList->m_10, true);
 	Rva0027231F kinds(*(BfmeFixedStorage0004543D *)&Rva0006EE7A(0, 0x7a, 0x9e));
-	Rva00261790 near(this, true);
+	Rva00261790 near((Arg00261790 *)this, true);
 	kinds.link(&alive)->link(&second)->link(&player)->link(&near);
 	return ThePartitionManager->getClosestObject(&m_pos, g_Va00DFDC30->m_80, 0, &kinds);
 }
