@@ -73,7 +73,8 @@ struct InGameRet
 	Object *m_obj;
 };
 
-const CommandButton *__stdcall Rva0042970AGet(int id)
+class CommandTranslator { public: const CommandButton* rva0042970A(int); };
+const CommandButton *CommandTranslator::rva0042970A(int id)
 {
 	int i;
 	const CommandButton *btn;
@@ -99,3 +100,6 @@ const CommandButton *__stdcall Rva0042970AGet(int id)
 	}
 	return 0;
 }
+
+// Member ABI: context evaluator42AABF loads its CommandTranslator receiver
+// into ECX before passing power51. Receiver remains unused inside this body.

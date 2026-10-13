@@ -1,6 +1,6 @@
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include
 #include "Common/BfmeAudioEventPrefix136.h"
-// ?Rva00428EEBIssueFireWeapon@@YGHPBVCommandButton@@HPAVDrawable@@PBUCoord3D@@@Z @0x00428EEB 284B: free issue command emitting 0x434/0x433 via MessageStreamSubsystem createMessage plus voice response.
+// ?rva00428EEB@CommandTranslator@@AAEHPBVCommandButton@@HPAVDrawable@@PBUCoord3D@@@Z @0x00428EEB 284B: member issue command emitting 0x434/0x433 via MessageStreamSubsystem createMessage plus voice response.
 // Evidence: retail bytes options-7 isValid slot75 then 0x20 ground branch; rowed isValid 0x35B112 appends 0x30F936 0x30F9BB 0x30F979 ctor 0x4D92FE pinned pickAndPlay 0x4DAAFD; TheInGameUI MessageStreamSubsystem names.
 
 #include "../../../Libraries/Include/Lib/Coord3D.h"
@@ -152,7 +152,22 @@ public:
 	int m_20;
 };
 
-int __stdcall Rva00428EEBIssueFireWeapon(const CommandButton *command, int commandType, Drawable *target, const struct Coord3D *pos)
+class CommandTranslator
+{
+private:
+ int rva00428EEB(const CommandButton*,int,Drawable*,const Coord3D*);
+    int issueCombatDropCommand(const CommandButton *command, int commandType,
+                               Drawable *target, const Coord3D *pos);
+    int issueMoveToLocationCommand(const Coord3D *pos, Drawable *drawableInWay, int commandType);
+    int issueSpecialPowerCommand(const CommandButton*,int,Drawable*,const Coord3D*,Object*);
+    int issueAttackCommand(Drawable*,const Coord3D*,int,int);
+    int createAttackMessage(Drawable *draw, Drawable *other, int commandType);
+    char m_pad00[8];
+    bool m_teamExists;
+
+};
+
+int CommandTranslator::rva00428EEB(const CommandButton *command, int commandType, Drawable *target, const struct Coord3D *pos)
 {
 	if (!command)
 		return GameMessage::MSG_INVALID;
@@ -201,19 +216,7 @@ int __stdcall Rva00428EEBIssueFireWeapon(const CommandButton *command, int comma
 // same branches and callees. BFME 2 adds explicit PickAndPlayInfo target /
 // position fields, as in matched 0x00428EEB; retail proves message IDs,
 // offsets and virtual slots. CommandTranslator's receiver is unused here.
-class CommandTranslator
-{
-private:
-    int issueCombatDropCommand(const CommandButton *command, int commandType,
-                               Drawable *target, const Coord3D *pos);
-    int issueMoveToLocationCommand(const Coord3D *pos, Drawable *drawableInWay, int commandType);
-    int issueSpecialPowerCommand(const CommandButton*,int,Drawable*,const Coord3D*,Object*);
-    int issueAttackCommand(Drawable*,const Coord3D*,int,int);
-    int createAttackMessage(Drawable *draw, Drawable *other, int commandType);
-    char m_pad00[8];
-    bool m_teamExists;
 
-};
 
 int CommandTranslator::issueCombatDropCommand(const CommandButton *command, int commandType, Drawable *target, const struct Coord3D *pos)
 {
@@ -506,3 +509,6 @@ bool __fastcall canSelectionSalvage(const Object* targetObj) {
  }
  return false;
 }
+
+// Member ABI: context evaluator42A35A supplies its CommandTranslator ECX
+// and four stack args. Body does not use this; preserve unknown method name.

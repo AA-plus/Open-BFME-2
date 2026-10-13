@@ -1,7 +1,9 @@
 // cl: /Ireference/shims/bfme2_ascii /DNDEBUG /MD /EHsc
 //
-// ?Rva0029C752Check@@YA_NXZ @0x0029C752 39B.
-// Free helper over TheInGameUI slot 0x124 selection list: empty list returns
+// ?areSelectedObjectsControllable@InGameUI@@QBE_NXZ @0x0029C752 39B.
+// ZH InGameUI::areSelectedObjectsControllable; receiver is unused.
+// Member ABI independently proven by native evaluator42A032 and WB E79EC0.
+// Helper over TheInGameUI slot 0x124 selection list: empty list returns
 // false, else tail-jmps to rowed Object::isLocallyControlled on [nodeData+0xfc].
 // Evidence: TheInGameUI global plus virtual 0x124 same as caller 0x0030EFD5;
 // list nodes with data at +8 (STL list layout); +0xfc plus rowed 0x0028B07A;
@@ -107,11 +109,12 @@ public:
 	virtual void slot71();
 	virtual void slot72();
 	virtual Sel *slot73();
+ bool areSelectedObjectsControllable() const;
 };
 
 extern InGameUI *TheInGameUI;
 
-bool __cdecl Rva0029C752Check()
+bool InGameUI::areSelectedObjectsControllable() const
 {
 	Sel *sel = TheInGameUI->slot73();
 	ListNode *head = sel->m_head;
