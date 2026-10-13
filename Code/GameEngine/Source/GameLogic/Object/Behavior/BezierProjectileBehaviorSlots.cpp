@@ -81,14 +81,22 @@ private:
 	unsigned int m_words[20];
 };
 
+class GeometryInfo
+{
+public:
+	bool bfmeIntersects(const Coord3D &, float, const GeometryInfo &, const Coord3D &, float) const;
+};
+
 class Thing
 {
 public:
 	void setTransformMatrix(const Matrix3D *mx);
+	void setPosition(const Coord3D *pos);
 };
 
 class Object : public Thing
 {
+	friend class BezierProjectileBehavior;
 public:
 	void kill(DamageType damageType, DeathType deathType);
 	void setStatus(ObjectStatusTypes status, bool set);
@@ -121,7 +129,8 @@ private:
 	const ThingTemplate *m_template; // +0x04
 	unsigned char m_pad008[0x38 - 0x08];
 	Coord3D m_position; // +0x38
-	unsigned char m_pad044[0x74 - 0x44];
+	float m_orientation; // +0x44, target collision-step accesses
+	unsigned char m_pad048[0x74 - 0x48];
 	ObjectID m_id; // +0x74
 	unsigned char m_pad078[0x10C - 0x78];
 	Rva0010CConditionBits m_conditionBits; // +0x10C
@@ -129,6 +138,24 @@ private:
 	unsigned int m_380; // +0x380
 	unsigned char m_pad384[0x438 - 0x384];
 	unsigned char m_438; // +0x438
+};
+
+// Target uses an embedded GeometryInfo at +0xA8; its full size is not
+// established here. This accessor preserves that offset without inventing it.
+static __forceinline GeometryInfo *collisionGeometry(Object *object)
+{
+	return (GeometryInfo *)((char *)object + 0xA8);
+}
+
+// Scalar coordinate storage reproduces the native copies and SSE operations.
+// This adapter is a local compiler-shape view, not an original class identity.
+struct Rva0045B9FBPoint : Coord3D
+{
+	Rva0045B9FBPoint(const Coord3D &r) { x = r.x; y = r.y; z = r.z; }
+	~Rva0045B9FBPoint() {}
+	void sub(const Coord3D &r) { x -= r.x; y -= r.y; z -= r.z; }
+	void add(const Coord3D &r) { x += r.x; y += r.y; z += r.z; }
+	void scale(float k) { x *= k; y *= k; z *= k; }
 };
 
 class GameLogic
@@ -163,6 +190,15 @@ struct Rva0045B936Arg
 struct BezierPathPoint
 {
 	int a[3];
+};
+
+// The three-pointer layout and 12-byte element stride are target facts;
+// the accessor shape is supported by the BFME 1 path-vector donor.
+struct BezierPathSpan
+{
+	BezierPathPoint *first, *last, *limit;
+	unsigned int size() const { return last - first; }
+	BezierPathPoint *begin() const { return first; }
 };
 
 class BehaviorModule
@@ -218,6 +254,7 @@ public:
 class BezierProjectileBehavior : public UpdateModule, public Rva0045BF06Iface, public Rva0045B4C0Iface
 {
 public:
+	void rva0045B9FB(Object *other);
 	virtual bool rva0045BF06(Object *victim);
 	virtual void rva0045B4C0(Object *victim, int a2, int a3);
 	virtual void rva0045B4E2(int unused);
@@ -229,10 +266,9 @@ private:
 	ObjectID m_38; // +0x38 victim
 	int m_3C;
 	Rva002CBA7C *m_helper; // +0x40
-	BezierPathPoint *m_pathBegin; // +0x44
-	BezierPathPoint *m_pathEnd; // +0x48
-	BezierPathPoint *m_pathCap;
-	unsigned char m_pad50[0x74 - 0x50];
+	BezierPathSpan m_path; // +0x44, end +0x48, capacity +0x4C
+	unsigned char m_pad50[0x70 - 0x50];
+	int m_70; // +0x70 path cursor
 	unsigned int m_74; // +0x74 launcher bonus condition
 	int m_78; // +0x78
 };
@@ -240,7 +276,7 @@ private:
 // ?rva0045BF06@BezierProjectileBehavior@@UAE_NPAVObject@@@Z @0x0045BF06
 bool BezierProjectileBehavior::rva0045BF06(Object *victim)
 {
-	if ((unsigned int)(m_pathEnd - m_pathBegin) <= 0)
+	if ((unsigned int)(m_path.last - m_path.first) <= 0)
 		return false;
 	if (m_helper == 0)
 		return false;
@@ -358,4 +394,33 @@ BezierProjectileBehaviorModuleData::BezierProjectileBehaviorModuleData()
 	m_valueB8 = 0;
 	m_invalidBC = -1;
 	m_valueC0 = 0.0f;
+}
+
+// ?rva0045B9FB@BezierProjectileBehavior@@QAEXPAVObject@@@Z @0x0045B9FB
+// 336 bytes. Primary caller 0x0045CD6E and WB counterpart 0x011816A0
+// establish the collision-step relationship. BFME 1's matched Bezier caller
+// (donor cee35b7d8) supports that relationship, not the unknown method name.
+void BezierProjectileBehavior::rva0045B9FB(Object *other)
+{
+	if (!other)
+		return;
+	int idx = m_path.size() - 1 < (unsigned int)m_70 ? m_path.size() - 1 : m_70;
+	Object *obj = m_object;
+	Rva0045B9FBPoint cur(obj->m_position);
+	BezierPathPoint *p = m_path.begin() + (idx - 1 < 0 ? 0 : idx - 1);
+	Rva0045B9FBPoint delta(*(const Coord3D *)p);
+	delta.sub(cur);
+	delta.scale(0.1f);
+	float angle = obj->m_orientation;
+	GeometryInfo *geom = collisionGeometry(obj);
+	int i = 0;
+	bool collision = true;
+	while (collision && i++ <= 12)
+	{
+		cur.add(delta);
+		collision = geom->bfmeIntersects(cur, angle, *collisionGeometry(other),
+			other->m_position, other->m_orientation);
+	}
+	cur.sub(delta);
+	obj->setPosition(&cur);
 }
