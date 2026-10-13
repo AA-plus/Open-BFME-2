@@ -47,3 +47,7 @@ template void _STL::vector<EvaMessageInfo>::_M_fill_insert(
 	EvaMessageInfo *, _STL::vector<EvaMessageInfo>::size_type, const EvaMessageInfo & );
 template _STL::vector<EvaMessageInfo> &
 	_STL::vector<EvaMessageInfo>::operator=( const _STL::vector<EvaMessageInfo> & );
+
+// Native 0x00784015 is the complete 14-byte placement-new exception action
+// of _Construct at 0x003F62C8. The whole parent and EH graph bind it to
+// the existing empty placement delete at 0x0069E440; element fields stay opaque.
