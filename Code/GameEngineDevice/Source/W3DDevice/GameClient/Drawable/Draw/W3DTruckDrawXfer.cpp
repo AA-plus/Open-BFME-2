@@ -30,6 +30,13 @@
 
 #include "Common/BfmeAudioEventPrefix136.h"
 
+class Rva002D9FD9Arg;
+class Rva002D9FD9Owner
+{
+public:
+	void rva002D9FD9(Rva002D9FD9Arg *xfer);
+};
+
 class AsciiString;
 class UnicodeString;
 class PooledString;
@@ -153,7 +160,7 @@ void W3DTruckDraw::xfer( Xfer *xfer )
 	if( xfer->IsLightCRC() )
 		return;
 
-	m_bfmeAudio374.rva002D9FD9( xfer );
-	m_bfmeAudio3FC.rva002D9FD9( xfer );
+	((Rva002D9FD9Owner *)&m_bfmeAudio374)->rva002D9FD9( (Rva002D9FD9Arg *)xfer );
+	((Rva002D9FD9Owner *)&m_bfmeAudio3FC)->rva002D9FD9( (Rva002D9FD9Arg *)xfer );
 
 }  // end xfer

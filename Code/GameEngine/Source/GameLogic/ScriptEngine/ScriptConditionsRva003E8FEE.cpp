@@ -31,6 +31,11 @@ class Rva00286772Manager
 public:
     bool rva00286772(PolygonTrigger *trig, int v);
 };
+class FireLogicSystem
+{
+public:
+    bool rva00286772(const PolygonTrigger *trig, int v);
+};
 class Rva00286772Manager; extern class Rva002872BA *TheTriggerManager;
 
 class Rva002104B6
@@ -49,7 +54,7 @@ bool __stdcall Rva003E8FEE(Parameter *parm)
     PolygonTrigger *trig = TheScriptEngine->getQualifiedTriggerAreaByName(parm->getString());
     if (!trig)
         return false;
-    return ((Rva00286772Manager *)TheTriggerManager)->rva00286772(trig, 1);
+    return ((FireLogicSystem *)TheTriggerManager)->rva00286772(trig, 1);
 }
 
 bool __stdcall Rva003E9029(const AsciiString *name)
