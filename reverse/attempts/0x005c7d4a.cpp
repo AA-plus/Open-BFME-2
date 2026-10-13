@@ -1,4 +1,6 @@
 // ??0Impl@InGameCommandButtonMovieClip@@QAE@PAV1@PAVAptMovieClipFrame@@ABVAsciiString@@@Z
+// partial score=0.98457 date=2026-10-13
+// ??0Impl@InGameCommandButtonMovieClip@@QAE@PAV1@PAVAptMovieClipFrame@@ABVAsciiString@@@Z
 // partial score=0.9845744313869788 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii
 #include "ascii_string.h"
