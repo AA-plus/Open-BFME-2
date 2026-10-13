@@ -31,6 +31,8 @@ public:
 	MultiplayerColorDefinition();
 	MultiplayerColorDefinition *operator=(const MultiplayerColorDefinition &other);
 	AsciiString getTooltipName() const;
+	void setColor(RGBColor rgb);
+	void setNightColor(RGBColor rgb);
 
 private:
 	AsciiString m_tooltipName; // +0x00
@@ -80,4 +82,16 @@ MultiplayerColorDefinition *MultiplayerColorDefinition::operator=(const Multipla
 	m_rgbExtra2 = other.m_rgbExtra2;
 	m_extraFlag = other.m_extraFlag;
 	return this;
+}
+
+// Retail 0x00380C1E / 0x00380C36, 24 bytes each. The canonical RGBColor
+// declaration keeps getAsInt owned by color.cpp (retail 0x00004EA7).
+void MultiplayerColorDefinition::setColor( RGBColor rgb )
+{
+	m_color = rgb.getAsInt() | 0xFF << 24;
+}
+
+void MultiplayerColorDefinition::setNightColor( RGBColor rgb )
+{
+	m_colorNight = rgb.getAsInt() | 0xFF << 24;
 }

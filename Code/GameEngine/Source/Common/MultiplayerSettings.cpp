@@ -180,13 +180,6 @@ done:
 
 // (addStartingMoneyChoice body removed for link: see note above)
 
-void MultiplayerColorDefinition::setColor( RGBColor rgb )
-{
-	m_color = rgb.getAsInt() | 0xFF << 24;
-}
-
-void MultiplayerColorDefinition::setNightColor( RGBColor rgb )
-{
-	m_colorNight = rgb.getAsInt() | 0xFF << 24;
-}
+// Color setters live in MultiplayerColorDefinitionCtor.cpp, which calls
+// the canonical out-of-line RGBColor::getAsInt instead of emitting a ZH copy.
 
