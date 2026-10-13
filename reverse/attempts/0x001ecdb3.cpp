@@ -1,4 +1,6 @@
 // ?beginCampaign@LinearCampaign@@QAEXXZ
+// partial score=0.8365 date=2026-10-13
+// ?beginCampaign@LinearCampaign@@QAEXXZ
 // partial score=0.85 date=2026-10-09
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /MD /EHsc /D_CRTIMP= /D_STLP_USE_STATIC_LIB /D_STLP_NO_EXCEPTIONS /Ireference/shims/bfmealloc
 // stlport
@@ -206,7 +208,7 @@ struct CarryoverThingTemplateView
 struct CarryoverNameVectorView
 {
 	int size() const { return m_finish - m_start; }
-	void **m_start;
+	void **volatile m_start;
 	void **m_finish;
 	void **m_endOfStorage;
 };
