@@ -101,60 +101,14 @@ PartitionSolver::PartitionSolver(const EntriesVec& elements, const SpacesVec& sp
 }
 #pragma optimize("", on)
 
-// ?solve@PartitionSolver@@ present-unmatched
-void PartitionSolver::solve(void)
-{
-	m_bestSolution.clear();
-	m_currentSolution.clear();
-	m_currentSolutionLeftovers = 0x7fffffff;
-	
-	Int minSizeForAllData = 0;
-	Int slotsAllotted = 0;
-	Int i, j;
-
-	// first, determine whether there is an actual solution, or we're going to have to fudge it.
-	for (i = 0; i < m_data.size(); ++i) {
-		minSizeForAllData += m_data[i].second;
-	}
-
-	for (i = 0; i < m_spacesForData.size(); ++i) {
-		slotsAllotted += m_spacesForData[i].second;
-	}
-
-	// we want to attempt to place the largest things first. This allows us to throw
-	// out whole classes of solutions
-
-	std::sort(m_data.begin(), m_data.end(), greater_than);
-	
-	// Also make the largest partition first.
-	std::sort(m_spacesForData.begin(), m_spacesForData.end(), greater_than);
-
-	// work in our temporary vector.
-	SpacesVec spacesStillAvailable = m_spacesForData;
-	
-	if (m_howToSolve == PREFER_FAST_SOLUTION) 
-	{
-		// we prefer the fast, but not necessarily correct solution
-		// simply start placing the stuff. Skip things you can't place.
-		for (i = 0; i < m_data.size(); ++i) 
-		{
-			for (j = 0; j < spacesStillAvailable.size(); ++j) 
-			{
-				if (m_data[i].second <= spacesStillAvailable[j].second) 
-				{
-					spacesStillAvailable[j].second -= m_data[i].second;
-					m_bestSolution.push_back(std::make_pair(m_data[i].first, spacesStillAvailable[j].first));
-					break;
-				}
-			}
-		}
-	} else {
-		DEBUG_CRASH(("PREFER_CORRECT_SOLUTION @todo impl"));
-	}
-}
+// solve lives in PartitionSolverSolve.cpp under its native /O1 /EHs configuration.
 
 // ?getSolution@PartitionSolver@@ present-unmatched
 const SolutionVec& PartitionSolver::getSolution( void ) const
 {
 	return m_bestSolution;
 }
+
+// Keep the independently rowed template providers under their original flags.
+template _STL::_Vector_base<PairObjectIDAndUInt,_STL::allocator<PairObjectIDAndUInt> >::_Vector_base(size_t,const _STL::allocator<PairObjectIDAndUInt>&);
+template _STL::pair<ObjectID,ObjectID> _STL::make_pair<ObjectID,ObjectID>(const ObjectID&,const ObjectID&);

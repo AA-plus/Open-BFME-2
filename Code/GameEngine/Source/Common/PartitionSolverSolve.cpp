@@ -1,19 +1,26 @@
-// ?solve@PartitionSolver@@QAEXXZ
-// partial score=0.950156 date=2026-10-13
 // cl: /O1 /Ireference/shims/bfmealloc /I. /FIzh_ascii.h /Ireference/shims/bfme2_ascii_zh /Ireference/shims/bfme2_ascii /G7 /arch:SSE /MD /EHs-c- /DNDEBUG /DWIN32 /D_WINDOWS /D_STLP_USE_STATIC_LIB /D_CRTIMP=  /D_STLP_NO_EXCEPTIONS /DBFME_MODULE_NO_MPO /DZH_EMIT_POOL_GLUE /Ireference/shims/bfmerendobj /Ireference/shims/debugvtable /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/debug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/bfmeanimobj /Ireference/shims/indexbuffercount /Ireference/shims/bfmecaps /Ireference/shims/bfmehcanim /Ireference/shims/bfmevector /Ireference/shims/bfmemapper /Ireference/shims/meshmatdesclayout /Ireference/shims/bfmeshader /Ireference/shims/bfmecpudetect /Ireference/shims/bfmepool /Ireference/open-bfme-1/Code/GameEngine/Include/Precompiled /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include/GameNetwork /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWAudio /Ireference/shims/bfmealloc /Ireference/shims/bfmehashtable /Ireference/shims/bfmelist /Ireference/shims/asciistring_downloadmanager /Ireference/shims/stlp_nodealloc /Ireference/shims/asciistring_thin /ICode/GameEngine/Source/Common /Ireference/shims/w3droadbuffer /Ireference/shims/bfmeterraintracks /ICode/Libraries/Include/Lib /EHs
 // stlport
-// ZH PartitionSolver donor; target identity independently confirmed by WB1432AC0
-// (automatic wb_show mapping to1432960 is the constructor and is wrong).
-// /EHs-c- followed by /EHs restores all321 instruction bytes; no barrier needed.
+// Adapted from the EA GPLv3 Zero Hour PartitionSolver.cpp donor at BFME1
+// cee35b7d8. WB1432AC0 independently identifies solve (the automatic
+// WB1432960 mapping is the constructor). Native 005675B3..005676F4.
+// The source header supplies the donor's ObjectID pair relationships.
+// Retail's vector calls use the already verified eight-byte storage providers:
+// copy4334D7, erase3FA4DB, push539A2E. These views preserve two 32-bit fields
+// and the three-pointer vector ABI; no original BFME2 template spelling is
+// inferred from a byte match. The donor's vectors have trivial element lifetime.
+// /EHs retains the native cleanup assumption around extern-C allocation.
 #include "PreRTS.h"
 #include "Common/PartitionSolver.h"
 namespace _STL { template <> int __lg<int>(int); }
+struct BfmeE8 { int a, b; };
+struct BfmePod8 { int a[2]; };
+typedef _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > SolverStorage;
+typedef _STL::vector<BfmePod8, _STL::allocator<BfmePod8> > SolverEraseStorage;
 bool Rva00566EDDCompareSecondWords(PairObjectIDAndUInt,PairObjectIDAndUInt);
-// ?solve@PartitionSolver@@ present-unmatched
 void PartitionSolver::solve(void)
 {
-	m_bestSolution.clear();
-	m_currentSolution.clear();
+	reinterpret_cast<SolverEraseStorage &>(m_bestSolution).clear();
+	reinterpret_cast<SolverEraseStorage &>(m_currentSolution).clear();
 	m_currentSolutionLeftovers = 0x7fffffff;
 	
 	Int minSizeForAllData = 0;
@@ -38,7 +45,7 @@ void PartitionSolver::solve(void)
 	std::sort(m_spacesForData.begin(), m_spacesForData.end(), Rva00566EDDCompareSecondWords);
 
 	// work in our temporary vector.
-	SpacesVec spacesStillAvailable = m_spacesForData;
+	SolverStorage spacesStillAvailable = reinterpret_cast<const SolverStorage &>(m_spacesForData);
 	
 	if (m_howToSolve == PREFER_FAST_SOLUTION) 
 	{
@@ -48,10 +55,11 @@ void PartitionSolver::solve(void)
 		{
 			for (j = 0; j < spacesStillAvailable.size(); ++j) 
 			{
-				if (m_data[i].second <= spacesStillAvailable[j].second) 
+				if (m_data[i].second <= spacesStillAvailable[j].b) 
 				{
-					spacesStillAvailable[j].second -= m_data[i].second;
-					m_bestSolution.push_back(std::make_pair(m_data[i].first, spacesStillAvailable[j].first));
+					spacesStillAvailable[j].b -= m_data[i].second;
+					BfmeE8 assignment = { m_data[i].first, spacesStillAvailable[j].a };
+					reinterpret_cast<SolverStorage &>(m_bestSolution).push_back(assignment);
 					break;
 				}
 			}
