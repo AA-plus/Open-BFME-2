@@ -1,4 +1,8 @@
 // ?onDamage@ReflectDamage@@UAEXPAVDamageInfo@@@Z
+// partial score=0.985 date=2026-10-14
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+// ?onDamage@ReflectDamage@@UAEXPAVDamageInfo@@@Z
 // partial score=0.98 date=2026-10-05
 // ?onDamage@ReflectDamage@@UAEXPAVDamageInfo@@@Z
 // partial score=0.97 date=2026-10-04
@@ -112,6 +116,7 @@ public:
 
 void ReflectDamage::onDamage(DamageInfo *damageInfo)
 {
+	_ReadWriteBarrier();
 	const ReflectDamageModuleData *data = getReflectDamageModuleData();
 	if (damageInfo->m_damageType == DAMAGE_REFLECTED)
 		return;
