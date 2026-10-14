@@ -1,4 +1,6 @@
 // ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
+// partial score=0.867823231141667 date=2026-10-14
+// ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
 // partial score=0.8618820999219237 date=2026-10-13
 // ?ProcessGameSpyResponses@AptOnlineCustomMatch@@QAEXXZ
 // cl: /Ireference/shims/bfme2_ascii /O1 /G7 /arch:SSE /DNDEBUG /EHsc /MD /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
@@ -29,6 +31,14 @@
 // Thirty-plus loop, receiver, compiler and helper variants plus focused mechanical
 // sweep did not close this. Outlined message helper yields .989 structural but adds
 // a call absent in retail and was discarded. No Code edits or new pins.
+
+// Round4: a compiler barrier after the important-message initialization restores
+// retail entry EH-state/flag store scheduling; inlining the single-use HWS slot
+// index restores the game pointer to ESI without adding instructions. Isolated
+// full-TU reproduction: 9233 bytes, frame17D0, zero unresolved calls, EH8 stack
+// displacement bytes remain. Fitness .86782323 (previous .86188210).
+// Over2100 trials rejected misleading score-only gains and retained real opcode
+// improvements. Other loop/field/lifetime/storage forms did not close the body.
 
 #include "ascii_string.h"
 #include "unicode_string.h"
@@ -693,6 +703,9 @@ private:
 	AptConnectionScreen *m_connectionGrid; // +0x4D4
 };
 
+
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 void AptOnlineCustomMatch::ProcessGameSpyResponses()
 {
 	HandleBuddyResponses();
@@ -701,6 +714,8 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 	Int allowedMessages = TheGameSpyInfo->getMaxMessagesPerUpdate();
 	PeerResponse resp;
 	Bool sawImportantMessage = FALSE;
+
+_ReadWriteBarrier();
 	if(allowedMessages-- && !sawImportantMessage) do
 	{
 		if (!TheGameSpyPeerMessageQueue->getResponse(resp))
@@ -1265,8 +1280,7 @@ void AptOnlineCustomMatch::ProcessGameSpyResponses()
 					GameSpyStagingRoom *game = TheGameSpyInfo->getCurrentStagingRoom();
 					if (game && game->isInGame() && game->getSlot(0) && game->getSlot(0)->isPlayer(resp.nick.c_str()))
 					{
-						Int slotNum = game->getLocalSlotNum();
-						GameSlot *slot = game->getSlot(slotNum);
+						GameSlot *slot = game->getSlot(game->getLocalSlotNum());
 						if (slot && !slot->m_isAccepted)
 						{
 							TheGameSpyInfo->addText(TheGameText->fetch("GUI:HostWantsToStart"), GameSpyColor[GSCOLOR_DEFAULT]);
