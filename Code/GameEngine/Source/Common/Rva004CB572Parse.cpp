@@ -5,11 +5,9 @@
 // Native two128B mask temporaries plus MultiIniFieldParse132B prove frame188.
 // Vector clear wrapper preserves native cached receiver/EDI and zero/EBX.
 // All five table tokens, offsets, userdata and procedure VAs read from retail.
-// The first procedure is ThingTemplate::parsePerUnitSounds, native33DC9C28B.
-// That callback's nested C10C2C table uses unrowed33DBE5; its retained bank
-// emits180B vs183B with argument-slot/copy-result scheduling mismatch.
-// Thus this is a bank of byte/EH-exact code, not a live matched ledger row or
-// linking proof. No data literal/pointer identity is inferred from masking.
+// The first procedure is the independently matched33DC9C28B dispatcher,
+// whose nested C10C2C table uses the matched183B33DBE5 sound-map callback.
+// The complete table is separately byte, relocation and extent verified.
 // BF1 semantic lead874e38488c7dcf8cf3343452e8e5371bb3a0e64c:
 // UpgradeSoundSelectorClientBehaviorParseSoundUpgrade.cpp (528B donor record).
 // The target records are900B, supplied by independently matched ctor/copy/dtor.
@@ -35,11 +33,11 @@ struct UpgradeMaskType: Rva001EAE6FHelper {};
 class UpgradeMuxData {public:void getUpgradeActivationMasks(UpgradeMaskType&,UpgradeMaskType&)const;};
 class UpgradeCenter;extern UpgradeCenter*TheUpgradeCenter;
 int Rva0033A495Get();
-class ThingTemplate {public:static void parsePerUnitSounds(INI*,void*,void*,const void*);};
+void Rva0033DC9CParse(INI*,void*,void*,const void*);
 void Rva000B9468Parse(INI*,void*,void*,const void*);
 class UpgradeSoundSelectorClientBehaviorModuleData {public:static void parseVoicePriority(INI*,void*,void*,const void*);};
-static const FieldParse fields[]={
- {"UnitSpecificSounds",ThingTemplate::parsePerUnitSounds,0,0x370},
+extern const FieldParse BfmeSoundUpgradeEntryFields[]={
+ {"UnitSpecificSounds",Rva0033DC9CParse,0,0x370},
  {"ExcludedUpgrades",INI::parseAsciiStringVectorAppend,0,0x10C},
  {"VoicePriority",UpgradeSoundSelectorClientBehaviorModuleData::parseVoicePriority,0,0x37C},
  {"RequiredModelConditions",Rva000B9468Parse,0,0x118},
@@ -64,7 +62,7 @@ void Rva004CB572::parse(INI*ini){
  const char*token;
  while((token=ini->getNextTokenOrNull(0))!=0){AsciiString value(token);names.push_back(value);}
  MultiIniFieldParse parse;
- parse.add(fields,0);
+ parse.add(BfmeSoundUpgradeEntryFields,0);
  parse.add((const FieldParse*)Rva0033A495Get(),0x1B0);
  ini->initFromINIMulti(this,parse);
  if(TheUpgradeCenter){UpgradeMaskType activation,conflicting;((UpgradeMuxData*)this)->getUpgradeActivationMasks(activation,conflicting);}

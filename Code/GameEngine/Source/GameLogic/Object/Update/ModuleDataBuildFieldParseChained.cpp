@@ -1316,16 +1316,29 @@ void SubObjectsUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 int Rva0033A495Get(void);
+void Rva0033DC9CParse(INI *, void *, void *, const void *);
 
 class RandomSoundSelectorClientBehaviorModuleData
 {
 public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
+	static void parseVoicePriority(INI *, void *, void *, const void *);
+};
+
+// Retail VA 0x00C5F318: four fields and the complete zero sentinel.
+// Registration establishes the owner family; retail supplies tokens, offsets
+// and callbacks. The descriptive data name does not assert original spelling.
+extern const FieldParse BfmeRandomSoundSelectorClientBehaviorFields[] = {
+	{ "Chance", &INI::parsePercentToReal, 0, 0x1D4 },
+	{ "RerollOnEveryFrame", &INI::parseBool, 0, 0x1DD },
+	{ "UnitSpecificSounds", &Rva0033DC9CParse, 0, 0x1C8 },
+	{ "VoicePriority", &RandomSoundSelectorClientBehaviorModuleData::parseVoicePriority, 0, 0x1D8 },
+	{ 0, 0, 0, 0 }
 };
 
 void RandomSoundSelectorClientBehaviorModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C5F318), 0);
+	parse.add(BfmeRandomSoundSelectorClientBehaviorFields, 0);
 	parse.add(reinterpret_cast<const FieldParse *>(Rva0033A495Get()), 8);
 }
 

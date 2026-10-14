@@ -17,7 +17,9 @@
 // ThingTemplate.cpp donor unit or its unrelated unmatched definitions.
 #include "ascii_string.h"
 #include <set>
-class INI { public: const char *getNextToken(const char * = 0); };
+struct FieldParse;
+class INI { public: const char *getNextToken(const char * = 0); void initFromINI(void *, const FieldParse *); };
+struct FieldParse { const char *token; void (*parse)(INI *, void *, void *, const void *); const void *userData; int offset; };
 class OpaqueRefCounted { public: void Release_Ref(); };
 class Rva002390CB {
 public:
@@ -38,6 +40,7 @@ Rva0033B830 Rva0033BEF5Make(const StringBase<char> &, const Rva002390CB &);
 void Rva00339235(const char *, void *);
 typedef _STL::_Rb_tree<BfmeStringRecord002CF550, BfmeStringRecord002CF550, _STL::_Identity<BfmeStringRecord002CF550>, _STL::less<BfmeStringRecord002CF550>, _STL::allocator<BfmeStringRecord002CF550> > TreeR;
 template <> _STL::pair<TreeR::iterator, bool> TreeR::insert_unique(const TreeR::value_type &);
+template <> void TreeR::clear();
 struct SoundMapInsertRecord : BfmeStringRecord002CF550 {
  SoundMapInsertRecord(const Rva0033B830 &value):BfmeStringRecord002CF550(value) {}
 };
@@ -51,4 +54,17 @@ void Rva0033DBE5Parse(INI *ini, void *instance, void *, const void *userData) {
  Rva002390CB sound;
  Rva00339235(token, &sound);
  ((TreeR *)instance)->insert_unique(SoundMapInsertRecord(Rva0033BEF5Make(*(const StringBase<char> *)&AsciiString(name), sound)));
+}
+
+// Retail VA 0x00C10C2C: wildcard callback followed by the complete zero sentinel.
+// The descriptive data name does not assert an original spelling.
+extern const FieldParse BfmeUnitSpecificSoundFields[] = {
+ {0, Rva0033DBE5Parse, 0, 0}, {0, 0, 0, 0}
+};
+
+// Retail 0x0033DC9C..0x0033DCB8. Target calls establish the map clear and INI
+// dispatch; ThingTemplate::parsePerUnitSounds is the donor semantic lead.
+void Rva0033DC9CParse(INI *ini, void *, void *store, const void *) {
+ ((TreeR *)store)->clear();
+ ini->initFromINI(store, BfmeUnitSpecificSoundFields);
 }
