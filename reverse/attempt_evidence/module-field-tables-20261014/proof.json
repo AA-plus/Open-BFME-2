@@ -253,15 +253,195 @@
       "size": 48,
       "retail_sha256": "d89973364c999b689916b9ab810998f1affb4f662157072beaff55f60237d8a3",
       "fields": 2
+    },
+    {
+      "class": "GiveOrRestoreUpgradeSpecialPowerModuleData",
+      "name": "BfmeGiveOrRestoreUpgradeSpecialPowerFields",
+      "symbol": "?BfmeGiveOrRestoreUpgradeSpecialPowerFields@@3QBUFieldParse@@B",
+      "va": 12974272,
+      "size": 64,
+      "retail_sha256": "409ad50ca373914b7aed75e331cba0ba14201bc02cadff3180503a3d4488b7ac",
+      "fields": 3
+    },
+    {
+      "class": "AutoHealBehaviorModuleData",
+      "name": "BfmeAutoHealBehaviorFields",
+      "symbol": "?BfmeAutoHealBehaviorFields@@3QBUFieldParse@@B",
+      "va": 12532960,
+      "size": 304,
+      "retail_sha256": "fe6b252dd47f89abbd670b022af8cf54e61c9a5eb6f4d637237fa092a141e527",
+      "fields": 18
+    },
+    {
+      "class": "LevelGrantSpecialPowerModuleData",
+      "name": "BfmeLevelGrantSpecialPowerFields",
+      "symbol": "?BfmeLevelGrantSpecialPowerFields@@3QBUFieldParse@@B",
+      "va": 12962000,
+      "size": 80,
+      "retail_sha256": "4e97e777424dcba50e6e806e000ad450f6e1974d7a47e6e4b9d994af772b52b4",
+      "fields": 4
+    },
+    {
+      "class": "CrushDieModuleData",
+      "name": "BfmeCrushDieFields",
+      "symbol": "?BfmeCrushDieFields@@3QBUFieldParse@@B",
+      "va": 12519528,
+      "size": 112,
+      "retail_sha256": "74f91eda06e72a5ab0ec72f5ce2a4f31aeadc4306496b5c5a2eae0e878e8ca31",
+      "fields": 6
+    },
+    {
+      "class": "RefundDieModuleData",
+      "name": "BfmeRefundDieFields",
+      "symbol": "?BfmeRefundDieFields@@3QBUFieldParse@@B",
+      "va": 12519168,
+      "size": 64,
+      "retail_sha256": "46deec65b0cc6d632d7ac3e79c3dded88385374ed9739c81515c28c62cd4e07e",
+      "fields": 3
+    },
+    {
+      "class": "CommandPointsUpgradeModuleData",
+      "name": "BfmeCommandPointsUpgradeFields",
+      "symbol": "?BfmeCommandPointsUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12947688,
+      "size": 48,
+      "retail_sha256": "e0925162206289eb3bfb21c01dfa46064174c21ca985565accd3ec1a67b8fa25",
+      "fields": 2
+    },
+    {
+      "class": "AudioLoopUpgradeModuleData",
+      "name": "BfmeAudioLoopUpgradeFields",
+      "symbol": "?BfmeAudioLoopUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12946840,
+      "size": 64,
+      "retail_sha256": "5790848b93b6e959682b376ef12fef151833fc8d32caa02ef7d96a6f143acdb6",
+      "fields": 3
+    },
+    {
+      "class": "ReplenishUnitsBehaviorModuleData",
+      "name": "BfmeReplenishUnitsBehaviorFields",
+      "symbol": "?BfmeReplenishUnitsBehaviorFields@@3QBUFieldParse@@B",
+      "va": 12886352,
+      "size": 128,
+      "retail_sha256": "a6ecde0b03a145e98f30dd4ff828ed50740726b8170d2c480f5936d3a5b49195",
+      "fields": 7
+    },
+    {
+      "class": "DominateEnemySpecialPowerModuleData",
+      "name": "BfmeDominateEnemySpecialPowerFields",
+      "symbol": "?BfmeDominateEnemySpecialPowerFields@@3QBUFieldParse@@B",
+      "va": 12973624,
+      "size": 96,
+      "retail_sha256": "f5ab5461e56b114c5d286204c5e1912706b9878eac00095d018c698b192d4504",
+      "fields": 5
+    },
+    {
+      "class": "RousingSpeechUpdateModuleData",
+      "name": "BfmeRousingSpeechUpdateFields",
+      "symbol": "?BfmeRousingSpeechUpdateFields@@3QBUFieldParse@@B",
+      "va": 12930856,
+      "size": 176,
+      "retail_sha256": "13e21de4eb5555c58a8b30efe41eb5f7cd97de2259f09d713d9767c6dba66906",
+      "fields": 10
+    },
+    {
+      "class": "RadiateFearUpdateModuleData",
+      "name": "BfmeRadiateFearUpdateFields",
+      "symbol": "?BfmeRadiateFearUpdateFields@@3QBUFieldParse@@B",
+      "va": 12914872,
+      "size": 144,
+      "retail_sha256": "b0a29d35a284db7f239ea2756d03fc81c5c752cfda1e5bd0fe0fbf4967294eba",
+      "fields": 8
+    },
+    {
+      "class": "ModelConditionUpgradeModuleData",
+      "name": "BfmeModelConditionUpgradeFields",
+      "symbol": "?BfmeModelConditionUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12945200,
+      "size": 96,
+      "retail_sha256": "9d523a13191459db9bad28a1fe2614e3bcc55fbc1d17b51b7459c8455720250e",
+      "fields": 5
+    },
+    {
+      "class": "MissileUpdateModuleData",
+      "name": "BfmeMissileUpdateFields",
+      "symbol": "?BfmeMissileUpdateFields@@3QBUFieldParse@@B",
+      "va": 12924016,
+      "size": 192,
+      "retail_sha256": "456a4899ee8f35caeac1943f19b9a943e4386c6290a9b6bbac3543c8600cca88",
+      "fields": 11
+    },
+    {
+      "class": "RubbleRiseUpdateModuleData",
+      "name": "BfmeRubbleRiseUpdateFields",
+      "symbol": "?BfmeRubbleRiseUpdateFields@@3QBUFieldParse@@B",
+      "va": 12921184,
+      "size": 176,
+      "retail_sha256": "b5c0bd78e37185afdcac6874e0a6ee63f6bc0d95adbf6ea43d58a3fed89793d3",
+      "fields": 10
+    },
+    {
+      "class": "SubObjectsUpgradeModuleData",
+      "name": "BfmeSubObjectsUpgradeFields",
+      "symbol": "?BfmeSubObjectsUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12942648,
+      "size": 176,
+      "retail_sha256": "f9a341e8801d3baa903bc49718849396ad7585e11d27c2053011715415e33fb8",
+      "fields": 10
+    },
+    {
+      "class": "OpenContainModuleData",
+      "name": "BfmeOpenContainFields",
+      "symbol": "?BfmeOpenContainFields@@3QBUFieldParse@@B",
+      "va": 12859568,
+      "size": 400,
+      "retail_sha256": "8fa3118cf74920e5eab900cb04b1eaf53f8fcc9d4ee2ac712936219b03a4f894",
+      "fields": 24
+    },
+    {
+      "class": "GarrisonContainModuleData",
+      "name": "BfmeGarrisonContainFields",
+      "symbol": "?BfmeGarrisonContainFields@@3QBUFieldParse@@B",
+      "va": 12530528,
+      "size": 96,
+      "retail_sha256": "c622a43cced9c59623691897fc15cde5d56cb7627b8fecb2f9f146b7e8854b2f",
+      "fields": 5
+    },
+    {
+      "class": "WeaponSetUpgradeModuleData",
+      "name": "BfmeWeaponSetUpgradeFields",
+      "symbol": "?BfmeWeaponSetUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12943392,
+      "size": 32,
+      "retail_sha256": "b8f978cf64f31cdbdbcab28cd53ddaeaa310816ca36cade0f4b08fd0a6fe2469",
+      "fields": 1
+    },
+    {
+      "class": "MonsterDockUpdateModuleData",
+      "name": "BfmeMonsterDockUpdateFields",
+      "symbol": "?BfmeMonsterDockUpdateFields@@3QBUFieldParse@@B",
+      "va": 12917988,
+      "size": 48,
+      "retail_sha256": "2fbc4ba6840c31a27e329b3f527e26aca8b62d5a8be89d855605ae2d3d0ac459",
+      "fields": 2
+    },
+    {
+      "class": "ModelConditionSpecialAbilityUpdateModuleData",
+      "name": "BfmeModelConditionSpecialAbilityUpdateFields",
+      "symbol": "?BfmeModelConditionSpecialAbilityUpdateFields@@3QBUFieldParse@@B",
+      "va": 12512976,
+      "size": 96,
+      "retail_sha256": "df0145611cdf9d98d7936fcc83929ec7c0cddbc3e39bba8633b7ea1469705f98",
+      "fields": 5
     }
   ],
   "validation": {
     "code_rows_exact": 63,
-    "data_rows_exact": 28,
-    "data_bytes": 2160,
+    "data_rows_exact": 48,
+    "data_bytes": 4752,
     "new_link_variants": 0,
     "data_check_findings": 0,
-    "remaining_literal_tables": 28,
+    "remaining_literal_tables": 8,
     "full_link_status": "Not clean: remaining literal tables and pre-existing shared-definition blockers in the stale census. No LINKED-byte gain claimed."
   }
 }

@@ -71,7 +71,32 @@ public:
 	static void parseObjectCreationList(INI *, void *, void *, const void *);
 	static void parseAsciiStringVector(INI *, void *, void *, const void *);
 	static void Rva004B2B64_ParseReplaceObject(INI *, void *, void *, const void *);
+	static void Rva004B6481_ParseAnim(INI *, void *, void *, const void *);
+	static void parseDurationReal(INI *, void *, void *, const void *);
+	static void parseUpgradeTemplate(INI *, void *, void *, const void *);
 };
+
+class Rva003B1017
+{
+public:
+	static void parseFromINI(INI *, void *, void *, const void *);
+};
+
+class Rva004B65E4
+{
+public:
+	static void rva004B65E4(INI *, void *, void *, const void *);
+};
+
+void Rva000B9468Parse(INI *, void *, void *, const void *);
+void Rva002567EAParse(INI *, void *, void *, const void *);
+void Rva002C8C06Parse(INI *, void *, void *, const void *);
+void Rva00339900Parse(INI *, void *, void *, const void *);
+void Rva00464081ParseMask(INI *, void *, void *, const void *);
+void Rva00464574Parse(INI *, void *, void *, const void *);
+void iniParseObjectFilter(INI *, void *, void *, const void *);
+void rva004649A1(INI *, void *, void *, const void *);
+void rva004B5293(INI *, void *, void *, const void *);
 
 // Retail VA 0x00C550C8 is the GloriousChargeUpdateModuleData FieldParse
 // table: .rdata holds BonusRadius/parseReal at +0xC8, SpeechDuration and
@@ -324,10 +349,20 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C5F8C0: 3 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeGiveOrRestoreUpgradeSpecialPowerFields[] = {
+	{ "CommandButton", &INI::parseAsciiString, 0, 0xC8 },
+	{ "UpgradeToGive", &INI::parseAsciiString, 0, 0xCC },
+	{ "FlagsUsedForToggle", &Rva002C8C06Parse, 0, 0xD0 },
+	{ 0, 0, 0, 0 }
+};
+
 void GiveOrRestoreUpgradeSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C5F8C0), 0);
+	parse.add(BfmeGiveOrRestoreUpgradeSpecialPowerFields, 0);
 }
 
 int Rva004CE29DGet(void);
@@ -382,9 +417,34 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00BF3CE0: 18 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeAutoHealBehaviorFields[] = {
+	{ "StartsActive", &INI::parseBool, 0, 0x118 },
+	{ "ButtonTriggered", &INI::parseBool, 0, 0x119 },
+	{ "SingleBurst", &INI::parseBool, 0, 0x11A },
+	{ "HealingAmount", &INI::parseInt, 0, 0x11C },
+	{ "HealingDelay", &INI::parseDurationUnsignedInt, 0, 0x120 },
+	{ "Radius", &INI::parseInt, 0, 0x128 },
+	{ "KindOf", &Rva002567EAParse, 0, 0x130 },
+	{ "UnitHealPulseFX", &INI::parseFXList, 0, 0x150 },
+	{ "StartHealingDelay", &INI::parseDurationUnsignedInt, 0, 0x124 },
+	{ "AffectsWholePlayer", &INI::parseBool, 0, 0x12C },
+	{ "AffectsContained", &INI::parseBool, 0, 0x12D },
+	{ "HealOnlyIfNotUnderAttack", &INI::parseBool, 0, 0x12E },
+	{ "HealOnlyIfNotInCombat", &INI::parseBool, 0, 0x12F },
+	{ "HealOnlyOthers", &INI::parseBool, 0, 0x14C },
+	{ "NonStackable", &INI::parseBool, 0, 0x154 },
+	{ "RespawnNearbyHordeMembers", &INI::parseBool, 0, 0x155 },
+	{ "RespawnFXList", &INI::parseFXList, 0, 0x158 },
+	{ "RespawnMinimumDelay", &INI::parseUnsignedInt, 0, 0x15C },
+	{ 0, 0, 0, 0 }
+};
+
 inline void AutoHealBehaviorModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
-	parse.add(reinterpret_cast<const FieldParse *>(0x00BF3CE0), 0);
+	parse.add(BfmeAutoHealBehaviorFields, 0);
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
 }
 
@@ -406,10 +466,21 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C5C8D0: 4 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeLevelGrantSpecialPowerFields[] = {
+	{ "Experience", &INI::parseInt, 0, 0xC8 },
+	{ "RadiusEffect", &INI::parseReal, 0, 0xCC },
+	{ "LevelFX", &INI::parseFXList, 0, 0xD4 },
+	{ "AcceptanceFilter", &iniParseObjectFilter, 0, 0xD0 },
+	{ 0, 0, 0, 0 }
+};
+
 void LevelGrantSpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C5C8D0), 0);
+	parse.add(BfmeLevelGrantSpecialPowerFields, 0);
 }
 
 // Retail VA 0x00C574AC: 2 fields and the zero sentinel.
@@ -508,10 +579,23 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00BF0868: 6 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeCrushDieFields[] = {
+	{ "TotalCrushSound", &Rva00339900Parse, 0, 0x38 },
+	{ "BackEndCrushSound", &Rva00339900Parse, 0, 0x3C },
+	{ "FrontEndCrushSound", &Rva00339900Parse, 0, 0x40 },
+	{ "TotalCrushSoundPercent", &INI::parseInt, 0, 0x48 },
+	{ "BackEndCrushSoundPercent", &INI::parseInt, 0, 0x4C },
+	{ "FrontEndCrushSoundPercent", &INI::parseInt, 0, 0x50 },
+	{ 0, 0, 0, 0 }
+};
+
 inline void CrushDieModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE52EGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00BF0868), 0);
+	parse.add(BfmeCrushDieFields, 0);
 }
 
 // Retail VA 0x00BF0994: 2 fields and the zero sentinel.
@@ -549,6 +633,16 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00BF0700: 3 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeRefundDieFields[] = {
+	{ "UpgradeRequired", &INI::parseUpgradeTemplate, 0, 0x38 },
+	{ "BuildingRequired", &iniParseObjectFilter, 0, 0x40 },
+	{ "RefundPercent", &INI::parsePercentToReal, 0, 0x3C },
+	{ 0, 0, 0, 0 }
+};
+
 // ?buildFieldParse@RefundDieModuleData@@SAXAAVMultiIniFieldParse@@@Z
 // retail 0x0025391E (34 bytes): double-add on the rowed Die getter 0x4CE52E
 // with extraOffset 8 then the RefundDie table at 0x00BF0700
@@ -560,7 +654,7 @@ public:
 void RefundDieModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE52EGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00BF0700), 0);
+	parse.add(BfmeRefundDieFields, 0);
 }
 
 // Retail VA 0x00BF0928: 1 fields and the zero sentinel.
@@ -638,10 +732,19 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C590E8: 2 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeCommandPointsUpgradeFields[] = {
+	{ "CommandPoints", &INI::parseInt, 0, 0x118 },
+	{ "RequiredObject", &iniParseObjectFilter, 0, 0x11C },
+	{ 0, 0, 0, 0 }
+};
+
 void CommandPointsUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C590E8), 0);
+	parse.add(BfmeCommandPointsUpgradeFields, 0);
 }
 
 // Retail VA 0x00C57208: 3 fields and the zero sentinel.
@@ -673,10 +776,33 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C58D98: 3 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeAudioLoopUpgradeFields[] = {
+	{ "SoundToPlay", &Rva00339900Parse, 0, 0x8 },
+	{ "KillAfterMS", &INI::parseDurationUnsignedInt, 0, 0xC },
+	{ "KillOnDeath", &INI::parseBool, 0, 0x10 },
+	{ 0, 0, 0, 0 }
+};
+
 class GarrisonContainModuleData
 {
 public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
+	static void parseInitialRoster(INI *, void *, void *, const void *);
+};
+
+// Retail VA 0x00BF3360: 5 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeGarrisonContainFields[] = {
+	{ "MobileGarrison", &INI::parseBool, 0, 0xA0 },
+	{ "HealObjects", &INI::parseBool, 0, 0x98 },
+	{ "TimeForFullHeal", &INI::parseDurationReal, 0, 0x9C },
+	{ "InitialRoster", &GarrisonContainModuleData::parseInitialRoster, 0, 0x0 },
+	{ "ImmuneToClearBuildingAttacks", &INI::parseBool, 0, 0xA1 },
+	{ 0, 0, 0, 0 }
 };
 
 // Retail VA 0x00C46388: 4 fields and the zero sentinel.
@@ -701,7 +827,7 @@ void AudioLoopUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 0x14);
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE52EGet()), 0x124);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C58D98), 0);
+	parse.add(BfmeAudioLoopUpgradeFields, 0);
 }
 
 void HordeGarrisonContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
@@ -758,9 +884,23 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C4A150: 7 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeReplenishUnitsBehaviorFields[] = {
+	{ "StartsActive", &INI::parseBool, 0, 0x138 },
+	{ "ReplenishDelay", &INI::parseDurationUnsignedInt, 0, 0x134 },
+	{ "ReplenishRadius", &INI::parseReal, 0, 0x118 },
+	{ "NoReplenishIfEnemyWithinRadius", &INI::parseReal, 0, 0x11C },
+	{ "ReplenishFXList", &INI::parseFXList, 0, 0x120 },
+	{ "ReplenishStatii", &Rva003B1017::parseFromINI, 0, 0x124 },
+	{ "ReplenishHordeMembersOnly", &INI::parseBool, 0, 0x139 },
+	{ 0, 0, 0, 0 }
+};
+
 void ReplenishUnitsBehaviorModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C4A150), 0);
+	parse.add(BfmeReplenishUnitsBehaviorFields, 0);
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
 }
 
@@ -770,10 +910,22 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C5F638: 5 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeDominateEnemySpecialPowerFields[] = {
+	{ "DominateRadius", &INI::parseReal, 0, 0xC8 },
+	{ "TriggerFX", &INI::parseFXList, 0, 0xCC },
+	{ "DominatedFX", &INI::parseFXList, 0, 0xD0 },
+	{ "PermanentlyConvert", &INI::parseBool, 0, 0xD4 },
+	{ "AttributeModifierAffects", &iniParseObjectFilter, 0, 0xD8 },
+	{ 0, 0, 0, 0 }
+};
+
 void DominateEnemySpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C5F638), 0);
+	parse.add(BfmeDominateEnemySpecialPowerFields, 0);
 }
 
 class RousingSpeechUpdateModuleData
@@ -782,10 +934,27 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C54F28: 10 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeRousingSpeechUpdateFields[] = {
+	{ "BonusRadius", &INI::parseReal, 0, 0xC8 },
+	{ "SpeechDuration", &INI::parseDurationUnsignedInt, 0, 0xCC },
+	{ "UpdateInterval", &INI::parseDurationUnsignedInt, 0, 0xD0 },
+	{ "LeaderFX", &INI::parseFXList, 0, 0xD4 },
+	{ "FollowerFX", &INI::parseFXList, 0, 0xD8 },
+	{ "CreateWave", &INI::parseBool, 0, 0xDC },
+	{ "WaveWidth", &INI::parseReal, 0, 0xE0 },
+	{ "ModifierName", &INI::parseAsciiStringVectorAppend, 0, 0xE4 },
+	{ "LevelUp", &INI::parseBool, 0, 0xF0 },
+	{ "ObjectFilter", &iniParseObjectFilter, 0, 0xF4 },
+	{ 0, 0, 0, 0 }
+};
+
 void RousingSpeechUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C54F28), 0);
+	parse.add(BfmeRousingSpeechUpdateFields, 0);
 }
 
 // Retail VA 0x00C58918: 5 fields and the zero sentinel.
@@ -819,10 +988,25 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C510B8: 8 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeRadiateFearUpdateFields[] = {
+	{ "InitiallyActive", &INI::parseBool, 0, 0x8 },
+	{ "WhichSpecialPower", &INI::parseInt, 0, 0xC },
+	{ "GenerateTerror", &INI::parseBool, 0, 0x10 },
+	{ "GenerateFear", &INI::parseBool, 0, 0x11 },
+	{ "GenerateUncontrollableFear", &INI::parseBool, 0, 0x12 },
+	{ "EmotionPulseRadius", &INI::parseReal, 0, 0x14 },
+	{ "EmotionPulseInterval", &INI::parseDurationUnsignedInt, 0, 0x18 },
+	{ "VictimFilter", &iniParseObjectFilter, 0, 0x1C },
+	{ 0, 0, 0, 0 }
+};
+
 void RadiateFearUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 0x20);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C510B8), 0);
+	parse.add(BfmeRadiateFearUpdateFields, 0);
 }
 
 class ModelConditionUpgradeModuleData
@@ -831,10 +1015,22 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C58730: 5 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeModelConditionUpgradeFields[] = {
+	{ "AddConditionFlags", &Rva000B9468Parse, 0, 0x118 },
+	{ "RemoveConditionFlags", &Rva000B9468Parse, 0, 0x164 },
+	{ "RemoveConditionFlagsInRange", &Rva004B65E4::rva004B65E4, 0, 0x164 },
+	{ "AddTempConditionFlag", &INI::Rva004B6481_ParseAnim, 0, 0x1B0 },
+	{ "TempConditionTime", &INI::parseReal, 0, 0x1B4 },
+	{ 0, 0, 0, 0 }
+};
+
 void ModelConditionUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C58730), 0);
+	parse.add(BfmeModelConditionUpgradeFields, 0);
 }
 
 class BezierProjectileBehaviorModuleData
@@ -849,10 +1045,28 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C53470: 11 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeMissileUpdateFields[] = {
+	{ "FuelLifetime", &INI::parseDurationUnsignedInt, 0, 0xC4 },
+	{ "IgnitionDelay", &INI::parseDurationUnsignedInt, 0, 0xC8 },
+	{ "DistanceToTravelBeforeTurning", &INI::parseReal, 0, 0xCC },
+	{ "DistanceToTargetBeforeDiving", &INI::parseReal, 0, 0xD0 },
+	{ "IgnitionFX", &INI::parseFXList, 0, 0xD4 },
+	{ "DetonateOnNoFuel", &INI::parseBool, 0, 0xD8 },
+	{ "ExhaustTemplate", &INI::parseAsciiString, 0, 0x11C },
+	{ "GarrisonHitKillRequiredKindOf", &Rva002567EAParse, 0, 0xE0 },
+	{ "GarrisonHitKillForbiddenKindOf", &Rva002567EAParse, 0, 0xFC },
+	{ "GarrisonHitKillCount", &INI::parseUnsignedInt, 0, 0xDC },
+	{ "GarrisonHitKillFX", &INI::parseFXList, 0, 0x118 },
+	{ 0, 0, 0, 0 }
+};
+
 void MissileUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	BezierProjectileBehaviorModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C53470), 0);
+	parse.add(BfmeMissileUpdateFields, 0);
 }
 
 // Retail VA 0x00BF0200: 15 fields and the zero sentinel.
@@ -895,11 +1109,30 @@ class RubbleRiseUpdateModuleData
 {
 public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
+	static void parseFXList(INI *, void *, void *, const void *);
+	static void parseOCL(INI *, void *, void *, const void *);
+};
+
+// Retail VA 0x00C52960: 10 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeRubbleRiseUpdateFields[] = {
+	{ "MinRubbleRiseDelay", &INI::parseDurationUnsignedInt, 0, 0x38 },
+	{ "MaxRubbleRiseDelay", &INI::parseDurationUnsignedInt, 0, 0x3C },
+	{ "MinBurstDelay", &INI::parseDurationUnsignedInt, 0, 0x40 },
+	{ "MaxBurstDelay", &INI::parseDurationUnsignedInt, 0, 0x44 },
+	{ "RubbleRiseDamping", &INI::parseReal, 0, 0x4C },
+	{ "RubbleHeight", &INI::parseReal, 0, 0x50 },
+	{ "MaxShudder", &INI::parseReal, 0, 0x54 },
+	{ "BigBurstFrequency", &INI::parseInt, 0, 0x48 },
+	{ "OCL", &RubbleRiseUpdateModuleData::parseOCL, 0, 0x0 },
+	{ "FXList", &RubbleRiseUpdateModuleData::parseFXList, 0, 0x0 },
+	{ 0, 0, 0, 0 }
 };
 
 void RubbleRiseUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C52960), 0);
+	parse.add(BfmeRubbleRiseUpdateFields, 0);
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE52EGet()), 8);
 }
 
@@ -909,10 +1142,27 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C57D38: 10 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeSubObjectsUpgradeFields[] = {
+	{ "ShowSubObjects", &INI::parseAsciiStringVectorAppend, 0, 0x118 },
+	{ "HideSubObjects", &INI::parseAsciiStringVectorAppend, 0, 0x124 },
+	{ "UpgradeTexture", &rva004B5293, 0, 0x13C },
+	{ "FadeTimeInSeconds", &INI::parseReal, 0, 0x148 },
+	{ "WaitBeforeFadeInSeconds", &INI::parseReal, 0, 0x14C },
+	{ "RecolorHouse", &INI::parseBool, 0, 0x150 },
+	{ "ExcludeSubobjects", &INI::parseAsciiStringVectorAppend, 0, 0x130 },
+	{ "SkipFadeOnCreate", &INI::parseBool, 0, 0x151 },
+	{ "HideSubObjectsOnRemove", &INI::parseBool, 0, 0x152 },
+	{ "UnHideSubObjectsOnRemove", &INI::parseBool, 0, 0x153 },
+	{ 0, 0, 0, 0 }
+};
+
 void SubObjectsUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C57D38), 0);
+	parse.add(BfmeSubObjectsUpgradeFields, 0);
 }
 
 int Rva0033A495Get(void);
@@ -957,6 +1207,37 @@ class OpenContainModuleData
 {
 public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
+};
+
+// Retail VA 0x00C438B0: 24 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeOpenContainFields[] = {
+	{ "ContainMax", &INI::parseInt, 0, 0x70 },
+	{ "EnterSound", &Rva00339900Parse, 0, 0x38 },
+	{ "ExitSound", &Rva00339900Parse, 0, 0x3C },
+	{ "DamagePercentToUnits", &INI::parsePercentToReal, 0, 0x6C },
+	{ "PassengerFilter", &iniParseObjectFilter, 0, 0x40 },
+	{ "ManualPickUpFilter", &iniParseObjectFilter, 0, 0x44 },
+	{ "PassengersTestCollisionHeight", &INI::parseReal, 0, 0x68 },
+	{ "PassengersInTurret", &INI::parseBool, 0, 0x85 },
+	{ "NumberOfExitPaths", &INI::parseInt, 0, 0x74 },
+	{ "DoorOpenTime", &INI::parseDurationUnsignedInt, 0, 0x78 },
+	{ "AllowOwnPlayerInsideOverride", &INI::parseBool, 0, 0x7C },
+	{ "AllowAlliesInside", &INI::parseBool, 0, 0x7D },
+	{ "AllowEnemiesInside", &INI::parseBool, 0, 0x7E },
+	{ "AllowNeutralInside", &INI::parseBool, 0, 0x7F },
+	{ "ShowPips", &INI::parseBool, 0, 0x80 },
+	{ "CollidePickup", &INI::parseBool, 0, 0x81 },
+	{ "PassengerBonePrefix", &Rva00464574Parse, 0, 0x0 },
+	{ "BoneSpecificConditionState", &rva004649A1, 0, 0x0 },
+	{ "EjectPassengersOnDeath", &INI::parseBool, 0, 0x82 },
+	{ "KillPassengersOnDeath", &INI::parseBool, 0, 0x83 },
+	{ "Enabled", &INI::parseBool, 0, 0x84 },
+	{ "ObjectStatusOfContained", &Rva00464081ParseMask, 0, 0x58 },
+	{ "ModifierToGiveOnExit", &INI::parseAsciiStringVectorAppend, 0, 0x88 },
+	{ "ModifierRequiredTime", &INI::parseDurationUnsignedInt, 0, 0x94 },
+	{ 0, 0, 0, 0 }
 };
 
 // Retail VA 0x00C4A928: 3 fields and the zero sentinel.
@@ -1024,7 +1305,7 @@ inline void CaveContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
 // chains. Row supersedes the base pin.
 void OpenContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C438B0), 0);
+	parse.add(BfmeOpenContainFields, 0);
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE52EGet()), 8);
 }
 
@@ -1036,7 +1317,7 @@ void OpenContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
 inline void GarrisonContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	OpenContainModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00BF3360), 0);
+	parse.add(BfmeGarrisonContainFields, 0);
 }
 
 // ?buildFieldParse@WeaponSetUpgradeModuleData@@SAXAAVMultiIniFieldParse@@@Z
@@ -1055,10 +1336,18 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C58020: 1 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeWeaponSetUpgradeFields[] = {
+	{ "WeaponCondition", &Rva002C8C06Parse, 0, 0x118 },
+	{ 0, 0, 0, 0 }
+};
+
 void WeaponSetUpgradeModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C58020), 0);
+	parse.add(BfmeWeaponSetUpgradeFields, 0);
 }
 
 // ?buildFieldParse@RemoveUpgradeUpgradeModuleData@@SAXAAVMultiIniFieldParse@@@Z
@@ -1130,6 +1419,15 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C51CE4: 2 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeMonsterDockUpdateFields[] = {
+	{ "DockableObjectFilter", &iniParseObjectFilter, 0, 0x10 },
+	{ "DockedAnimationTime", &INI::parseDurationUnsignedInt, 0, 0x14 },
+	{ 0, 0, 0, 0 }
+};
+
 // ?buildFieldParse@MonsterDockUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z
 // retail 0x004A137F (27 bytes): chained on the rowed DockUpdate base proc at
 // 0x5896C1, then table 0x00C51CE4 holding DockableObjectFilter at +0x10 plus
@@ -1140,7 +1438,7 @@ public:
 void MonsterDockUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	DockUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C51CE4), 0);
+	parse.add(BfmeMonsterDockUpdateFields, 0);
 }
 
 class FireWeaponWhenDeadBehaviorModuleData
@@ -1245,6 +1543,18 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00BEEED0: 5 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeModelConditionSpecialAbilityUpdateFields[] = {
+	{ "WhichSpecialPower", &INI::parseInt, 0, 0xC8 },
+	{ "GenerateTerror", &INI::parseBool, 0, 0xCC },
+	{ "GenerateUncontrollableFear", &INI::parseBool, 0, 0xCD },
+	{ "EmotionPulseRadius", &INI::parseReal, 0, 0xD0 },
+	{ "ObjectFilter", &iniParseObjectFilter, 0, 0xD4 },
+	{ 0, 0, 0, 0 }
+};
+
 // ?buildFieldParse@ModelConditionSpecialAbilityUpdateModuleData@@SAXAAVMultiIniFieldParse@@@Z
 // retail 0x0024D655 (27 bytes): chained on the rowed SpecialAbilityUpdateModuleData base proc at
 // 0x44ED95, then table 0x00BEEED0. The owning factory pushes this proc VA
@@ -1253,7 +1563,7 @@ public:
 void ModelConditionSpecialAbilityUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	SpecialAbilityUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00BEEED0), 0);
+	parse.add(BfmeModelConditionSpecialAbilityUpdateFields, 0);
 }
 
 // Retail VA 0x00BEEF90: 4 fields and the zero sentinel.
