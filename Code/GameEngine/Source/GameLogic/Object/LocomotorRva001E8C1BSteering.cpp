@@ -1,13 +1,3 @@
-// ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
-// partial score=0.97 date=2026-10-13
-// ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
-// partial score=0.97 date=2026-10-13
-// ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
-// partial score=0.960424398134932 date=2026-10-10
-// ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
-// partial score=0.9021734413423984 date=2026-10-10
-// ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z
-// partial score=0.6 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /I.
 //
 // ?rva001E8C1B@Rva001E8C1B@@QAEXHHMM@Z retail 0x001E8C1B..0x001E8F03
@@ -18,7 +8,7 @@
 // object's orientation +0x44). When the template allows backing up (+0xD8)
 // and the turn is wider than +0x148 * PI (unless the stored point +0x14 is
 // beyond +0x140 and the path distance beyond +0x144) it sets model
-// condition bit 28 (Object 0x0028AE6D on change) and the reversing bit 7
+// condition word +0x11C bit 28 (Object 0x0028AE6D on change) and the reversing bit 7
 // at +0x44 and turns away by PI; else it clears both. It then turns toward
 // a point 1000 out (0x001E685F) and scales the turn by the turn-rate test
 // 0x001E4845 against +0x40. With a positive top speed it moves on through
@@ -67,13 +57,13 @@ class Object
 {
 public:
 	void rva0028AE6D();
- bool modelTest(int bit)const{return (m_modelConditions.word & (1 << bit)) != 0;}
+ bool modelTest(int bit)const{return (m_modelConditions & (1 << bit)) != 0;}
 
 	char m_pad000[0x38];
 	Coord3D m_pos; // +0x38
 	Real m_orientation; // +0x44
 	char m_pad048[0x11c - 0x48];
-	union ModelWord { unsigned int word; volatile unsigned int volatileWord; volatile unsigned char volatileBytes[4]; unsigned char bytes[4]; } m_modelConditions; // +0x11C
+	unsigned int m_modelConditions; // observed word at Object +0x11C
 	char m_pad120[0x258 - 0x120];
 	AIUpdateInterface *m_ai; // +0x258
 };
@@ -151,18 +141,21 @@ void Rva001E8C1B::rva001E8C1B(int objArg, int goalArg, Real onPathDistToGoal, Re
 	Real turnRate = m_turnRate;
 	if (reverse && (_ReadWriteBarrier(),fabs(relAngle)) > m_template->m_reverseAngle * 3.1415927f)
 	{
-		if (!(obj->m_modelConditions.volatileWord & 0x10000000))
+		if (!(obj->m_modelConditions & 0x10000000))
 		{
-			obj->m_modelConditions.volatileWord |= 0x10000000;
+			// Preserve retail's separate test and memory update.
+			_ReadWriteBarrier();
+			obj->m_modelConditions |= 0x10000000;
 			obj->rva0028AE6D();
 		}
 		m_flags |= 0x80;
 	}
 	else
 	{
-		if (obj->m_modelConditions.volatileBytes[3] & 0x10)
+		if (obj->m_modelConditions & 0x10000000)
 		{
-			obj->m_modelConditions.volatileBytes[3] &= ~0x10;
+			_ReadWriteBarrier();
+			obj->m_modelConditions &= ~0x10000000;
 			obj->rva0028AE6D();
 		}
 		m_flags &= ~0x80;
@@ -184,7 +177,7 @@ void Rva001E8C1B::rva001E8C1B(int objArg, int goalArg, Real onPathDistToGoal, Re
 	if (maxSpeed > 0.0f)
 	{
 		Real angleCoeff = (Real)fabs(relAngle) / (3.1415927f / 4.0f);
-		_ReadWriteBarrier();
+		// Keep the natural x87/SSE scheduling here.
 		if (angleCoeff > 1.0f)
 			angleCoeff = 1.0f;
 		Real goalSpeed;

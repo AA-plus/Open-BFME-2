@@ -23,7 +23,7 @@ public:
 
 class Rva001E8C1B {
 public:
-	void rva001e8c1b(unsigned int, unsigned int, float, float);
+	void rva001E8C1B(int, int, float, float);
 };
 
 class Rva001E7C2B {
@@ -50,5 +50,5 @@ void Rva001E7C2B::rva001e7c2b(unsigned int a, unsigned int b, float c, float d)
 
 void Rva001E9045::rva001e9045(unsigned int a, unsigned int b, float c, float d)
 {
-	reinterpret_cast<Rva001E8C1B *>(this)->rva001e8c1b(a, b, c, d);
+	reinterpret_cast<Rva001E8C1B *>(this)->rva001E8C1B((int)a, (int)b, c, d);
 }
