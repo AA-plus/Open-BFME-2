@@ -1,9 +1,3 @@
-// ?rva00481A9E@Rva0048180C@@QAEXPAVObject@@_NPAURva00481A9EInfo@@@Z
-// partial score=0.97 date=2026-10-13
-// ?rva00481A9E@Rva0048180C@@QAEXPAVObject@@_NPAURva00481A9EInfo@@@Z
-// partial score=0.951 date=2026-10-06
-// ?rva00481A9E@Rva0048180C@@QAEXPAVObject@@_NPAURva00481A9EInfo@@@Z
-// partial score=0.97 date=2026-10-06
 // cl: /O1 /DNDEBUG /MD /G7 /arch:SSE
 //
 // ?rva00481A9E@Rva0048180C@@QAEXPAVObject@@_NPAURva00481A9EInfo@@@Z @0x00481A9E (225B).
@@ -102,7 +96,6 @@ private:
 	const UpgradeTemplate *m_tmpl; // +0x2c
 };
 
-// ?rva00481A9E@Rva0048180C@@QAEXPAVObject@@_NPAURva00481A9EInfo@@@Z present-unmatched
 void Rva0048180C::rva00481A9E(Object *tgt, bool flag, Rva00481A9EInfo *info)
 {
 	if (m_owner == 0)
@@ -132,12 +125,11 @@ void Rva0048180C::rva00481A9E(Object *tgt, bool flag, Rva00481A9EInfo *info)
 			fsel = info->m_f1c;
 		else
 			fsel = info->m_f10;
-		float mult = body->f6();
-		// Retail ends the x87 chain with a single `fmulp st(1),st`, which pops both
-		// operands; the operand order decides whether VC7 emits that pop-pair form
-		// or `fmul st,st(1)` followed by a separate `fstp st(0)` to drop the
-		// divisor. Only this order reaches the pop-pair form.
-		tgt->rva0028FEA7(mult * (fsel / (float)g_Va00DBA4E4), m_owner, info->m_extra);
+
+		// Retail ends the x87 chain with a single `fmulp st(1),st`; the product
+		// is a named float argument temp (inline call-argument forms keep the
+		// non-pop `fmul` plus a separate `fstp st(0)`).
+		float arg = body->f6() * (fsel / (float)g_Va00DBA4E4); tgt->rva0028FEA7(arg, m_owner, info->m_extra);
 	} else {
 		((unsigned char *)&tgt->m_flags380)[1] &= 0x7e;
 	}
