@@ -1488,6 +1488,47 @@ int Rva005571FC::rva005571FC(int request, int result, int buffer, int, int)
 	return 1;
 }
 
+// Retail 0x005570AB (337 bytes), reached through adapter 0x00557927: a
+// successful reply "a,b" whose numbers are both nonzero posts response type 3
+// with the payload's +8 id; the request is erased on every path.
+class Rva005570AB : public Gen_00654130
+{
+public:
+	int rva005570AB(int a1, int a2, int a3, int a4, int a5);
+};
+int Rva005570AB::rva005570AB(int request, int result, int buffer, int, int)
+{
+	_STL::map<int, int>::iterator it = m_values.find(request);
+	if (it._M_node == m_values.end()._M_node || (request ? it : it)->second == 0 || result != 0)
+	{
+		bfmeErase((void *)request);
+		return 1;
+	}
+	AsciiString text((const char *)buffer);
+	text.trim();
+	char *sep = strstr(text.str(), ",");
+	if (sep && sep[1])
+	{
+		*sep = 0;
+		int first = atoi(text.str());
+		int second = atoi(sep + 1);
+		if (first && second)
+		{
+			BfmeOpaqueOwnedRecord1408 resp;
+			resp.responseType = 3;
+			resp.m_554 = first;
+			resp.m_558 = second;
+			resp.m_550 = ((int *)it->second)[2];
+			if (TheGameSpyPSMessageQueue)
+				TheGameSpyPSMessageQueue->addResponse(resp);
+			bfmeErase((void *)request);
+			return 1;
+		}
+	}
+	bfmeErase((void *)request);
+	return 1;
+}
+
 // Retail 0x00557304 (246 bytes), reached through adapter 0x00557971: a
 // successful reply of 0 or 1 posts response type 6 with the +0x57D flag set
 // for 1; the request is erased on every path.
