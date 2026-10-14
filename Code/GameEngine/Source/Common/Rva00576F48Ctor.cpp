@@ -1,7 +1,3 @@
-// ??0Rva00576F48@@QAE@PAURva00577634Owner@@H@Z
-// partial score=0.98 date=2026-10-13
-// ??0Rva00576F48@@QAE@PAURva00577634Owner@@H@Z
-// partial score=0.97 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 //
 // ??0Rva00576F48@@QAE@PAURva00577634Owner@@H@Z, retail 0x005774E3..0x005775C1
@@ -144,7 +140,7 @@ Rva00576F48::Rva00576F48(Rva00577634Owner *owner, int id)
 	{
 		target->slot1(StrategicInGameUI::GetSelectionPortrait((Rva005D2355In *)m_id18));
 		{
-			int value = m_id18;
+			int value = (m_owner14 ? m_id18 : m_id18);
 			Rva005773DB wrapped(&value);
 			target->slot6(&wrapped);
 		}
