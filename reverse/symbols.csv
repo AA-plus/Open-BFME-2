@@ -5517,7 +5517,6 @@ name,address,notes
 ?AtlWinModuleInit@ATL@@YGJPAU_ATL_WIN_MODULE70@1@@Z,0x00003295,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?AtlWinModuleTerm@ATL@@YGJPAU_ATL_WIN_MODULE70@1@PAUHINSTANCE__@@@Z,0x000058C3,donor_sweep: call target read from retail at a unique placement of a BFME 1 donor body compiled /O1
 ?Attach@Rva003559B5Host@@QAEXHPAURva003559B5Val@@@Z,0x003558A3,address-derived thiscall attach of built value; RETAIL REL32 shared by all three F3 try-new wrappers; identity unproven
-?BFME2LoadParticleTexture@@YA?AVBFME2ParticleTextureHandle@@PBDHH@Z,0x00132D89,Descriptive cached texture loader; independently verified hidden holder result and filename lookup then allocation; WORD refcount plus two DWORD options
 ?BFMEPoolYield@@YAXXZ,0x006105C0,descriptive local name; target pool-lock retry calls 0x6105C0 which loads a handle and calls WaitForSingleObject(handle 1); semantic identity inferred from target bytes
 ?BFME_DX8_Thread_Assert@@YAXXZ,0x00120F50,releases BFMEs DX8 device mutex - decrements the recursion count at 0x00DEDA8C and signals the handle at 0x00DEC598; address read from retail REL32 at 0x00138840
 ?BFME_DX8_Thread_Lock@@YAXXZ,0x0011F520,takes BFMEs DX8 device mutex with a 20-second WaitForSingleObject on 0x00DEC598; address read from retail REL32 at 0x00138790

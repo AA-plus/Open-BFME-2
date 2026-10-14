@@ -40,7 +40,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
+};
 
 
 class RenderableStandingWaterArea {
@@ -61,10 +65,10 @@ void RenderableStandingWaterArea::createTexture(int index) {
    else if (reinterpret_cast<W3DRadarFormatCaps *>(DX8Wrapper::CurrentCaps)->supportTextureFormat((WW3DFormat)0x3e)) format=0x3e;
    else if (reinterpret_cast<W3DRadarFormatCaps *>(DX8Wrapper::CurrentCaps)->supportTextureFormat((WW3DFormat)0x3d)) format=0x3d;
    const char *data=*(const char *const *)s;
-   m_textures[0] = BFME2LoadParticleTexture(data ? data+8 : "",1,format);
+   m_textures[0] = TextureAsset::Get(data ? data+8 : "",1,format);
   } else {
    const char *data=*(const char *const *)s;
-   m_textures[index] = BFME2LoadParticleTexture(data ? data+8 : "",0,0);
+   m_textures[index] = TextureAsset::Get(data ? data+8 : "",0,0);
   }
  }
 }

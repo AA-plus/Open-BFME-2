@@ -37,7 +37,11 @@ public:
 	~BFME2ParticleTextureHandle() { if (m_data) m_data->Release(); }
 	ProxyClass::ProxyData *m_data;
 };
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, Int a, Int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, Int a, Int b);
+};
 
 class HierarchyPrototype : public ProxyClass::ProxyData
 {
@@ -151,16 +155,16 @@ void W3DShrubBuffer::updateTexture()
 	Int i;
 	for (i = 0; i < m_numTypes; i++)
 	{
-		m_packer.rva00171067(BFME2LoadParticleTexture(m_types[i].m_data->m_textureName.str(), 0, 0));
+		m_packer.rva00171067(TextureAsset::Get(m_types[i].m_data->m_textureName.str(), 0, 0));
 		if (m_types[i].m_doShadow)
-			m_shadowPacker.rva00171067(BFME2LoadParticleTexture(m_types[i].m_shadowTextureName.str(), 0, 0));
+			m_shadowPacker.rva00171067(TextureAsset::Get(m_types[i].m_shadowTextureName.str(), 0, 0));
 	}
 	for (i = 0; i < m_numTypes; i++)
 	{
-		m_packer.rva00171583(BFME2LoadParticleTexture(m_types[i].m_data->m_textureName.str(), 0, 0),
+		m_packer.rva00171583(TextureAsset::Get(m_types[i].m_data->m_textureName.str(), 0, 0),
 			&m_types[i].m_topLeft, &m_types[i].m_bottomRight);
 		if (m_types[i].m_doShadow)
-			m_shadowPacker.rva00171583(BFME2LoadParticleTexture(m_types[i].m_shadowTextureName.str(), 0, 0),
+			m_shadowPacker.rva00171583(TextureAsset::Get(m_types[i].m_shadowTextureName.str(), 0, 0),
 				&m_types[i].m_shadowTopLeft, &m_types[i].m_shadowBottomRight);
 	}
 	m_texture = m_packer.rva00171625();

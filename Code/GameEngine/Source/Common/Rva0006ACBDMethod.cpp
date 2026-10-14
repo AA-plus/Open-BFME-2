@@ -2,7 +2,7 @@
 // stlport
 // ?rva0006ACBD@BaseHeightMapRenderObjClass@@QAEXVAsciiString@@@Z @0x0006ACBD 173B
 // BaseHeightMapRenderObjClass texture reload via rowed StringBase set at
-// 0x366F0 plus BFME2LoadParticleTexture 0x132D89 plus RefCountPtr assign
+// 0x366F0 plus TextureAsset::Get 0x132D89 plus RefCountPtr assign
 // 0x424D0 plus ShroudTexture getFilter 0x132856. Evidence: same-this caller
 // 0x0006B804 plus slot caller 0x000926AC plus prev 0x0006AB98 plus next
 // BaseHeightMapGetMaximumVisibleBox.
@@ -78,7 +78,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int a, int b);
+};
 
 __forceinline const char *GetStr0006ACBD(const AsciiString &s)
 {
@@ -116,7 +120,7 @@ void BaseHeightMapRenderObjClass::rva0006ABE7(AsciiString name, bool flag)
 	((BfmeResetTextureRef *)&m_3828)->clear();
 	m_3834 = flag;
 	((StringBase<char> &)m_382C).set((StringBase<char> &)name);
-	m_3828.m_tex = BFME2LoadParticleTexture(GetStr0006ACBD(m_382C), 0, 0);
+	m_3828.m_tex = TextureAsset::Get(GetStr0006ACBD(m_382C), 0, 0);
 	m_3828.getFilter()->Set_Min_Filter(2);
 	m_3828.getFilter()->Set_Mag_Filter(2);
 	m_3828.getFilter()->Set_U_Addr_Mode(0);
@@ -129,7 +133,7 @@ void BaseHeightMapRenderObjClass::rva0006ACBD(AsciiString name)
 		((StringBase<char> &)(StringBase<char> &)name).set((StringBase<char> &)m_3824);
 	((StringBase<char> &)m_3820).set((StringBase<char> &)name);
 	const char *s = GetStr0006ACBD(m_3820);
-	m_381C.m_tex = BFME2LoadParticleTexture(s, 0, 0);
+	m_381C.m_tex = TextureAsset::Get(s, 0, 0);
 	m_381C.getFilter()->_M_clear_nothrow(1);
 }
 
@@ -153,7 +157,7 @@ void Rva0006D470::rva0006D470(AsciiString name)
         ((StringBase<char>&)name).set((StringBase<char>&)m_384C);
     if(name.compare(m_3848)!=0) {
         ((StringBase<char>&)m_3848).set((StringBase<char>&)name);
-        m_3844.m_tex=BFME2LoadParticleTexture(GetStr0006ACBD(m_3848),0,0);
+        m_3844.m_tex=TextureAsset::Get(GetStr0006ACBD(m_3848),0,0);
         m_3844.getFilter()->_M_clear_nothrow(1);
     }
 }
@@ -178,7 +182,7 @@ void Rva0006D3B6::rva0006D3B6(AsciiString name)
         ((StringBase<char>&)name).set((StringBase<char>&)m_3840);
     if(name.compare(m_383C)!=0) {
         ((StringBase<char>&)m_383C).set((StringBase<char>&)name);
-        m_3838.m_tex=BFME2LoadParticleTexture(GetStr0006ACBD(m_383C),0,0);
+        m_3838.m_tex=TextureAsset::Get(GetStr0006ACBD(m_383C),0,0);
         m_3838.getFilter()->_M_clear_nothrow(1);
     }
 }

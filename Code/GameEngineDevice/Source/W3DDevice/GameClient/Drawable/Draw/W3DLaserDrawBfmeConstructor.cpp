@@ -49,7 +49,11 @@ private:
 };
 
 class W3DRadarResetTexture { public: W3DRadarResetSurface getSurfaceLevel(); };
-extern BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *, Int, Int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *, Int, Int);
+};
 class AssetReference {
 public:
  AssetReference(); AssetReference(const AssetReference &); ~AssetReference();
@@ -337,7 +341,7 @@ W3DLaserDraw::W3DLaserDraw( Thing *thing, const ModuleData* moduleData ) :
 	for (Int i = 0; i < numTextures; i++)
 	{
 		const Char *name = (textureNames->begin() + i)->str();
-		BFME2ParticleTextureHandle handle = BFME2LoadParticleTexture(name, 0, 0);
+		BFME2ParticleTextureHandle handle = TextureAsset::Get(name, 0, 0);
 		if (handle.Ptr)
 		{
 			SurfaceClass::SurfaceDescription surfaceDesc;

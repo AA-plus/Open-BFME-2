@@ -12,7 +12,7 @@
 // Callbacks (target evidence: bodies, callees and ID3DXEffect slots; names
 // are the parameter strings they are bound to):
 //   Texture         0x001F6B10 324B  SetTexture: ParticleSystem+0x10 name
-//                   through the rowed BFME2LoadParticleTexture 0x00132D89,
+//                   through the rowed TextureAsset::Get 0x00132D89,
 //                   white texture 0x00132E76 when absent.
 //   DetailTexture   0x001F6C6F 428B  same through the +0x1C4 object's
 //                   vtable slot 6 (by-value AsciiString name).
@@ -120,7 +120,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
+};
 RefCountPtr<TextureClass> Rva00132E76WhiteTexture();
 
 #include "../../../Libraries/Include/Lib/RGBColor.h"
@@ -284,7 +288,7 @@ void Rva001F6B10Texture(ID3DXEffect *effect, D3DXHANDLE handle)
 {
 	if (TheParticleSystemManager && TheParticleSystemManager->get())
 	{
-		BFME2ParticleTextureHandle texture = BFME2LoadParticleTexture(TheParticleSystemManager->get()->m_10.str(), 0, 0);
+		BFME2ParticleTextureHandle texture = TextureAsset::Get(TheParticleSystemManager->get()->m_10.str(), 0, 0);
 		if (texture)
 			effect->SetTexture(handle, texture.Peek_D3D_Base_Texture());
 		else
@@ -298,7 +302,7 @@ void Rva001F6C6FDetailTexture(ID3DXEffect *effect, D3DXHANDLE handle)
 {
 	if (TheParticleSystemManager && TheParticleSystemManager->get() && TheParticleSystemManager->get()->m_1C4)
 	{
-		BFME2ParticleTextureHandle texture = BFME2LoadParticleTexture(TheParticleSystemManager->get()->m_1C4->slot06().str(), 0, 0);
+		BFME2ParticleTextureHandle texture = TextureAsset::Get(TheParticleSystemManager->get()->m_1C4->slot06().str(), 0, 0);
 		if (texture)
 			effect->SetTexture(handle, texture.Peek_D3D_Base_Texture());
 		else

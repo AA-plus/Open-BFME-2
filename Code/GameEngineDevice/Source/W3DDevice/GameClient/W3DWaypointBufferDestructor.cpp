@@ -37,7 +37,11 @@ public:
 
 template<class T> class RefCountPtr {public: RefCountPtr():m_ptr(0){} ~RefCountPtr(){if(m_ptr)m_ptr->Release_Ref();} const RefCountPtr &operator=(const RefCountPtr &); operator T*() const {return m_ptr;} T *m_ptr;};
 class BFME2ParticleTextureHandle:public RefCountPtr<TextureClass> {};
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char*,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char*,int,int);
+};
 RenderObjClass *Create_Render_Obj(const char*);
 
 class W3DWaypointBuffer
@@ -70,7 +74,7 @@ W3DWaypointBuffer::W3DWaypointBuffer()
 {
  m_waypointNodeRobj=Create_Render_Obj("SCMoveHintSml");
  m_line=new SegmentedLineClass;
- m_texture=BFME2LoadParticleTexture("EXLaser.tga",0,0);
+ m_texture=TextureAsset::Get("EXLaser.tga",0,0);
  // Native argument is the handle address, preserving the rowed provider ABI.
  m_line->Set_Texture(reinterpret_cast<TextureClass*>(&m_texture));
  ShaderClass shader=ShaderClass::_PresetAdditiveShader;

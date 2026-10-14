@@ -21,7 +21,11 @@ class TextureBaseClass { public: void Release_Ref(); };
 class TextureClass : public TextureBaseClass {};
 template<class T> class RefCountPtr { public: T *m_ptr; const RefCountPtr &operator=(const RefCountPtr &); ~RefCountPtr(){if(m_ptr)m_ptr->Release_Ref();} };
 class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass> {};
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 float GetGameClientRandomValueReal(float,float,char *,int);
 class Rva0030C934IntGetter { public: int get()const; };
 class Rva0030C8CCIntGetter { public: int get()const; };
@@ -104,5 +108,5 @@ void WaterTracksObj::init(float width,float length,Vector2 &start,Vector2 &end,c
  timeToCompress=settings?reinterpret_cast<Rva0030C900IntGetter*>(settings)->get():waveTypeInfo[type].compressMs;
  timeToCompress*=GetGameClientRandomValueReal(0.5f,1.1f,randomFile,245);
  if(type==5) {timeToRetreat=1000;totalMs=timeToBeach+timeToStop+fadeMs+timeToRetreat;startPos=start;fadeMs=1000;}
- texture=BFME2LoadParticleTexture(textureName,0,0);
+ texture=TextureAsset::Get(textureName,0,0);
 }

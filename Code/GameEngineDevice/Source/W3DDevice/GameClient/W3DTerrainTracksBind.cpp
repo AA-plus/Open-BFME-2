@@ -87,7 +87,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass> {
 public:
  ~BFME2ParticleTextureHandle() { if(ptr) ptr->Release_Ref(); }
 };
-extern BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 
 class Object { public: int rva0028B511() const; };
 class Drawable { public: char prefix00[0xFC]; Object *m_object; };
@@ -336,7 +340,7 @@ void Rva00084C05System::update() {
 void Rva00084206Track::init(float w,float l,const char *name) {
  ((Rva00083CB2 *)this)->rva00083CB2();
  width=w; length=l;
- texture=BFME2LoadParticleTexture(name,0,0);
+ texture=TextureAsset::Get(name,0,0);
 }
 
 // Semantic donor: BFME1 9cbfb551 TerrainTracksBfmeAddCap.cpp. The complete

@@ -9,7 +9,7 @@
 // (findImageByName 0x002D92F6) a texture slot (+0x24; assignment 0x000424D0)
 // and three Coord2D[4] arrays (+0x28 +0x48 +0x68) built by the eh vector
 // constructor iterator with the exported Coord2D ctor/dtor. When the image
-// exists its name is loaded through BFME2LoadParticleTexture 0x00132D89
+// exists its name is loaded through TextureAsset::Get 0x00132D89
 // and stored in the slot; the returned handle releases its texture
 // (0x0061ED10). The unwind funclet also destroys the slot (its destructor is
 // declared only). Class and member names are unresolved.
@@ -46,7 +46,11 @@ public:
 
 extern ImageCollection *TheMappedImageCollection;
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int a, int b);
+};
 
 struct CursorTextureSlot
 {
@@ -97,5 +101,5 @@ Rva0010461F::Rva0010461F()
 	  m_edgeImage(TheMappedImageCollection->findImageByName(AsciiString("RadarViewBoxEdge")))
 {
 	if (m_edgeImage != 0)
-		m_edgeTexture = BFME2LoadParticleTexture(m_edgeImage->getName().str(), 1, 0);
+		m_edgeTexture = TextureAsset::Get(m_edgeImage->getName().str(), 1, 0);
 }

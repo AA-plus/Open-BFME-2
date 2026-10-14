@@ -50,7 +50,11 @@ public:
 	}
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int a, int b);
+};
 
 struct CursorTextureSlot
 {
@@ -151,7 +155,7 @@ bool W3DMouse::loadD3DCursorTextures(MouseCursor cursor)
 	if (animFrames == 1)
 	{
 		sprintf(frameName, "%s.tga", baseName);
-		cursorTextures[cursor][0] = BFME2LoadParticleTexture(frameName, 0, 0);
+		cursorTextures[cursor][0] = TextureAsset::Get(frameName, 0, 0);
 		m_currentD3DSurface[0] = cursorTextures[cursor][0].Get_Surface_Level();
 		m_currentFrames = 1;
 	}
@@ -160,7 +164,7 @@ bool W3DMouse::loadD3DCursorTextures(MouseCursor cursor)
 		for (int i = 0; i < animFrames; i++)
 		{
 			sprintf(frameName, "%s%04d.tga", baseName, i);
-			if ((cursorTextures[cursor][i] = BFME2LoadParticleTexture(frameName, 0, 0), cursorTextures[cursor][i].Ptr) != NULL)
+			if ((cursorTextures[cursor][i] = TextureAsset::Get(frameName, 0, 0), cursorTextures[cursor][i].Ptr) != NULL)
 			{
 				m_currentD3DSurface[m_currentFrames] = cursorTextures[cursor][i].Get_Surface_Level();
 				m_currentFrames++;

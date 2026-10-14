@@ -4,7 +4,7 @@
 // ?rva00081CDF@Rva00081CDF@@QAEXXZ @ 0x00081CDF (343B), Ghidra boundary.
 // Water texture init plus asset collection: loads one global-driven texture
 // into +0x44 then WaterSurfaceBubbles.tga into +0x48 and Noise0000.tga into
-// +0x4C via rowed BFME2LoadParticleTexture 0x00132D89 plus rowed RefCountPtr
+// +0x4C via rowed TextureAsset::Get 0x00132D89 plus rowed RefCountPtr
 // op= 0x000424D0, collects the global AsciiString plus the two literals plus
 // two indexed AsciiStrings via rowed 0x0006C950 and rowed 0x0006C995, loops
 // twice via pinned 0x0007EDBC and rowed 0x0030812E, then rowed
@@ -105,7 +105,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
+};
 
 class RenderableStandingWaterArea
 {
@@ -144,7 +148,7 @@ void Rva00081CDF::rva00081CDF()
 	// at +0x3C via shared str() (m_text ? m_text+8 : ""); the holder above
 	// carries that string for byte identity. Row 0x0006C995 types as Target*
 	// but this body passes the two .tga literals; kept rowed as served.
-	m_tex44 = BFME2LoadParticleTexture(p->m_str3C.str(), 0, 0);
+	m_tex44 = TextureAsset::Get(p->m_str3C.str(), 0, 0);
 
 	p = *reinterpret_cast<Rva00200BD9Holder **>(&TheWaterTransparency);
 	if (!p)
@@ -153,10 +157,10 @@ void Rva00081CDF::rva00081CDF()
 		p = (Rva00200BD9Holder *)p->m_04->getFinalOverride();
 	assets << p->m_str3C;
 
-	m_tex48 = BFME2LoadParticleTexture("WaterSurfaceBubbles.tga", 0, 0);
+	m_tex48 = TextureAsset::Get("WaterSurfaceBubbles.tga", 0, 0);
 	assets.rva0006C995((Rva001408C0Target *)"WaterSurfaceBubbles.tga");
 
-	m_tex4C = BFME2LoadParticleTexture("Noise0000.tga", 0, 0);
+	m_tex4C = TextureAsset::Get("Noise0000.tga", 0, 0);
 	assets.rva0006C995((Rva001408C0Target *)"Noise0000.tga");
 
 	for (int i = 0; i < 2; ++i) {

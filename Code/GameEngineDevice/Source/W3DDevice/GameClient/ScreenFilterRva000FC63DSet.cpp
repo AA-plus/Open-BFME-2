@@ -709,7 +709,7 @@ Int Rva000FCF54Filter::init()
 // and the pixel-shader handle (+0x04) are reset, render to texture must be
 // available and the "shaders\monochromezoom.nvp" shader (rowed loader
 // 0x00077E05) must load; the instance at 0x00DEC1CC then registers as
-// W3DFilters[6] and the "circleFade.tga" mask (rowed BFME2LoadParticleTexture)
+// W3DFilters[6] and the "circleFade.tga" mask (rowed TextureAsset::Get)
 // is kept at +0x08.
 class TextureClass : public TextureBaseClass {};
 
@@ -726,7 +726,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *filename, int a, int b);	// 0x00132D89
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);	// 0x00132D89
+};
 long Rva00077E05Load(const char *name, unsigned long *handle);	// 0x00077E05
 extern UnsignedInt g_Va00DEC1CC;
 
@@ -750,6 +754,6 @@ Int Rva000FC5B7Filter::init()
 	if (hr < 0)
 		return false;
 	W3DFilters[6] = reinterpret_cast<W3DFilterInterface *>(&g_Va00DEC1CC);
-	m_fadeTexture = BFME2LoadParticleTexture("circleFade.tga", 0, 0);
+	m_fadeTexture = TextureAsset::Get("circleFade.tga", 0, 0);
 	return true;
 }

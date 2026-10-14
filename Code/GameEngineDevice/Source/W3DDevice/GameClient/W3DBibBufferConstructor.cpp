@@ -10,7 +10,11 @@ class BFME2ParticleTextureHandle { public:
  TextureClass *Ptr;
  ~BFME2ParticleTextureHandle() { if(Ptr) Ptr->Release_Ref(); }
 };
-extern BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 class ShroudFilter { public: char pad[12]; int u,v; };
 class ShroudTexture { public: ShroudFilter *getFilter(); };
 class Vector3 { public: Vector3() {} float X, Y, Z; };
@@ -35,8 +39,8 @@ W3DBibBuffer::W3DBibBuffer() {
  count=0; sorted=true;
  indexSize=384; vertexSize=256;
  allocateBibBuffers();
- bibTexture=(const RefCountPtr<TextureClass> &)BFME2LoadParticleTexture("TBBib.tga",0,0);
- highlight=(const RefCountPtr<TextureClass> &)BFME2LoadParticleTexture("TBRedBib.tga",0,0);
+ bibTexture=(const RefCountPtr<TextureClass> &)TextureAsset::Get("TBBib.tga",0,0);
+ highlight=(const RefCountPtr<TextureClass> &)TextureAsset::Get("TBRedBib.tga",0,0);
  ((ShroudTexture *)&bibTexture)->getFilter()->u=1;
  ((ShroudTexture *)&bibTexture)->getFilter()->v=1;
  ((ShroudTexture *)&highlight)->getFilter()->u=1;

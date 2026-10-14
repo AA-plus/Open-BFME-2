@@ -241,7 +241,7 @@ void W3DBibBuffer::loadBibsInVertexAndIndexBuffers(void)
 for the bibs. */
 //=============================================================================
 // BFME 2's constructor (0x000D42B3: counted particle-texture holders loaded
-// through BFME2LoadParticleTexture, clamp set on each filter) is matched in
+// through TextureAsset::Get, clamp set on each filter) is matched in
 // W3DBibBufferConstructor.cpp, which also emits the TBib array constructor;
 // the Zero Hour body that stood here did not match retail and only
 // duplicated that definition at link time.

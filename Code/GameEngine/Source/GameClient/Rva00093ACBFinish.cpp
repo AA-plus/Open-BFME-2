@@ -66,7 +66,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
+};
 
 class W3DSnowManager : public SnowManager {
 public:
@@ -151,7 +155,7 @@ extern OVERRIDE<WeatherSetting> TheWeatherSetting;
 void W3DSnowManager::updateIniSettings()
 {
     SnowManager::updateIniSettings();
-    m_snowTexture = BFME2LoadParticleTexture(TheWeatherSetting->getSnowTexture(), 0, 0);
+    m_snowTexture = TextureAsset::Get(TheWeatherSetting->getSnowTexture(), 0, 0);
 }
 
 // Retail's data references in this unit's matched rows land on globals defined

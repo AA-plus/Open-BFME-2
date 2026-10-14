@@ -140,7 +140,11 @@ struct IDirect3DDevice8 { virtual void Slot00()=0; virtual void Slot04()=0; virt
 
 class DX8Wrapper { protected: static DX8Caps *CurrentCaps; static IDirect3DDevice8 *D3DDevice; public: static DX8Caps *Get_Current_Caps() { return CurrentCaps; } static IDirect3DDevice8 *_Get_D3D_Device8() { return D3DDevice; } };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 bool W3DSnowManager::ReAcquireResources() {
     BFMEDX8DeviceLock lock;
     ReleaseResources();
@@ -159,7 +163,7 @@ bool W3DSnowManager::ReAcquireResources() {
             vbCount+=4; ib+=6;
         }
     }
-    m_snowTexture = BFME2LoadParticleTexture(TheWeatherSetting->m_snowTexture.str(), 0, 0);
+    m_snowTexture = TextureAsset::Get(TheWeatherSetting->m_snowTexture.str(), 0, 0);
     m_80=4096; m_88=4096; m_84=2048;
     return true;
 }

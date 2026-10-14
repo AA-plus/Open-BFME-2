@@ -44,7 +44,7 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 // cold failure tail to +0x538) follows Add_Legacy_Material in retail as in the
 // BFME1 donor TU (BFME1 0x0096F5B0), whose body it ports. read_chunks reaches
 // it through the 0x15 chunk dispatch. BFME2 loads map textures through
-// BFME2LoadParticleTexture (0x132D89), assigns them with the owning wrapper at
+// TextureAsset::Get (0x132D89), assigns them with the owning wrapper at
 // 0x42707 and drops the reference with the release-and-clear helper at
 // 0x4D75B; the context Textures vector sits at +0x10C and the model's
 // CurMatDesc at +0x94. Retail keeps the texture handle's pointer in EDI across
@@ -137,7 +137,11 @@ public:
     }
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int, int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int, int);
+};
 
 template<class T> class RefCountPtr;
 
@@ -332,7 +336,7 @@ bool MeshModelClass::read_v3_materials(ChunkLoadClass &cload, MeshLoadContextCla
 				if (cload.Cur_Chunk_ID() != W3D_CHUNK_MAP3_INFO) goto Error;
 				if (cload.Read(&mapinfo, sizeof(mapinfo)) != sizeof(mapinfo)) goto Error;
 				if (!cload.Close_Chunk()) goto Error;
-				reinterpret_cast<BfmeTextureHandle &>(texture) = reinterpret_cast<const BfmeTextureHandle &>(BFME2LoadParticleTexture(filename, 0, 0));
+				reinterpret_cast<BfmeTextureHandle &>(texture) = reinterpret_cast<const BfmeTextureHandle &>(TextureAsset::Get(filename, 0, 0));
 				shader.Set_Texturing(ShaderClass::TEXTURING_ENABLE);
 			} else if (cload.Cur_Chunk_ID() == W3D_CHUNK_MATERIAL3_SI_MAP) {
 				Vector3 diffuse;
@@ -349,7 +353,7 @@ bool MeshModelClass::read_v3_materials(ChunkLoadClass &cload, MeshLoadContextCla
 					if (cload.Cur_Chunk_ID() != W3D_CHUNK_MAP3_INFO) goto Error;
 					if (cload.Read(&mapinfo, sizeof(mapinfo)) != sizeof(mapinfo)) goto Error;
 					if (!cload.Close_Chunk()) goto Error;
-					reinterpret_cast<BfmeTextureHandle &>(texture) = reinterpret_cast<const BfmeTextureHandle &>(BFME2LoadParticleTexture(filename, 0, 0));
+					reinterpret_cast<BfmeTextureHandle &>(texture) = reinterpret_cast<const BfmeTextureHandle &>(TextureAsset::Get(filename, 0, 0));
 					shader.Set_Texturing(ShaderClass::TEXTURING_ENABLE);
 					shader.Set_Dst_Blend_Func(ShaderClass::DSTBLEND_ONE);
 					shader.Set_Src_Blend_Func(ShaderClass::SRCBLEND_ONE);

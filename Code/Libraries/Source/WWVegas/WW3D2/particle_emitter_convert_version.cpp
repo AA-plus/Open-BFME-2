@@ -91,7 +91,11 @@ extern const char *EMITTER_TYPE_NAMES[EMITTER_TYPEID_COUNT];
 
 
 #include "texture_handle.h"
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char*,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char*,int,int);
+};
 void
 ParticleEmitterDefClass::Convert_To_Ver2 (void)
 {
@@ -104,7 +108,7 @@ ParticleEmitterDefClass::Convert_To_Ver2 (void)
 		//	Determine which shader to use...
 		//
 		ShaderClass shader = ShaderClass::_PresetAdditiveSpriteShader;
-		BFME2ParticleTextureHandle ptexture = BFME2LoadParticleTexture(m_Info.TextureFilename,0,0);
+		BFME2ParticleTextureHandle ptexture = TextureAsset::Get(m_Info.TextureFilename,0,0);
 		if (ptexture) {
 			// If texture has an alpha channel do alpha blending instead of additive
 			// (which is the default for point groups):

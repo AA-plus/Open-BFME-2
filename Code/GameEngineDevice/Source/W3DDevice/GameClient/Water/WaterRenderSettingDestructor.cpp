@@ -28,7 +28,11 @@ public:
  TextureBaseClass *Ptr;
  ~BFME2ParticleTextureHandle() { if (Ptr) Ptr->Release_Ref(); }
 };
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 class W3DRadarResetSurface;
 class CursorTextureSlot {
 public:
@@ -139,8 +143,8 @@ protected:
 void WaterRenderObjClass::loadSetting(
 	Setting *setting, TimeOfDay timeOfDay)
 {
- setting->skyTexture = BFME2LoadParticleTexture(((WaterSettingLoadView *)WaterSettings)[(unsigned)timeOfDay].m_skyTextureFile.str(),0,0);
- setting->waterTexture = BFME2LoadParticleTexture(((WaterSettingLoadView *)WaterSettings)[(unsigned)timeOfDay].m_waterTextureFile.str(),0,0);
+ setting->skyTexture = TextureAsset::Get(((WaterSettingLoadView *)WaterSettings)[(unsigned)timeOfDay].m_skyTextureFile.str(),0,0);
+ setting->waterTexture = TextureAsset::Get(((WaterSettingLoadView *)WaterSettings)[(unsigned)timeOfDay].m_waterTextureFile.str(),0,0);
 
 	setting->skyTexelsPerUnit = ((WaterSettingLoadView *)WaterSettings)[(unsigned int)timeOfDay].m_skyTexelsPerUnit;
 	SurfaceClass::SurfaceDescription surfaceDesc;

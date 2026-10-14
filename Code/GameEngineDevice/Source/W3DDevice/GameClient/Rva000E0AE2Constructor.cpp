@@ -14,7 +14,11 @@ class BFME2ParticleTextureHandle { public:
  TextureClass *Ptr;
  ~BFME2ParticleTextureHandle() { if(Ptr) Ptr->Release_Ref(); }
 };
-extern BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 
 class Vector3 { public:float x,y,z; };
 #include "../../../../../reference/shims/wwmath/Vector2.h"
@@ -82,8 +86,8 @@ class Rva000E0AE2 { public:Rva000E0AE2();~Rva000E0AE2();
 Rva000E0AE2::Rva000E0AE2():unknown1c(0) {
  records.reserve(50);
  hint=Create_Render_Obj("SCMoveHintSml");
- normalTexture=(const RefCountPtr<TextureClass> &)BFME2LoadParticleTexture("EXLaser.tga",0,0);
- specialTexture=(const RefCountPtr<TextureClass> &)BFME2LoadParticleTexture("EXLaser2.tga",0,0);
+ normalTexture=(const RefCountPtr<TextureClass> &)TextureAsset::Get("EXLaser.tga",0,0);
+ specialTexture=(const RefCountPtr<TextureClass> &)TextureAsset::Get("EXLaser2.tga",0,0);
  ShaderClass shader(ShaderClass::_PresetAlphaShader.bits|7);
  lines[0]=new SegmentedLineClass;
  lines[0]->Set_Texture((TextureClass *)&normalTexture);

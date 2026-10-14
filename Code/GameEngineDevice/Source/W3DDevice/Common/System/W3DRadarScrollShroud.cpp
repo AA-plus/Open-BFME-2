@@ -96,11 +96,11 @@ public:
 	TextureClass *m_ptr;
 };
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
 
 class TextureAsset
 {
 public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
 	void rva00132FE9(bool flag);
 };
 
@@ -149,7 +149,7 @@ void W3DRadar::rva0004F580()
 	if (!image)
 		return;
 
-	BFME2ParticleTextureHandle texture = BFME2LoadParticleTexture(image->m_filename.str(), 1, 0);
+	BFME2ParticleTextureHandle texture = TextureAsset::Get(image->m_filename.str(), 1, 0);
 	((TextureAsset *)&texture)->rva00132FE9(true);
 
 	CursorTextureSlot *slot = image->m_textureSlot ? image->m_textureSlot : (CursorTextureSlot *)&texture;

@@ -184,7 +184,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *filename, int a, int b);	// 0x00132D89
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);	// 0x00132D89
+};
 
 // One FX shader parameter (FXShader::Parameter, 0x24 bytes); the vector
 // helpers are rowed under this placeholder element name.
@@ -499,7 +503,7 @@ bool FXShaderSetup::UpdateParameterList(const FXShaderParameterVector &parameter
 				if (parameter->m_type == 1) {
 					Rva00151DAB binding;
 					binding.m_parameter = handle;
-					binding.m_texture = BFME2LoadParticleTexture(parameter->m_08.str(), 0, 0);
+					binding.m_texture = TextureAsset::Get(parameter->m_08.str(), 0, 0);
 					m_Textures.push_back(binding);
 				} else if (parameter->m_type == 2) {
 					effect->SetFloat(handle, parameter->m_vector[0]);

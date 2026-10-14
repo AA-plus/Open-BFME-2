@@ -548,7 +548,11 @@ public:
 	~BFME2ParticleTextureHandle() {if(Ptr)Ptr->Release_Ref();}
 	TextureClass *Ptr;
 };
-extern BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 class ShroudFilter {public:void SetMip(int mode);char pad00[0xc];int m_minFilter;int m_magFilter;};
 class ShroudTexture {public:ShroudFilter *getFilter(void);};
 enum FilterTypes {FT_NULL_FILTER=0,FT_VIEW_BW_FILTER,FT_VIEW_MOTION_BLUR_FILTER,FT_VIEW_CROSSFADE,FT_MAX=10};
@@ -563,7 +567,7 @@ Int ScreenCrossFadeFilter::init()
 	if (!W3DShaderManager::canRenderToTexture())
 		return false;
 	reinterpret_cast<RefCountPtr<TextureClass> &>(g_bfmeObjUDC) =
-		reinterpret_cast<const RefCountPtr<TextureClass> &>(BFME2LoadParticleTexture("exmask_g.tga",0,0));
+		reinterpret_cast<const RefCountPtr<TextureClass> &>(TextureAsset::Get("exmask_g.tga",0,0));
 	if (!g_bfmeObjUDC)
 		return false;
 	ShroudTexture &fadePattern = reinterpret_cast<ShroudTexture &>(g_bfmeObjUDC);

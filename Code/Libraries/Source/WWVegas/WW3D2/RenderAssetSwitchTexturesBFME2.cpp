@@ -26,7 +26,11 @@ Rva00136090MeshHolder Rva00136090MeshHold(MeshModelClass *);
 class SwitchTextureVector{public:virtual ~SwitchTextureVector();RefCountPtr<TextureClass> *items;int maximum;bool valid,allocated;short pad;int count,growth;__forceinline RefCountPtr<TextureClass>&operator[](int i){return items[i];}};
 class MaterialInfoClass{public:virtual void Delete_This();int refs;char unknown08[0x18];SwitchTextureVector textures;RefCountPtr<TextureClass> Peek_Texture(int);void Replace_Texture(int i,const RefCountPtr<TextureClass>&t){textures[i]=t;}void Release_Ref(){--refs;if(refs==0)Delete_This();}};
 class BFME2ParticleTextureHandle{public:TextureClass *p;~BFME2ParticleTextureHandle(){if(p)p->Release_Ref();}};
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 void BFME_DX8_Thread_Lock();bool BFME_DX8_Thread_Assert();
 class BFMEDX8DeviceLock{public:BFMEDX8DeviceLock(){BFME_DX8_Thread_Lock();}~BFMEDX8DeviceLock(){BFME_DX8_Thread_Assert();}};
 class SwitchMeshView {public:
@@ -148,7 +152,7 @@ static void SwitchTextureOnMesh(SwitchMeshView *mesh,const SwitchStrings &oldNam
     RefCountPtr<TextureClass> texture=materials->Peek_Texture(index);unsigned i=0;
     for(;i<oldNames.size();++i)if(reinterpret_cast<const StringBase<char>*>(&oldNames[i])->compareNoCase(texture.p?texture.p->Get_Name():0)==0)break;
     if(i<oldNames.size()||oldNames.empty()){
-     BFME2ParticleTextureHandle next=BFME2LoadParticleTexture(newNames[i].str(),0,0);
+     BFME2ParticleTextureHandle next=TextureAsset::Get(newNames[i].str(),0,0);
      if(next.p){const RefCountPtr<TextureClass> &ref=reinterpret_cast<const RefCountPtr<TextureClass>&>(next);model.pointer->Replace_Texture(texture,ref);RefCountPtr<TextureClass> &destination=materials->textures[index];destination=ref;}
     }
    }

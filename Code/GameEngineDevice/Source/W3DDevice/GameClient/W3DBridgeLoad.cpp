@@ -4,7 +4,7 @@
 // (2774 bytes). Address read from the REL32 in addBridge 0x000DF612. Zero
 // Hour W3DBridge::load (W3DBridgeBuffer.cpp) with BFME2's changes: the
 // bridge texture is the one-pointer handle at +34 (released through the
-// rowed 0x0004D75B clear and refilled from BFME2LoadParticleTexture through
+// rowed 0x0004D75B clear and refilled from TextureAsset::Get through
 // the rowed RefCountPtr assignment); models come from the global
 // Create_Render_Obj and each section mesh from the render object's slot 5.
 // The W3DBridge layout is Zero Hour's (template name +108; matrices
@@ -205,7 +205,11 @@ public:
 	}
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int mipLevels, int flags);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int mipLevels, int flags);
+};
 
 template <class T> class RefCountPtr
 {
@@ -344,7 +348,7 @@ bool W3DBridge::load(BodyDamageType curDamageState)
 	strcpy(right, modelName);
 	strcat(right, ".BRIDGE_RIGHT");
 
-	m_bridgeTexture = reinterpret_cast<const RefCountPtr<TextureClass> &>(BFME2LoadParticleTexture(textureFile, 3, 0));
+	m_bridgeTexture = reinterpret_cast<const RefCountPtr<TextureClass> &>(TextureAsset::Get(textureFile, 3, 0));
 	m_leftMtx.Make_Identity();
 	m_rightMtx.Make_Identity();
 	m_sectionMtx.Make_Identity();

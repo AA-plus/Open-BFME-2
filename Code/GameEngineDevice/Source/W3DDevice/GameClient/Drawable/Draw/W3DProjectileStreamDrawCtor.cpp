@@ -8,7 +8,7 @@
 // Shape: EH ctor over the rowed DrawModule base (DrawableModule
 // 0x306B19 family: m_drawable at +4, proven by that TU), vtable 0x00BCE010,
 // texture member at +0x0C loaded by filename through the pinned
-// BFME2LoadParticleTexture 0x132D89 into a full-expression temp (hidden out
+// TextureAsset::Get 0x132D89 into a full-expression temp (hidden out
 // reuses the dead ModuleData arg slot at [ebp+0xC]) copied via the rowed
 // RefCountPtr<TextureClass> op= 0x424D0 with the temp's inline release
 // (rowed Release_Ref 0x61ED10) after, then 0x14 dwords at +0x10 plus the
@@ -65,7 +65,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
+};
 
 class W3DProjectileStreamDraw : public DrawModule
 {
@@ -86,7 +90,7 @@ W3DProjectileStreamDraw::W3DProjectileStreamDraw(Thing *thing, const ModuleData 
 {
 	const char *rawName = m_drawable->m_prefixedName08;
 	const char *texName = rawName != 0 ? rawName + 8 : "";
-	m_texture = BFME2LoadParticleTexture(texName, 0, 0);
+	m_texture = TextureAsset::Get(texName, 0, 0);
 	for (int i = 0; i < 0x14; ++i)
 		m_zeros10[i] = 0;
 	m_zero60 = 0;

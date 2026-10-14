@@ -58,8 +58,7 @@ void Rva000AB910::rva000AA557(){
 }
 
 #include "../../../GameEngineDevice/Source/W3DDevice/GameClient/BFME2ParticleTextureHandles.h"
-extern BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char*,int,int);
-class TextureAsset {public:void SetQualityLevel(int);};
+class TextureAsset {public:static BFME2ParticleTextureHandle Get(const char*,int,int);void SetQualityLevel(int);};
 class ShroudFilter; // The already-owned10B setter at13ED10 writes word+8. Its ledger spelling
 // is an ABI carrier here; this is not a claim that a filter is an iostream.
 namespace _STL {class ios_base {protected:void _M_clear_nothrow(int);friend class ::ShroudFilter;friend class ::Rva000AB910;};}
@@ -97,7 +96,7 @@ void Rva000AB910::rva000AB193(){
   if(sscanf(line,"%d->%d",&id,&index)==2)filename.format("apt_%s_%d.tga",name.str(),index);
   else if(sscanf(line,"%d",&id)==1)filename.format("apt_%s_%d.tga",name.str(),id);
   else continue;
-  BFME2ParticleTextureHandle texture=BFME2LoadParticleTexture(filename.str(),1,0);
+  BFME2ParticleTextureHandle texture=TextureAsset::Get(filename.str(),1,0);
   ((TextureAsset*)&texture)->SetQualityLevel(2);
   ShroudTexture *view=(ShroudTexture*)&texture;
   if(mode){view->getFilter()->words[1]=1;view->getFilter()->words[0]=1;reinterpret_cast<_STL::ios_base*>(view->getFilter())->_M_clear_nothrow(1);}

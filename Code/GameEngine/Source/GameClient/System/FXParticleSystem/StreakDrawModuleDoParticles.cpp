@@ -22,7 +22,7 @@
 // from 0x001F4E1B or black alpha 0x001F4DF9 size and the angle 0x001F4DC4
 // scaled by 255/2pi to a byte) plus a local id array (+0x88). With a streak
 // line and at least two points the system's texture (+0x10 name; rowed
-// BFME2LoadParticleTexture) and the shader picked by its +0x08 type
+// TextureAsset::Get) and the shader picked by its +0x08 type
 // (AdditiveSprite by default; HardwareFog when DX8Wrapper::FogEnable) are set
 // the points are handed over the first colour is cleared and the line
 // renders (slot 12). Returns the point count.
@@ -106,7 +106,11 @@ public:
 	}
 	TextureClass *Ptr;
 };
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int a, int b);
+};
 
 class StreakLineClass
 {
@@ -272,7 +276,7 @@ Int StreakDrawModule::doParticles(RenderInfoClass &rinfo, void *bounds, Int *par
 
 	if (g_00E06224 != 0 && count >= 2)
 	{
-		BFME2ParticleTextureHandle texture = BFME2LoadParticleTexture(getSystem()->m_textureName.str(), 0, 0);
+		BFME2ParticleTextureHandle texture = TextureAsset::Get(getSystem()->m_textureName.str(), 0, 0);
 		g_00E06224->Reset_Line();
 		g_00E06224->Set_Texture((TextureClass *)&texture);
 		ShaderClass shader = ShaderClass::_PresetAdditiveSpriteShader;

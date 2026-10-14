@@ -83,7 +83,11 @@ public:
 	}
 	TextureClass *Ptr;
 };
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int a, int b);
+};
 
 class StreakLineClass
 {
@@ -266,7 +270,7 @@ template<> Int DefaultModule<6>::doParticles(RenderInfoClass &rinfo, void *bound
 
 
  if(count>0) {
-  BFME2ParticleTextureHandle texture=BFME2LoadParticleTexture(getSystem()->m_textureName.str(),0,0);
+  BFME2ParticleTextureHandle texture=TextureAsset::Get(getSystem()->m_textureName.str(),0,0);
   if(g_00E06098!=0) {
    g_00E06098->Set_Texture((TextureClass*)&texture);
    g_00E06098->Set_Flag(PointGroupClass::TRANSFORM,true);

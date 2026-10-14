@@ -219,7 +219,11 @@ private:
 class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
-BFME2ParticleTextureHandle __cdecl BFME2LoadParticleTexture(const char *filename, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
+};
 AsciiString makeNrmTextureName(const AsciiString &in);
 bool Render_Obj_Exists(const char *name);
 
@@ -269,12 +273,12 @@ struct BfmeGlobalNrmTexturesView { char m_prefix[0x49]; Bool m_loadNrmTextures; 
 // ?loadTexture@RoadType@@QAEXVAsciiString@@H@Z
 void RoadType::loadTexture(AsciiString path, Int ID)
 {
-	reinterpret_cast<BfmeRoadTypeTexturesView *>(this)->m_roadTexture = BFME2LoadParticleTexture(path.str(), MIP_LEVELS_3, 0);
+	reinterpret_cast<BfmeRoadTypeTexturesView *>(this)->m_roadTexture = TextureAsset::Get(path.str(), MIP_LEVELS_3, 0);
 	if (reinterpret_cast<const BfmeGlobalNrmTexturesView *>(TheGlobalData)->m_loadNrmTextures)
 	{
 		AsciiString nrmPath = makeNrmTextureName(path);
 		if (Render_Obj_Exists(nrmPath.str()))
-			reinterpret_cast<BfmeRoadTypeTexturesView *>(this)->m_roadTexture2 = BFME2LoadParticleTexture(nrmPath.str(), MIP_LEVELS_3, 0);
+			reinterpret_cast<BfmeRoadTypeTexturesView *>(this)->m_roadTexture2 = TextureAsset::Get(nrmPath.str(), MIP_LEVELS_3, 0);
 	}
 
 	m_vertexRoad=(DX8VertexBufferClass *)NEW BfmeDX8VertexBuffer(DX8_FVF_XYZNDUV1,BFME_ROAD_LIMITS->m_maxRoadVertex+4, (s_dynamic?BfmeDX8VertexBuffer::USAGE_DYNAMIC:BfmeDX8VertexBuffer::USAGE_DEFAULT), 0);

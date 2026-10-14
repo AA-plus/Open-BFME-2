@@ -73,7 +73,11 @@ static void bfmeVciAnchor() { BfmeVciAnchorElem anchor[2]; (void)anchor; }
 #include "texture_handle.h"
 
 // Descriptive identity: cached texture lookup or creation at retail RVA 0x132D89.
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char*,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char*,int,int);
+};
 ParticleEmitterClass *
 ParticleEmitterClass::Create_From_Definition (const ParticleEmitterDefClass &definition)
 {
@@ -84,7 +88,7 @@ ParticleEmitterClass::Create_From_Definition (const ParticleEmitterDefClass &def
 	const char *ptexture_filename = definition.Get_Texture_Filename ();
 	BFME2ParticleTextureHandle ptexture;
 	if (ptexture_filename && ptexture_filename[0]) {
-		ptexture = BFME2LoadParticleTexture(ptexture_filename,0,0);
+		ptexture = TextureAsset::Get(ptexture_filename,0,0);
 	}
 
 	ShaderClass shader;

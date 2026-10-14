@@ -42,7 +42,11 @@ class BFME2ParticleTextureHandle {
 public:TextureClass*Ptr;
  ~BFME2ParticleTextureHandle(){if(Ptr)Ptr->Release_Ref();}
 };
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char*,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char*,int,int);
+};
 template<class T>class TexSlot:public RefCountPtr<T>{public:
  __forceinline TexSlot&operator=(const BFME2ParticleTextureHandle&h){RefCountPtr<T>::operator=(*(const RefCountPtr<T>*)&h);return *this;}};
 void BFME_DX8_Thread_Lock();
@@ -272,12 +276,12 @@ int BaseHeightMapRenderObjClass::initHeightData(int x,int y,WorldHeightMap*pMap,
   assets<<layer4Name;
   ((Rva0006C995*)&assets)->rva0006C995((Rva001408C0Target*)"exscorch01.tga");
   bfmeMergeReceiverKeys((int)&assets);
-  stageTwo=BFME2LoadParticleTexture(stageTwoName.str(),0,0);
-  stageThree=BFME2LoadParticleTexture(macroName.str(),0,0);
+  stageTwo=TextureAsset::Get(stageTwoName.str(),0,0);
+  stageThree=TextureAsset::Get(macroName.str(),0,0);
   {
    BFMEDX8DeviceLock lock;
-   layer3=BFME2LoadParticleTexture(layer3Name.str(),0,0);
-   layer4=BFME2LoadParticleTexture(layer4Name.str(),0,0);
+   layer3=TextureAsset::Get(layer3Name.str(),0,0);
+   layer4=TextureAsset::Get(layer4Name.str(),0,0);
    ((Rva00067878*)this)->rva0006B3F3();
    ((Rva000686F2*)this)->rva000686F2();
    material=VertexMaterialClass::Get_Preset(VertexMaterialClass::PRELIT_DIFFUSE);

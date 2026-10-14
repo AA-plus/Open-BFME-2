@@ -900,7 +900,7 @@ public:
 extern FileSystem *TheFileSystem;
 
 // The texture handle's views (W3D: TextureClass and its filter at +0x1C):
-// rowed BFME2LoadParticleTexture 0x00132D89, getFilter 0x00132856 and the
+// rowed TextureAsset::Get 0x00132D89, getFilter 0x00132856 and the
 // quality forwarder 0x00132FE9.
 class TextureClass
 {
@@ -921,7 +921,6 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *filename, int a, int b);
 
 // WW3D's TextureFilterClass: min, mag and mip filters, then the U and V
 // address modes (1 clamps).
@@ -944,6 +943,7 @@ public:
 class TextureAsset
 {
 public:
+	static BFME2ParticleTextureHandle Get(const char *filename, int a, int b);
 	void rva00132FE9(bool flag);
 };
 
@@ -1021,7 +1021,7 @@ void rva0043D467(void)
 		}
 		if (i >= sizeof(extensions) / sizeof(extensions[0]))
 			break;
-		BFME2ParticleTextureHandle texture = BFME2LoadParticleTexture(name.str(), 1, 0);
+		BFME2ParticleTextureHandle texture = TextureAsset::Get(name.str(), 1, 0);
 		((ShroudTexture *)&texture)->getFilter()->m_vAddressMode = 1;
 		((ShroudTexture *)&texture)->getFilter()->m_uAddressMode = 1;
 		((TextureAsset *)&texture)->rva00132FE9(true);

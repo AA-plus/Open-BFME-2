@@ -27,7 +27,7 @@
 // A shader or texture
 // creation failure calls shutdown (slot 1) and returns FALSE.
 //
-// Callees are the ledger's rows: 0x00132D89 BFME2LoadParticleTexture,
+// Callees are the ledger's rows: 0x00132D89 TextureAsset::Get,
 // 0x000424D0 RefCountPtr<TextureClass>::operator=, 0x0061ED10 Release_Ref,
 // 0x00132856 ShroudTexture::getFilter, 0x00077C19/0x00077D0F shader loads,
 // 0x00309E4B settings getter; 0x000F630C is called by its pinned bool name
@@ -55,7 +55,11 @@ class BFME2ParticleTextureHandle : public RefCountPtr<TextureClass>
 {
 };
 
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *name, int a, int b);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *name, int a, int b);
+};
 
 class ShroudFilter
 {
@@ -196,8 +200,8 @@ int Rva007DCA80::init(void)
 	if (!W3DShaderManager::canRenderToTexture())
 		return 0;
 
-	m_vapor1 = BFME2LoadParticleTexture("ExVapor01.tga", 0, 0);
-	m_vapor2 = BFME2LoadParticleTexture("ExVapor02.tga", 0, 0);
+	m_vapor1 = TextureAsset::Get("ExVapor01.tga", 0, 0);
+	m_vapor2 = TextureAsset::Get("ExVapor02.tga", 0, 0);
 	((ShroudTexture *)&m_vapor1)->getFilter()->m_0C = 0;
 	((ShroudTexture *)&m_vapor1)->getFilter()->m_10 = 0;
 	((ShroudTexture *)&m_vapor2)->getFilter()->m_0C = 0;

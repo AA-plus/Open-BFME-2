@@ -26,7 +26,11 @@ class BFME2ParticleTextureHandle { public:
 	~BFME2ParticleTextureHandle() { if (Ptr) Ptr->Release_Ref(); }
 };
 
-extern BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *, int, int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *, int, int);
+};
 
 class DrawModule
 {
@@ -130,9 +134,9 @@ W3DStreakDraw::W3DStreakDraw(Thing *thing, const ModuleData *moduleData)
 		}
 	}
 	if (found)
-		m_texture = (const RefCountPtr<TextureClass> &)BFME2LoadParticleTexture(found->texture.str(), 0, 0);
+		m_texture = (const RefCountPtr<TextureClass> &)TextureAsset::Get(found->texture.str(), 0, 0);
 	else
-		m_texture = (const RefCountPtr<TextureClass> &)BFME2LoadParticleTexture(data->m_textureName.str(), 0, 0);
+		m_texture = (const RefCountPtr<TextureClass> &)TextureAsset::Get(data->m_textureName.str(), 0, 0);
 
 	m_streak = new Rva001684D6();
 	if (m_streak) {

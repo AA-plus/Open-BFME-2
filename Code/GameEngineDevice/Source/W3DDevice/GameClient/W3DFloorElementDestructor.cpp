@@ -28,7 +28,11 @@ class RenderObjClass;
 RenderObjClass *Create_Render_Obj(const char *);
 bool Render_Obj_Exists(const char *);
 AsciiString makeNrmTextureName(const AsciiString &);
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *,int,int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *,int,int);
+};
 struct BfmeResetTextureRef { void clear(); };
 struct CursorTextureSlot { void operator=(const BFME2ParticleTextureHandle &); };
 class FloorMaterialDispatch;
@@ -213,10 +217,10 @@ bool Gen_uw_000e5033::load()
             }
             info->release();
         }
-    } else reinterpret_cast<CursorTextureSlot *>(&m_texture20)->operator=(BFME2LoadParticleTexture(m_name90.str(),3,0));
+    } else reinterpret_cast<CursorTextureSlot *>(&m_texture20)->operator=(TextureAsset::Get(m_name90.str(),3,0));
     if (*(bool *)((char *)TheWritableGlobalData+0x49)) {
         AsciiString normal=makeNrmTextureName(AsciiString(m_texture20.pointer ? reinterpret_cast<FloorTextureNameDispatch *>(m_texture20.pointer)->name() : (const char *)0));
-        if (Render_Obj_Exists(normal.str())) reinterpret_cast<CursorTextureSlot *>(&m_texture24)->operator=(BFME2LoadParticleTexture(normal.str(),3,0));
+        if (Render_Obj_Exists(normal.str())) reinterpret_cast<CursorTextureSlot *>(&m_texture24)->operator=(TextureAsset::Get(normal.str(),3,0));
     }
     return true;
 }

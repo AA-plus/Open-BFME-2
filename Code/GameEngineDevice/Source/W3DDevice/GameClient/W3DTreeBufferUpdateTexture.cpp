@@ -24,7 +24,11 @@ public:
 	~BFME2ParticleTextureHandle() { if (Ptr) Ptr->Release_Ref(); }
 	TextureClass *Ptr;
 };
-BFME2ParticleTextureHandle BFME2LoadParticleTexture(const char *, int, int);
+class TextureAsset
+{
+public:
+	static BFME2ParticleTextureHandle Get(const char *, int, int);
+};
 
 template <class T> class RefCountPtr;
 template <> class RefCountPtr<TextureClass>
@@ -124,15 +128,15 @@ void W3DTreeBuffer::updateTexture()
 	((Rva00170EBC *)list68)->rva00170EBC(true);
 	int i;
 	for (i = 0; i < numTypes; ++i) {
-		((Rva00171024 *)list40)->rva00171067(BFME2LoadParticleTexture(types[i].nameC.str(), 0, 0));
+		((Rva00171024 *)list40)->rva00171067(TextureAsset::Get(types[i].nameC.str(), 0, 0));
 		if (types[i].doShadow)
-			((Rva00171024 *)list68)->rva00171067(BFME2LoadParticleTexture(types[i].textureName.str(), 0, 0));
+			((Rva00171024 *)list68)->rva00171067(TextureAsset::Get(types[i].textureName.str(), 0, 0));
 	}
 	for (i = 0; i < numTypes; ++i) {
-		((Rva00171583 *)list40)->rva00171583(handleKey(BFME2LoadParticleTexture(types[i].nameC.str(), 0, 0)),
+		((Rva00171583 *)list40)->rva00171583(handleKey(TextureAsset::Get(types[i].nameC.str(), 0, 0)),
 			&types[i].coord24, &types[i].coord34);
 		if (types[i].doShadow)
-			((Rva00171583 *)list68)->rva00171583(handleKey(BFME2LoadParticleTexture(types[i].textureName.str(), 0, 0)),
+			((Rva00171583 *)list68)->rva00171583(handleKey(TextureAsset::Get(types[i].textureName.str(), 0, 0)),
 				&types[i].coord2c, &types[i].coord3c);
 	}
 	texture38 = assetPtr(((Rva00171024 *)list40)->rva00171625());
