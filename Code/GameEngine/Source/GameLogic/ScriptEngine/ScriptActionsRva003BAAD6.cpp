@@ -23,7 +23,12 @@ public:
 	Rva0033070EEntry *rva0033070E(const StringBase<char> &key);
 };
 
-#define Rva00E01DB0 (*(Rva0033070E **)0x00E01DB0)
+// WorldHeightMapParse.cpp owns this singleton at retail VA 0x00E01DB0.
+// The recovered CameraAnimationList name describes that owner; this unit only
+// requires the lookup view established by the call at 0x003BB141.
+class CameraAnimationList;
+extern CameraAnimationList *TheCameraAnimationList;
+#define Rva00E01DB0 ((Rva0033070E *)TheCameraAnimationList)
 
 class Rva003BAAD6Holder
 {
