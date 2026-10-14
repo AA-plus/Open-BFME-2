@@ -1,0 +1,267 @@
+{
+  "basis": "Target retail tables reached by already matched buildFieldParse registrations; global names descriptive, original spelling unknown. All callbacks bind existing matched owners.",
+  "source": "Code/GameEngine/Source/GameLogic/Object/Update/ModuleDataBuildFieldParseChained.cpp",
+  "tables": [
+    {
+      "class": "DockUpdateModuleData",
+      "name": "BfmeDockUpdateFields",
+      "symbol": "?BfmeDockUpdateFields@@3QBUFieldParse@@B",
+      "va": 13042380,
+      "size": 48,
+      "retail_sha256": "46a8be69416b3224f21c1fbc1185d77b3dc1520b2241d5fb0a70a470c135c6a0",
+      "fields": 2
+    },
+    {
+      "class": "TeleportToCasterSpecialPowerModuleData",
+      "name": "BfmeTeleportToCasterSpecialPowerFields",
+      "symbol": "?BfmeTeleportToCasterSpecialPowerFields@@3QBUFieldParse@@B",
+      "va": 12974816,
+      "size": 96,
+      "retail_sha256": "1ee40f2331fb38a31c09335becdbbd51b46a83b9de83c108d22183f59a48cb33",
+      "fields": 5
+    },
+    {
+      "class": "SupplyWarehouseDockUpdateModuleData",
+      "name": "BfmeSupplyWarehouseDockUpdateFields",
+      "symbol": "?BfmeSupplyWarehouseDockUpdateFields@@3QBUFieldParse@@B",
+      "va": 12924684,
+      "size": 48,
+      "retail_sha256": "9a2bba1d25a62245b91ea885f981604ed56ae05230e2204232db1390aa1fec88",
+      "fields": 2
+    },
+    {
+      "class": "ReplaceSelfUpgradeModuleData",
+      "name": "BfmeReplaceSelfUpgradeFields",
+      "symbol": "?BfmeReplaceSelfUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12946056,
+      "size": 48,
+      "retail_sha256": "f055a7c613cd5dee9aa686b379e5b04350903cd5a759c86815176a136bae67ed",
+      "fields": 2
+    },
+    {
+      "class": "UnpauseSpecialPowerUpgradeModuleData",
+      "name": "BfmeUnpauseSpecialPowerUpgradeFields",
+      "symbol": "?BfmeUnpauseSpecialPowerUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12943088,
+      "size": 48,
+      "retail_sha256": "ac37a78d70ccf2f8b89c0756235ac1b62c3958c52a69b633ddb9229ef071803b",
+      "fields": 2
+    },
+    {
+      "class": "LevelUpUpgradeModuleData",
+      "name": "BfmeLevelUpUpgradeFields",
+      "symbol": "?BfmeLevelUpUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12940460,
+      "size": 48,
+      "retail_sha256": "bc21bfa969e2cdf2b5a929d7f5823a81bdb49c06dd455b236708d830e5e468c2",
+      "fields": 2
+    },
+    {
+      "class": "ExperienceScalarUpgradeModuleData",
+      "name": "BfmeExperienceScalarUpgradeFields",
+      "symbol": "?BfmeExperienceScalarUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12944676,
+      "size": 32,
+      "retail_sha256": "a710d1e00bb95e255b39632a97e3c191a6747093e3113527fdce79b3d20cc15c",
+      "fields": 1
+    },
+    {
+      "class": "UpgradeDieModuleData",
+      "name": "BfmeUpgradeDieFields",
+      "symbol": "?BfmeUpgradeDieFields@@3QBUFieldParse@@B",
+      "va": 12519768,
+      "size": 32,
+      "retail_sha256": "2fbd59ba5acec965fe87ad9da4aa05bcfd8c2d043902d9cbef6ac87d4aa26f5e",
+      "fields": 1
+    },
+    {
+      "class": "KeepObjectDieModuleData",
+      "name": "BfmeKeepObjectDieFields",
+      "symbol": "?BfmeKeepObjectDieFields@@3QBUFieldParse@@B",
+      "va": 12519828,
+      "size": 48,
+      "retail_sha256": "18aa14342f72b08487a05234c20f3a08dd399483ee301ed18b9c794a6aea440e",
+      "fields": 2
+    },
+    {
+      "class": "SpecialPowerCompletionDieModuleData",
+      "name": "BfmeSpecialPowerCompletionDieFields",
+      "symbol": "?BfmeSpecialPowerCompletionDieFields@@3QBUFieldParse@@B",
+      "va": 12519720,
+      "size": 32,
+      "retail_sha256": "913b38455dac0623dab53a149754d36d89aecc68c01209d321adec4a8fcb9ff4",
+      "fields": 1
+    },
+    {
+      "class": "RebuildHoleExposeDieModuleData",
+      "name": "BfmeRebuildHoleExposeDieFields",
+      "symbol": "?BfmeRebuildHoleExposeDieFields@@3QBUFieldParse@@B",
+      "va": 12889600,
+      "size": 80,
+      "retail_sha256": "476806af474040edd2fe12dddecda95a26eafcb48225b886805e77afd368e614",
+      "fields": 4
+    },
+    {
+      "class": "BaseUpgradeModuleData",
+      "name": "BfmeBaseUpgradeFields",
+      "symbol": "?BfmeBaseUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12939784,
+      "size": 64,
+      "retail_sha256": "a8fa326c9bc325d8e3e9cdc568d088b7143c0f901dc911c1033868bd60600295",
+      "fields": 3
+    },
+    {
+      "class": "HordeGarrisonContainModuleData",
+      "name": "BfmeHordeGarrisonContainFields",
+      "symbol": "?BfmeHordeGarrisonContainFields@@3QBUFieldParse@@B",
+      "va": 12870536,
+      "size": 80,
+      "retail_sha256": "dc9deaf1429e770f4c27fa5ee576ee6ded499cbef0a5b0f3267812b4b4bbf28a",
+      "fields": 4
+    },
+    {
+      "class": "OilSpillUpdateModuleData",
+      "name": "BfmeOilSpillUpdateFields",
+      "symbol": "?BfmeOilSpillUpdateFields@@3QBUFieldParse@@B",
+      "va": 12894888,
+      "size": 80,
+      "retail_sha256": "b2ffb4758dd201fbf1321c21879efa99e66314c5406099016cd66b7b8188c713",
+      "fields": 4
+    },
+    {
+      "class": "GeometryUpgradeModuleData",
+      "name": "BfmeGeometryUpgradeFields",
+      "symbol": "?BfmeGeometryUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12945688,
+      "size": 96,
+      "retail_sha256": "17d5be7d41937ec7e10b7ee00f405303f5d2f0f14b7f08fef8f37fc58dc40ec8",
+      "fields": 5
+    },
+    {
+      "class": "SpawnBehaviorModuleData",
+      "name": "BfmeSpawnBehaviorFields",
+      "symbol": "?BfmeSpawnBehaviorFields@@3QBUFieldParse@@B",
+      "va": 12517888,
+      "size": 256,
+      "retail_sha256": "d83c2aac9f062609a03e479978b6cff2dde6274579ef40cadd7ef5b8a1ddb148",
+      "fields": 15
+    },
+    {
+      "class": "GiveUpgradeUpdateModuleData",
+      "name": "BfmeGiveUpgradeUpdateFields",
+      "symbol": "?BfmeGiveUpgradeUpdateFields@@3QBUFieldParse@@B",
+      "va": 12915104,
+      "size": 80,
+      "retail_sha256": "c2b8c705ca0b4b8d1a5d349423790b648c80829fdd28f7ebd1f12971483122d2",
+      "fields": 4
+    },
+    {
+      "class": "CreateObjectDieModuleData",
+      "name": "BfmeCreateObjectDieFields",
+      "symbol": "?BfmeCreateObjectDieFields@@3QBUFieldParse@@B",
+      "va": 12888360,
+      "size": 64,
+      "retail_sha256": "fae8a1c54b69a2e61eb9d4f9c5b7acf0b442231720e519c0210d5c03075b3880",
+      "fields": 3
+    },
+    {
+      "class": "CaveContainModuleData",
+      "name": "BfmeCaveContainFields",
+      "symbol": "?BfmeCaveContainFields@@3QBUFieldParse@@B",
+      "va": 12511944,
+      "size": 32,
+      "retail_sha256": "383b855015415b138e5163f3880500d69c27e4de4f63ef80b3a0c2337b8551f0",
+      "fields": 1
+    },
+    {
+      "class": "RemoveUpgradeUpgradeModuleData",
+      "name": "BfmeRemoveUpgradeUpgradeFields",
+      "symbol": "?BfmeRemoveUpgradeUpgradeFields@@3QBUFieldParse@@B",
+      "va": 12947104,
+      "size": 80,
+      "retail_sha256": "aa8168aac43bae366f9a3c401b259914c534f7811427dd7152f9f30d166fd450",
+      "fields": 4
+    },
+    {
+      "class": "ReplaceObjectUpdateModuleData",
+      "name": "BfmeReplaceObjectUpdateFields",
+      "symbol": "?BfmeReplaceObjectUpdateFields@@3QBUFieldParse@@B",
+      "va": 12515680,
+      "size": 80,
+      "retail_sha256": "d0637e178ffe7003fc2fe93a7d008f15dd3544a0f793df77bc2d81a5df254461",
+      "fields": 4
+    },
+    {
+      "class": "FireWeaponWhenDamagedBehaviorModuleData",
+      "name": "BfmeFireWeaponWhenDamagedBehaviorFields",
+      "symbol": "?BfmeFireWeaponWhenDamagedBehaviorFields@@3QBUFieldParse@@B",
+      "va": 12518400,
+      "size": 192,
+      "retail_sha256": "c2e505064f66598187c98a2392b0906317334e38efa7e1d8025330d5952f5204",
+      "fields": 11
+    },
+    {
+      "class": "ArrowStormUpdateModuleData",
+      "name": "BfmeArrowStormUpdateFields",
+      "symbol": "?BfmeArrowStormUpdateFields@@3QBUFieldParse@@B",
+      "va": 12512776,
+      "size": 112,
+      "retail_sha256": "00ca41f5297d908028394c8935b32bb6bcffbbc4e14b49f177ff1197a195ddc2",
+      "fields": 6
+    },
+    {
+      "class": "HeroModeSpecialAbilityUpdateModuleData",
+      "name": "BfmeHeroModeSpecialAbilityUpdateFields",
+      "symbol": "?BfmeHeroModeSpecialAbilityUpdateFields@@3QBUFieldParse@@B",
+      "va": 12513168,
+      "size": 80,
+      "retail_sha256": "0a4fbdd88c565ef268ea21323ee5eee7061720e3a522c57555190c75eaee0795",
+      "fields": 4
+    },
+    {
+      "class": "WeaponSetSpecialAbilityUpdateModuleData",
+      "name": "BfmeWeaponSetSpecialAbilityUpdateFields",
+      "symbol": "?BfmeWeaponSetSpecialAbilityUpdateFields@@3QBUFieldParse@@B",
+      "va": 12513288,
+      "size": 48,
+      "retail_sha256": "22a6f43a57196c5e6b6712a8c9bda72973280fa7d3d39b231a5257d277dea461",
+      "fields": 2
+    },
+    {
+      "class": "ToggleMountedSpecialAbilityUpdateModuleData",
+      "name": "BfmeToggleMountedSpecialAbilityUpdateFields",
+      "symbol": "?BfmeToggleMountedSpecialAbilityUpdateFields@@3QBUFieldParse@@B",
+      "va": 12515184,
+      "size": 96,
+      "retail_sha256": "b993c5aa5fecec05da5f713e91ad9566942b3ee6182c1c25711d0bb0af9cb31d",
+      "fields": 5
+    },
+    {
+      "class": "SpecialDisguiseUpdateModuleData",
+      "name": "BfmeSpecialDisguiseUpdateFields",
+      "symbol": "?BfmeSpecialDisguiseUpdateFields@@3QBUFieldParse@@B",
+      "va": 12515512,
+      "size": 112,
+      "retail_sha256": "22e550103f88317a366bf4adafbfa9aded8bee6c92aa3f775900650696a12053",
+      "fields": 6
+    },
+    {
+      "class": "FellBeastSwoopPowerModuleData",
+      "name": "BfmeFellBeastSwoopPowerFields",
+      "symbol": "?BfmeFellBeastSwoopPowerFields@@3QBUFieldParse@@B",
+      "va": 12516884,
+      "size": 48,
+      "retail_sha256": "d89973364c999b689916b9ab810998f1affb4f662157072beaff55f60237d8a3",
+      "fields": 2
+    }
+  ],
+  "validation": {
+    "code_rows_exact": 63,
+    "data_rows_exact": 28,
+    "data_bytes": 2160,
+    "new_link_variants": 0,
+    "data_check_findings": 0,
+    "remaining_literal_tables": 28,
+    "full_link_status": "Not clean: remaining literal tables and pre-existing shared-definition blockers in the stale census. No LINKED-byte gain claimed."
+  }
+}
