@@ -1,9 +1,3 @@
-// ?rva001F8A38@Rva001F8A38@@QBEXAAV?$vector@PBVModuleData@@V?$allocator@PBVModuleData@@@_STL@@@_STL@@PAX@Z
-// partial score=0.95 date=2026-10-13
-// ?rva001F8A38@Rva001F8A38@@QBEXAAV?$vector@PBVModuleData@@V?$allocator@PBVModuleData@@@_STL@@@_STL@@PAX@Z
-// partial score=0.925 date=2026-10-13
-// ?rva001F8A38@Rva001F8A38@@QBEXAAV?$vector@PBVModuleData@@V?$allocator@PBVModuleData@@@_STL@@@_STL@@PAX@Z
-// partial score=0.925 date=2026-10-10
 // stlport
 // cl: /O1 /G7 /arch:SSE /MD /EHsc /DNDEBUG /D_CRTIMP= /D_STLP_USE_STATIC_LIB /Ireference/shims/bfmealloc
 // Native [1F8A38,1F8ACB). Four-byte polymorphic-source vector atC4/C8;
@@ -26,7 +20,7 @@ class Rva001F8A38 {public:void rva001F8A38(_STL::vector<const ModuleData*>&,void
 void Rva001F8A38::rva001F8A38(_STL::vector<const ModuleData*>&out,void*context) const{
  _STL::vector<const ModuleData*>temporary;
  reserveCollected(temporary,end-begin);
- for(Rva001F8A38Source **it=begin;it!=end;++it){
+ for(Rva001F8A38Source **it=(context ? begin : begin);it!=end;++it){
   const ModuleData*value=(*it)->collect(context);
   temporary.push_back(value);
  }
