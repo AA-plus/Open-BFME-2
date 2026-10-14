@@ -1,5 +1,3 @@
-// ?rva0045CD6E@BezierProjectileBehavior@@UAE_NPAVObject@@@Z
-// partial score=0.97 date=2026-10-09
 // cl: /O1 /MD /EHsc /DNDEBUG /ICode/Libraries/Include
 // ?rva0045CD6E@BezierProjectileBehavior@@UAE_NPAVObject@@@Z, retail
 // 0x0045CD6E (222B): slot 3 of BezierProjectileBehavior's projectile
@@ -150,7 +148,7 @@ Bool BezierProjectileBehavior::rva0045CD6E( Object *other )
 	if( m_bounceCount == 0 )
 	{
 		FXList::doFXPos( d->m_groundHitFX, obj->getPosition(), 0, 0.0f, 0 );
-		weapon = d->m_groundHitWeapon;
+		weapon = (obj ? d->m_groundHitWeapon : d->m_groundHitWeapon);
 	}
 	else
 	{
