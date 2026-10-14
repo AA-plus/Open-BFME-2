@@ -16,8 +16,6 @@ extern "C" void _ReadWriteBarrier();
 class Matrix3D;
 class Object;
 class Thing;
-struct Rva001E4194A;
-bool __stdcall Rva001E4194Get(Rva001E4194A *);
 float normalizeAngle(float);
 float Cos(float);float Sin(float);
 class Matrix3D {public:unsigned v00,v04,v08,v0C,v10,v14,v18,v1C,v20,v24,v28,v2C;__forceinline void set(const Matrix3D &m){v00=m.v00;v04=m.v04;v08=m.v08;v0C=m.v0C;v10=m.v10;_ReadWriteBarrier();v14=m.v14;v18=m.v18;v1C=m.v1C;v20=m.v20;v24=m.v24;v28=m.v28;v2C=m.v2C;}};
@@ -35,6 +33,7 @@ class Rva001E702E {public:void rva001E702E(Thing *,int,int);};
 class Rva001E46E1 {public:void rva001E9083(Object *,const Coord3D *,float,float);bool rva001E7ECA(Object *,const Coord3D *);};
 struct LocomotorData {char pad[0x84];float turnLimit;};
 class Locomotor {public:
+ bool rva001E4194(Object *);
  void locoUpdate_moveTowardsAngle(Object *,float);
  void rva001E41FA(float);
  char pad[4];const LocomotorData *data;char pad08[0x44-8];unsigned flags;char pad48[0x68-0x48];Matrix3D matrix;
@@ -43,7 +42,7 @@ void Locomotor::locoUpdate_moveTowardsAngle(Object *obj,float goalAngle)
 {
  flags &=~4U;
  if(!obj||!data)return;
- if(Rva001E4194Get((Rva001E4194A *)obj))return;
+ if(rva001E4194(obj))return;
  matrix.set(obj->matrix);
  float relative=normalizeAngle(goalAngle-*(volatile float*)&obj->orientation);
  float limit=data->turnLimit;

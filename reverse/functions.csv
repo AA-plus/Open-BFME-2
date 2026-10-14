@@ -38422,7 +38422,7 @@ _FilterBlockBil_8_wmt,,0x001D7C80,204,Code/Libraries/Source/VP6/FilterBlockBil8W
 ?rva001E4912@Rva001E4912@@QAEPAV1@HII@Z,,0x001E4912,66,Code/GameEngine/Source/Common/Rva001E4912Init.cpp,matched,memset 0x4c plus two bit sets via 24 callers returns this
 ?rva001E434A@Rva001E434A@@QAEPAXXZ,,0x001E434A,19,Code/GameEngine/Source/Common/Rva001E434ASelect.cpp,matched,select member by flag plus 0x1a6 via 3 callers
 ?rva001E4147@Rva001E4147@@QAEXPAURva001E4147Twelve@@@Z,,0x001E4147,24,Code/GameEngine/Source/Common/Rva001E4147Copy.cpp,matched,copy 12B src plus 0x38 to this plus 0x14 if src
-?Rva001E4194Get@@YG_NPAURva001E4194A@@@Z,,0x001E4194,24,Code/GameEngine/Source/Common/Rva001E4194Get.cpp,matched,bool via double deref plus 0x25c then plus 0x5c
+?rva001E4194@Locomotor@@QAE_NPAVObject@@@Z,,0x001E4194,24,Code/GameEngine/Source/Common/Rva001E4194Get.cpp,matched,Native and WB AF0CF0 establish Locomotor thiscall with Object stack arg; receiver unused in 24B body; nullable object25C component byte5C
 ?rva001E415F@Rva001E415F@@QAEXMH@Z,,0x001E415F,29,Code/GameEngine/Source/Common/Rva001E415FSet.cpp,matched,store float plus 0x5c and frame plus int plus 0x60
 ?Rva00275D9FGet@@YA_NPBVRva00263546@@@Z,,0x00275D9F,47,Code/GameEngine/Source/Common/Rva00275D9FGet.cpp,matched,one-time init global mask then overlap test
 ??4Rva00072A94@@QAEAAV0@ABV0@@Z,,0x00072A94,47,Code/GameEngine/Source/Common/Rva00072A94Assign.cpp,matched,honest holder assign self-check inc-dec with slot0 Delete_This via 11 callers and factory 0x152C47
