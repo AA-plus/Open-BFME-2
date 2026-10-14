@@ -1,0 +1,49 @@
+Seat crack-k-20261013, branch crack/k, voice RVA 004DAAFD and helpers.
+
+Provider repair 004D9FB9 (57 bytes; zero new unique coverage):
+- The previous row was an ArmorTemplate object-symbol alias. Voice call4DBE9F
+  must target4D9FB9; the stale back-reference template spelling resolves3ED1BE.
+- Native boundary4D9FB9..4D9FF2 and caller/wrapper4DA13F witnessed by retail
+  and live Ghidra xrefs. This is a20-byte object-pointer-to-selection-index map;
+  node key+4, value+8, buckets+4, count+10. Original class name unknown.
+- clear1DBCDC is the existing72-byte Rva004DFC20 byte/relocation twin. Bucket
+  vector<void*> is12bytes. Use normal game free30830, which retains EH state.
+- Destructor is57bytes exact under normal build; EH structure exact, and the
+  cleanup's relocation explicitly checked: mov ecx,[ebp-10];add ecx,4;jmp
+  vector<void*>::~vector at27370. A provisional private bucket destructor
+  also passed masked EH verification but would bind the wrong name: rejected.
+  A derived map view omitted add ecx,4: rejected. No pin/alias was introduced.
+- Optimized14-byte vector<void*> COMDAT is also emitted; the native131-byte
+  owner remains stlport_vector_voidptr_alloc.cpp. link_check cannot preview:
+  this laptop has no census index. Did not start a verification runner.
+
+Caller progress (bank is a complete genuine TU, never a fake Driver):
+- Handover strict score remeasured0.7983849 (its historical .93/.94 scores
+  were not full proof). Current0.8823459717;5086code+206switch-table bytes,
+  target5078code+206tables; frame364 matches. All210 direct/indirect calls
+  align and their target operands agree after verified private-helper mapping.
+- Native-sized visible list<Drawable*>::insert37 and create_node28 eliminate
+  an extra pointer copy. Typed planned reverse iterators recover EDI and the
+  switch's object spill. The main switch stays in WB case order.
+- The76-byte victim helper,528-byte climbing helper,642-byte attack helper
+  and1316-byte move helper all match their complete bodies and relocations.
+  They need this actual caller to reproduce MSVC's private register ABI;
+  they remain banked until the parent can be honestly rowed.
+- The 53-state EH graph is structurally correct: ten remaining EH byte
+  differences are cleanup stack offsets. Lower homes are4bytes too high;
+  crowdData/planned/VoiceSupply/VoiceCreated slots differ. Body also has the
+  initial drawable/object EBX/EDI exchange and a tail EDI zero constant that
+  displaces drawable intoEBX and spills flag20. Eight extra code bytes total.
+
+Trials retained under build/crack-k/voice (ignored):
+- Real visible record ctor77/dtor62, guard, predicate, hash iterator22,
+  entry ctor30/copy63, key ordering, implicit strings, bool declaration scopes,
+  reverse iterator base/free operators and constness did not fix the wall.
+- Full list ctor visibility makes allocator temporary use native arg+B but
+  frame360 and most homes then move4; visibility for Object list alone fixes
+  one temporary but not overall layout. Keep inspecting real helper visibility.
+- 160 bounded parent-only permutations were evaluated; the best nominal score
+  moved required type=7EE after continue and was rejected. Valid declaration
+  permutations reverted to the same strict score. No padding/volatile/asm.
+- Do not read an EH EXACT result as relocation-target proof: inspect funclet
+  callees too. The repaired provider demonstrates why.

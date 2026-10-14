@@ -1,16 +1,12 @@
 // ?pickAndPlayUnitVoiceResponse@@YA_NPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@@Z
-// partial score=0.89 date=2026-10-12
-// ?pickAndPlayUnitVoiceResponse@@YA_NPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@@Z
-// partial score=0.94 date=2026-10-10
-// ?pickAndPlayUnitVoiceResponse@@YA_NPBVDrawableList@@W4Type@GameMessage@@PAVPickAndPlayInfo@@@Z
-// partial score=0.93 date=2026-10-10
+// partial score=0.8823459717142452 date=2026-10-13
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /Ireference/shims/bfme2_ascii /ICode/GameEngine/Include /ICode/Libraries/Include/Lib
 // PickAndPlayUnitVoiceResponse.cpp (WorldBuilder twin path
 // GameEngine/Source/GameClient/Drawable/PickAndPlayUnitVoiceResponse.cpp).
 //
 // One unit because the file statics use MSVC same-TU private register
-// conventions that only reproduce when the callee is defined earlier in the
-// unit than its caller:
+// conventions that reproduce in the genuine caller context. Moving each
+// definition before or after the caller was tested and preserves these bytes:
 //   0x004D9453  76 B  victim / enter-message helper: info in ECX, victim out
 //                     in EAX, enter-message out in ESI, the rest on the stack
 //   0x004D9596  28 B  record "is filled" predicate; callers keep ECX live
@@ -22,6 +18,7 @@
 //                     record in EDI
 //   0x004DAAFD 5078 B pickAndPlayUnitVoiceResponse (WB 0x1293980, asserts
 //                     1270..1808), the only caller of the statics above.
+#include <new>
 #include "ascii_string.h"
 #include "Coord3D.h"
 #include "Common/BfmeAudioEventPrefix136.h"
@@ -50,6 +47,8 @@ namespace rts {
 template <class T> struct hash {};
 }
 
+class FreelistPool { public: void *pop(); };
+extern FreelistPool g_freelistPool00DBA5E0;
 namespace _STL {
 template <class T> class allocator
 {
@@ -140,12 +139,25 @@ public:
 	~hashtable();
 	_Ht_iterator<V, _Nonconst_traits<V>, K, HF, ExK, EqK, A> begin();
 };
+template<> class vector<void *,allocator<void *> > {
+public:
+ void **begin, **end, **storage;
+ ~vector();
+};
+}
+class Rva004D9FB9ObjectIndex {
+public:
+ unsigned m_functors;
+ _STL::vector<void *,_STL::allocator<void *> > m_buckets;
+ unsigned m_num_elements;
+ __declspec(noinline) ~Rva004D9FB9ObjectIndex();
+};
+namespace _STL {
 template <class K, class T, class HF, class EqK, class A> class hash_map
 {
 public:
 	hash_map();
-	char m_pad[0x10];
-	unsigned int m_num_elements;
+	Rva004D9FB9ObjectIndex m_table;
 };
 template <class T> struct _List_node
 {
@@ -172,11 +184,27 @@ public:
 	typedef _List_iterator<T, _Nonconst_traits<T> > iterator;
 	list(const A &a = A()) : _List_base<T, A>(a) {}
 	iterator end() { return iterator(this->_M_node); }
-	iterator insert(iterator pos, const T &x);
+	__declspec(noinline) iterator insert(iterator pos,const T &value) {
+ _List_node<T> *node=_M_create_node(value);
+ _List_node<T> *next=pos._M_node;
+ _List_node<T> *prev=next->_M_prev;
+ node->_M_next=next;node->_M_prev=prev;
+ prev->_M_next=node;next->_M_prev=node;
+ return iterator(node);
+ }
 	void push_back(const T &x) { insert(end(), x); }
+protected:
+ _List_node<T> *_M_create_node(const T&value);
 };
 }
 
+namespace _STL {
+template <> __declspec(noinline) _List_node<Drawable*>* list<Drawable*,allocator<Drawable*> >::_M_create_node(Drawable*const&value) {
+ _List_node<Drawable*> *node=(_List_node<Drawable*>*)g_freelistPool00DBA5E0.pop();
+ new ((void*)&node->_M_data) Drawable*(value);
+ return node;
+}
+}
 typedef _STL::vector<Rva004DA181Element, _STL::allocator<Rva004DA181Element> > TempTemplateVector;
 typedef _STL::vector<BfmePod340, _STL::allocator<BfmePod340> > TempTemplatePushView;
 
@@ -188,19 +216,7 @@ typedef _STL::_Ht_iterator<VideoPair, _STL::_Nonconst_traits<VideoPair>, const G
 	_STL::equal_to<const GameWindow *>, _STL::allocator<VideoPair> > ObjectIndexIterator;
 typedef _STL::hash_map<int, Rva004DAADEElement, _STL::hash<int>, _STL::equal_to<int>,
 	_STL::allocator<_STL::pair<const int, Rva004DAADEElement> > > ObjectIndexMap;
-typedef _STL::pair<const NameKeyType, ArmorTemplate> ArmorPair;
-// The hash_map destructor is the ICF-folded STLport hashtable destructor
-// 0x004D9FB9 (object symbol of the ArmorTemplate hashtable instantiation).
-namespace _STL {
-template <> class hashtable<ArmorPair, NameKeyType, rts::hash<NameKeyType>, _Select1st<ArmorPair>,
-	equal_to<NameKeyType>, allocator<ArmorPair> > : public ObjectIndexMap
-{
-public:
-	~hashtable();
-};
-}
-typedef _STL::hashtable<ArmorPair, NameKeyType, rts::hash<NameKeyType>, _STL::_Select1st<ArmorPair>,
-	_STL::equal_to<NameKeyType>, _STL::allocator<ArmorPair> > ObjectIndexTable;
+typedef ObjectIndexMap ObjectIndexTable;
 inline ObjectIndexIterator objectsBegin(ObjectIndexTable &t) { return ((VideoTable *)&t)->begin(); }
 
 typedef _STL::map<int, void *, _STL::less<int>, _STL::allocator<_STL::pair<const int, void *> > > CrowdCountMap;
@@ -268,7 +284,7 @@ public:
 	public:
 		struct value_type
 		{
-			value_type(Object *o, int i) : first((int)o), second((void *)i) {}
+			value_type(const Object *o, int i) : first((int)o), second((void *)i) {}
 			int first;
 			void *second;
 		};
@@ -426,13 +442,16 @@ public:
 	char m_pad[0x54];
 	int m_playerIndex;
 	char m_pad58[0x750 - 0x58];
+	enum State { State2 = 2 };
 	int m_750;
+	int getState() const { return m_750; }
 };
 
 class CrowdResponseTemplate
 {
 public:
 	int *getCrowdResponseDataForThreshold(int threshold);
+ int getWeight() const { return m_04; }
 	int m_00;
 	int m_04;
 };
@@ -571,7 +590,7 @@ public:
 	virtual void s054(); virtual void s055(); virtual void s056(); virtual void s057(); virtual void s058(); virtual void s059();
 	virtual void s060(); virtual void s061(); virtual void s062(); virtual void s063(); virtual void s064(); virtual void s065();
 	virtual void s066();
-	virtual void getContainedItems(_STL::list<Object *, _STL::allocator<Object *> > *items);
+	virtual void getContainedItems(_STL::list<const Object *, _STL::allocator<const Object *> > *items);
 };
 
 class Thing
@@ -585,6 +604,7 @@ class Weapon;
 class Object : public Thing
 {
 public:
+ const ThingTemplateView*getTemplate() const {return m_template;}
 	const Rva0028AC4EEntry *rva0028AC4E() const;
 	Object *rva002931F5(bool b);
 	Player *getControllingPlayer() const;
@@ -903,10 +923,32 @@ struct PlannedOrderNode
 	PlannedOrderNode *m_prev;
 	NameKeyType m_id;
 };
+struct PlannedOrderIterator {
+ PlannedOrderNode *node;
+ PlannedOrderIterator(PlannedOrderNode*n):node(n) {}
+ PlannedOrderIterator(const PlannedOrderIterator&o):node(o.node) {}
+ PlannedOrderIterator &operator--() { node=node->m_prev;return *this; }
+ NameKeyType &operator*() const { return node->m_id; }
+ bool operator==(const PlannedOrderIterator&o) const { return node==o.node; }
+};
+struct PlannedOrderReverseIterator {
+ PlannedOrderIterator current;
+ PlannedOrderReverseIterator(PlannedOrderNode*n):current(n) {}
+ PlannedOrderReverseIterator(const PlannedOrderReverseIterator&o):current(o.current) {}
+ NameKeyType &operator*() const { PlannedOrderIterator tmp=current;return *--tmp; }
+ PlannedOrderReverseIterator &operator++() { --current;return *this; }
+ bool operator!=(const PlannedOrderReverseIterator&o) const { return !(current==o.current); }
+};
+struct PlannedOrderList {
+ PlannedOrderNode *head;
+ bool empty() const { return head->m_next==head; }
+ PlannedOrderReverseIterator rbegin() const { return PlannedOrderReverseIterator(head); }
+ PlannedOrderReverseIterator rend() const { return PlannedOrderReverseIterator(head->m_next); }
+};
 struct PlannedOrders
 {
 	void *m_vtbl;
-	PlannedOrderNode *m_list;
+	PlannedOrderList m_list;
 	NameKeyType m_current;
 };
 class PlannedCommand
@@ -920,6 +962,7 @@ public:
 
 struct Rva004D9367Key
 {
+ Rva004D9367Key() {m0=0;m4=0;m8=0x80000000;mC=0x7fffffff;m10=0x80000000;}
 	int m0;
 	unsigned char m4;
 	char m_pad[3];
@@ -927,8 +970,37 @@ struct Rva004D9367Key
 	int mC;
 	int m10;
 };
-unsigned char __cdecl Rva004D9367Less(Rva004D9367Key const *a, Rva004D9367Key const *b);
-int __cdecl Rva004D93E2Equal(Rva004D9367Key const *a, Rva004D9367Key const *b);
+__declspec(noinline) unsigned char __cdecl Rva004D9367Less(Rva004D9367Key const *a, Rva004D9367Key const *b)
+{
+	if (a->m0 < b->m0)
+		return 1;
+	if (a->m0 > b->m0)
+		return 0;
+	if (a->m4 != 0) {
+		if (b->m4 == 0)
+			return 0;
+		if (a->m8 < b->m8)
+			return 1;
+		if (a->m8 <= b->m8)
+			return (unsigned char)(a->mC > b->mC);
+		return 0;
+	}
+	if (b->m4 != 0)
+		return 1;
+	return (unsigned char)(a->m10 < b->m10);
+}
+
+__declspec(noinline) int __cdecl Rva004D93B5NotEqual(Rva004D9367Key const *a, Rva004D9367Key const *b)
+{
+	if (Rva004D9367Less(a, b) || Rva004D9367Less(b, a))
+		return 1;
+	return 0;
+}
+
+__declspec(noinline) int __cdecl Rva004D93E2Equal(Rva004D9367Key const *a, Rva004D9367Key const *b)
+{
+	return !(unsigned char)Rva004D93B5NotEqual(a, b);
+}
 
 class Rva0036CA00Str;
 class Rva004D964E;
@@ -945,10 +1017,11 @@ public:
 	~Rva004D960C();
 };
 
+enum EvaEventID{EVA_NONE=0};
 class Eva
 {
 public:
-	bool rva001DE2DA(int message, const Coord3D *pos, int player);
+	bool reportEvaEvent(EvaEventID message,const Coord3D*pos,const Coord3D*other);
 };
 extern Eva *TheEva;
 
@@ -985,6 +1058,16 @@ public:
 
 struct Coord3DBase;
 extern Coord3DBase g_bfmeCoordDefault;
+
+__declspec(noinline) PickAndPlayInfo::PickAndPlayInfo()
+{
+ m_air=false; m_drawTarget=0; m_source=0; m_weaponSlot=0; m_specialPowerTemplate=0;
+ m_pos.x=((const Coord3D*)&g_bfmeCoordDefault)->x;
+ m_pos.y=((const Coord3D*)&g_bfmeCoordDefault)->y;
+ m_pos.z=((const Coord3D*)&g_bfmeCoordDefault)->z;
+ m_commandButton=0;
+}
+
 
 struct BfmePointFD;
 bool __cdecl Rva004D933BIs(int command);
@@ -1046,7 +1129,7 @@ static void doPickAndPlayForAttackCommand(GameMessage::Type type, PickAndPlayInf
 		ids.m_bombard = "VoiceBombard";
 	}
 
-	if (!isSiege && player && player->m_750 == 2 && !forced)
+	if (!isSiege && player && player->getState() == 2 && !forced)
 	{
 		Rva002390CB sound;
 		sound.m_ref = TheAudio->getMiscAudio()->m_E0;
@@ -1062,8 +1145,9 @@ static void doPickAndPlayForAttackCommand(GameMessage::Type type, PickAndPlayInf
 		const ThingTemplateView *tmpl = info->m_drawTarget->getTemplate();
 		if (tmpl)
 		{
+			const AsciiString &templateName=tmpl->m_name;
 			AsciiString name(isSiege ? "VoiceEnterStateAttackUnit" : "VoiceAttackUnit");
-			name += tmpl->m_name;
+			name += templateName;
 			record->rva004D9874(name);
 			if (!record->isFilled())
 			{
@@ -1078,15 +1162,17 @@ static void doPickAndPlayForAttackCommand(GameMessage::Type type, PickAndPlayInf
 	if (!record->isFilled())
 	{
 		const Weapon *weapon = obj->getCurrentWeapon(0);
-		if (weapon && weapon->m_template)
-		{
+		if (weapon) {
+const WeaponTemplateView *weaponTemplate=weapon->m_template;
+if (weaponTemplate) {
 			if (isSiege)
-				((Rva004D977D *)record)->rva004D977D(weapon->m_template->m_D8, asStruct(Rva002390CB()));
+				((Rva004D977D *)record)->rva004D977D(weaponTemplate->m_D8, asStruct(Rva002390CB()));
 			else
-				((Rva004D977D *)record)->rva004D977D(weapon->m_template->m_D0, asStruct(Rva002390CB()));
+				((Rva004D977D *)record)->rva004D977D(weaponTemplate->m_D0, asStruct(Rva002390CB()));
 		}
 	}
 
+}
 	if (!record->isFilled() && ((Rva00271BDE *)drawable)->rva00271BDE())
 		record->rva004D97B0(ids.m_ids[1]);
 
@@ -1308,18 +1394,18 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 	{
 		Object *obj = it->_M_data->getObject();
 		++index;
-		if (!obj || obj->m_template->isKindOf<0x2F>())
+		if (!obj || obj->getTemplate()->isKindOf<0x2F>())
 			continue;
 		ContainModuleView *contain = (ContainModuleView *)obj->rva0028C197();
 		if (contain)
 		{
-			_STL::list<Object *, _STL::allocator<Object *> > items;
+			_STL::list<const Object *, _STL::allocator<const Object *> > items;
 			contain->getContainedItems(&items);
-			_STL::_List_node<Object *> *itemsEnd = items._M_node;
-			for (_STL::_List_node<Object *> *c = itemsEnd->_M_next; c != itemsEnd; c = c->_M_next)
+			_STL::_List_node<const Object *> *itemsEnd = items._M_node;
+			for (_STL::_List_node<const Object *> *c = itemsEnd->_M_next; c != itemsEnd; c = c->_M_next)
 			{
-				Object *rider = c->_M_data;
-				if (rider && !rider->m_template->isKindOf<0x2F>())
+				const Object *rider = c->_M_data;
+				if (rider && !rider->getTemplate()->isKindOf<0x2F>())
 					((NameKeyGenerator::KeyToBucketMap *)&objects)->insert(NameKeyGenerator::KeyToBucketMap::value_type(rider, index));
 			}
 		}
@@ -1341,7 +1427,8 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		if (!crowd)
 			continue;
 		CrowdInsertResult result = ((CrowdCountTree *)&crowds)->insert_unique(CrowdPair((unsigned int)crowd, 0));
-		*(int *)&result.first._M_node[1]._M_parent += crowd->m_04;
+		int &weight = *(int *)((char *)result.first._M_node + 0x14);
+		weight += crowd->getWeight();
 	}
 
 	int *crowdData = 0;
@@ -1353,12 +1440,12 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		{
 			if ((int)n[1]._M_parent > best)
 			{
-				bestCrowd = (CrowdResponseTemplate *)n[1]._M_color;
 				best = (int)n[1]._M_parent;
+				bestCrowd = (CrowdResponseTemplate *)n[1]._M_color;
 			}
 		}
 		if (bestCrowd)
-			crowdData = bestCrowd->getCrowdResponseDataForThreshold(objects.m_num_elements);
+			crowdData = bestCrowd->getCrowdResponseDataForThreshold(objects.m_table.m_num_elements);
 	}
 
 	PickAndPlayInfo plannedInfo;
@@ -1369,7 +1456,6 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		int objIndex = oit._M_cur->m_value;
 		++oit;
 		Drawable *drawable = obj->getDrawable();
-		Drawable *singleDrawable = drawable;
 		if (!drawable)
 			continue;
 
@@ -1379,7 +1465,7 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		key.m8 = 0x80000000;
 		key.mC = objIndex;
 		key.m10 = drawable->rva00274D6F();
-		key.m4 = (obj->m_template->m_110 >> 26) & 1;
+		key.m4 = (obj->getTemplate()->m_110 >> 26) & 1;
 		if (key.m4)
 		{
 			ExperienceLevelHandle handle = obj->m_experienceTracker->rva0039AC0C();
@@ -1393,29 +1479,28 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 			if (!planned)
 			{
 				Object *horde = obj->rva002931F5(true);
-				if (!horde)
-					continue;
-				planned = (const PlannedOrders *)((Rva0035516C *)TheAiOrdersManager)->rva0035516C(horde->m_id);
-				if (!planned)
-					continue;
+				if (horde)
+					planned = (const PlannedOrders *)((Rva0035516C *)TheAiOrdersManager)->rva0035516C(horde->m_id);
 			}
-			if (planned->m_list->m_next == planned->m_list)
+			if (!planned)
+				continue;
+			if (planned->m_list.empty())
 				continue;
 			if (!planned->m_current)
 				continue;
-			PlannedOrderNode *rit = planned->m_list;
-			PlannedOrderNode *rend = rit->m_next;
+			PlannedOrderReverseIterator rit = planned->m_list.rbegin();
+			PlannedOrderReverseIterator rend = planned->m_list.rend();
 			bool reachedCurrent = false;
 			bool found = false;
 			while (rit != rend && !reachedCurrent && !found)
 			{
-				NameKeyType id = rit->m_prev->m_id;
+				NameKeyType id = *rit;
 				if (id == planned->m_current)
 					reachedCurrent = true;
 				PlannedCommand *command = (PlannedCommand *)((Rva00355B61 *)TheAiOrdersManager)->rva00355155(id);
 				if (!command)
 				{
-					rit = rit->m_prev;
+					++rit;
 					continue;
 				}
 				PickAndPlayInfo commandInfo;
@@ -1426,9 +1511,9 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 					info = &plannedInfo;
 				}
 				DrawableList single;
-				single.push_back(singleDrawable);
+				single.push_back(drawable);
 				getVictimAndEnterMessage(&single, type, info, &victim, &enterMessage, &isAttackOrMove);
-				rit = rit->m_prev;
+				++rit;
 			}
 			if (!found)
 			{
@@ -1512,10 +1597,13 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 				rec->setSounds(sound, Rva002390CB());
 				break;
 			}
-			if (victim && victim->m_template)
+			if (victim) {
+			const ThingTemplateView* victimTemplate=victim->getTemplate();
+			if (victimTemplate)
 			{
-				AsciiString voice = "VoiceEnterUnit" + victim->m_template->m_name;
+				AsciiString voice = "VoiceEnterUnit" + victimTemplate->m_name;
 				rec->rva004D9874(voice);
+			}
 			}
 			if (rec->isFilled())
 				break;
@@ -1549,12 +1637,12 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 						rec->rva004D97B0(3);
 					break;
 				case 0xAF:
-					if (victim->m_template->isKindOf<0x20>())
+					if (victim->getTemplate()->isKindOf<0x20>())
 					{
 						AsciiString voice("VoiceGetHealed");
 						rec->rva004D9874(voice);
 					}
-					else if (victim->m_template->isKindOf<7>())
+					else if (victim->getTemplate()->isKindOf<7>())
 					{
 						AsciiString voice("VoiceGarrison");
 						rec->rva004D9874(voice);
@@ -1580,6 +1668,34 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 			}
 			break;
 		}
+		case 0x430:
+		case 0x7E8:
+		{
+			Object *enemy = TheAI->findClosestEnemy(obj, obj->getVisionRange(), 0x6E, 0, 0, 1);
+			if (!enemy && info && !(info->m_pos == *(const Coord3D *)&g_bfmeCoordDefault))
+				enemy = (Object *)((Rva002FFFCA *)TheAI)->rva002FFFCA(obj, &info->m_pos, obj->getVisionRange() * 0.5, 0x6E, 0, 0, 1);
+			if (enemy)
+			{
+				PickAndPlayInfo attackInfo;
+				if (info)
+					attackInfo = *info;
+				attackInfo.m_drawTarget = enemy->getDrawable();
+				doPickAndPlayForAttackCommand(type, &attackInfo, forced, rec);
+			}
+			else
+			{
+				doPickAndPlayForMoveCommand(type, (Rva004DA57ATarget *)info, forced, &bestKey.m0, rec, &key.m0);
+			}
+			break;
+		}
+		case 0x428:
+		case 0x429:
+		case 0x42F:
+		case 0x442:
+		case 0x464:
+		case 0x7E7:
+			doPickAndPlayForMoveCommand(type, (Rva004DA57ATarget *)info, forced, &bestKey.m0, rec, &key.m0);
+			break;
 		case 0x419:
 		case 0x41A:
 		case 0x42B:
@@ -1614,6 +1730,14 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 				}
 			}
 			break;
+		case 0x40E:
+		case 0x40F:
+		case 0x425:
+		case 0x426:
+		case 0x427:
+		case 0x7E6:
+			doPickAndPlayForAttackCommand(type, info, forced, rec);
+			break;
 		case 0x433:
 		case 0x434:
 			rec->rva004D97B0(0xD);
@@ -1632,14 +1756,20 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 					rec->rva004D9874(((const SpecialPowerTemplateView *)info->m_specialPowerTemplate->friend_getFinalOverride())->m_initiateVoice);
 			}
 			break;
+		case 0x7EC:
+			if (info && info->m_specialPowerTemplate)
+				rec->rva004D9874(((const SpecialPowerTemplateView *)info->m_specialPowerTemplate->friend_getFinalOverride())->m_atLocationVoice);
+			break;
 		case 0x7DA:
 		{
-			const ThingTemplateView *tmpl = info->m_source ? info->m_source->m_template : 0;
+			if (info && info->m_source) {
+			const ThingTemplateView *tmpl = info->m_source->m_template;
 			if (tmpl)
 			{
 				AsciiString voice("VoiceCreatedFrom");
 				voice += tmpl->m_name;
 				rec->rva004D9874(voice);
+			}
 			}
 			if (!rec->isFilled())
 				rec->rva004D97B0(9);
@@ -1666,68 +1796,30 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		case 0x7DE:
 			rec->rva004D97B0(0xA);
 			break;
+		case 0x7DF:
+			rec->rva004D97B0(0xB);
+			break;
+		case 0x7E0:
+			rec->rva004D97B0(8);
+			break;
+		case 0x7E1:
+			rec->rva004D97B0(0xE);
+			break;
 		case 0x7E2:
 		{
-			const ThingTemplateView *tmpl = info->m_source ? info->m_source->m_template : 0;
+			if (info && info->m_source) {
+			const ThingTemplateView *tmpl = info->m_source->m_template;
 			if (tmpl)
 			{
 				AsciiString voice("VoiceFullyCreatedFrom");
 				voice += tmpl->m_name;
 				rec->rva004D9874(voice);
 			}
+			}
 			if (!rec->isFilled())
 				rec->rva004D97B0(0xF);
 			break;
 		}
-		case 0x7E1:
-			rec->rva004D97B0(0xE);
-			break;
-		case 0x7E0:
-			rec->rva004D97B0(8);
-			break;
-		case 0x7DF:
-			rec->rva004D97B0(0xB);
-			break;
-		case 0x430:
-		case 0x7E8:
-		{
-			Object *enemy = TheAI->findClosestEnemy(obj, obj->getVisionRange(), 0x6E, 0, 0, 1);
-			if (!enemy && info && !(info->m_pos == *(const Coord3D *)&g_bfmeCoordDefault))
-				enemy = (Object *)((Rva002FFFCA *)TheAI)->rva002FFFCA(obj, &info->m_pos, obj->getVisionRange() * 0.5, 0x6E, 0, 0, 1);
-			if (enemy)
-			{
-				PickAndPlayInfo attackInfo;
-				if (info)
-					attackInfo = *info;
-				attackInfo.m_drawTarget = enemy->getDrawable();
-				doPickAndPlayForAttackCommand(type, &attackInfo, forced, rec);
-			}
-			else
-			{
-				doPickAndPlayForMoveCommand(type, (Rva004DA57ATarget *)info, forced, &bestKey.m0, rec, &key.m0);
-			}
-			break;
-		}
-		case 0x428:
-		case 0x429:
-		case 0x42F:
-		case 0x442:
-		case 0x464:
-		case 0x7E7:
-			doPickAndPlayForMoveCommand(type, (Rva004DA57ATarget *)info, forced, &bestKey.m0, rec, &key.m0);
-			break;
-		case 0x40E:
-		case 0x40F:
-		case 0x425:
-		case 0x426:
-		case 0x427:
-		case 0x7E6:
-			doPickAndPlayForAttackCommand(type, info, forced, rec);
-			break;
-		case 0x7EC:
-			if (info && info->m_specialPowerTemplate)
-				rec->rva004D9874(((const SpecialPowerTemplateView *)info->m_specialPowerTemplate->friend_getFinalOverride())->m_atLocationVoice);
-			break;
 		case 0x7EA:
 		{
 			AsciiString voice("VoiceStartCharging");
@@ -1792,7 +1884,8 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 			if ((char)Rva004D93E2Equal(&bestKey, &key))
 			{
 				Rva004D960C entry(*(const Rva0036CA00Str *)&rec->m_04, *(const Rva004D964E *)rec);
-				++*(int *)((char *)((VoiceSetTree *)&voices)->insert_unique(*(const Rva004D971D *)&entry).first._M_node + 0x30);
+				_STL::pair<_STL::_Rb_tree_iterator<Rva004D971D, _STL::_Nonconst_traits<Rva004D971D> >, bool> inserted = ((VoiceSetTree *)&voices)->insert_unique(*(const Rva004D971D *)&entry);
+                ++*(int *)((char *)inserted.first._M_node + 0x30);
 			}
 		}
 	}
@@ -1840,7 +1933,7 @@ bool pickAndPlayUnitVoiceResponse(const DrawableList *list, GameMessage::Type ms
 		}
 		bool reported = false;
 		if (local || isAttackOrMove)
-			reported = TheEva->rva001DE2DA(best->m_record.m_00, pos, 0);
+			reported = TheEva->reportEvaEvent((EvaEventID)best->m_record.m_00, pos, 0);
 		if (best->m_record.m_04 == 0)
 			return reported;
 	}
