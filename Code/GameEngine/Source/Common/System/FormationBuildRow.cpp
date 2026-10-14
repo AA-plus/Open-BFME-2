@@ -1,8 +1,4 @@
-// ?rva0042481E@FormationAssistant@@QAE_NPAVFormationRowList@@PBVFormationTemplateRows@@PAVFormationObjectList@@@Z
-// partial score=0.98 date=2026-10-13
-// ?rva0042481E@FormationAssistant@@QAE_NPAVFormationRowList@@PBVFormationTemplateRows@@PAVFormationObjectList@@@Z
-// partial score=0.97 date=2026-10-13
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP=
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc /D_CRTIMP= /ICode/Libraries/Include/Lib
 // FormationAssistant formation build (WB twins 0x0113B990 and 0x0113C210 in
 // FormationAssistant.cpp, unnamed there).
 //
@@ -18,6 +14,14 @@
 // (list push_back 0x004246BD, zero resize 0x0042468D, pop_back 0x004246D7,
 // pooled erase 0x0029DFC5) and filter accepts 0x00362437.
 
+#include "BfmeE16.h"
+
+// The erased iterator's complete existing36B provider stays visible below.
+// MSVC then reuses the dead candidate spill[-20] for its hidden return buffer;
+// a declaration-only call allocated an extra slot and shifted the whole frame.
+// Canonical BfmeE16 supplies storage; FormationSlot is the target field view.
+// EH handlerB8709C -> FuncInfoD34564: one state, temporary FormationRow
+// cleanup atB87094. All384 body bytes and its EH graph are verified.
 typedef bool Bool;
 typedef int Int;
 typedef float Real;
@@ -47,7 +51,7 @@ struct FormationCandidate
 };
 
 // One placed slot (16 bytes): candidate, object and its offset.
-struct BfmeE16
+struct FormationSlot
 {
 	FormationCandidate *m_candidate;
 	Object *m_object;
@@ -106,7 +110,7 @@ class BfmeE16Vector : public _STL::_Vector_base<BfmeE16, _STL::allocator<BfmeE16
 {
 public:
 	void rva0042468D(unsigned int n);
-	BfmeE16 &operator[](unsigned int i) { return _M_start[i]; }
+	FormationSlot &operator[](unsigned int i) { return *(FormationSlot*)&_M_start[i]; }
 };
 
 // Temporary row: the folded _Vector_base<int> constructor 0x00211E58 and an
@@ -156,10 +160,19 @@ public:
 
 typedef _STL::_List_iterator<Object *, _STL::_Nonconst_traits<Object *> > ObjectListIter;
 
+extern void *g_freeList001EB130;
 class Rva0029DFC5List
 {
 public:
-	ObjectListIter rva0029DFC5(ObjectListIter position);
+	__declspec(noinline) ObjectListIter rva0029DFC5(ObjectListIter position) {
+ _STL::_List_node_base *node=position._M_node;
+ _STL::_List_node_base *prev=node->_M_prev;
+ _STL::_List_node_base *next=node->_M_next;
+ prev->_M_next=next;next->_M_prev=prev;
+ node->_M_next=(_STL::_List_node_base*)g_freeList001EB130;
+ g_freeList001EB130=node;
+ return ObjectListIter(next);
+}
 };
 
 struct ObjectListNode
@@ -204,7 +217,7 @@ Bool FormationAssistant::rva0042481E(FormationRowList *rows, const FormationTemp
 				{
 					if (candidate->m_filter->accepts(it->m_data, 0))
 					{
-						BfmeE16 &slot = row[idx];
+						FormationSlot &slot = row[idx];
 						slot.m_object = it->m_data;
 						slot.m_candidate = candidate;
 						Rva00422377Out offset;
