@@ -1,7 +1,6 @@
 // ?RenderStreak@StreakRendererClass@@QAEXAAVRenderInfoClass@@ABVMatrix3D@@IPAVVector3@@PAVVector4@@PAMABVSphereClass@@PAI@Z
-// partial score=0.8570294835295316 date=2026-10-13
-// ?RenderStreak@StreakRendererClass@@QAEXAAVRenderInfoClass@@ABVMatrix3D@@IPAVVector3@@PAVVector4@@PAMABVSphereClass@@PAI@Z
-// partial score=0.8076875017814811 date=2026-10-10
+// partial score=0.8935037042518802 date=2026-10-14
+// R4: identity-view copy and in-place UV scaling; exact frame/EH, body 14001/14036.
 // cl: /I. /DBFME_WWSTRING_NATIVE_CSTR_ASSIGN /Ireference/shims/wwstring_teardown/zhmd /arch:SSE /G7 /DNDEBUG /DWIN32 /D_WINDOWS /MD /EHsc /Ireference/shims/sweep /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngine/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/Compression /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/GameEngineDevice/Include /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/reference/CnC_Generals_Zero_Hour/GeneralsMD/Code/Main /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWLib /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WW3D2 /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWMath /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWSaveLoad /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/Wwutil /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDownload /Ireference/open-bfme-1/Code/Libraries/Source/WWVegas/WWDebug /Ireference/open-bfme-1/Code/Libraries/Source/Compression /Ireference/shims/sweep
 // stlport
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -636,6 +635,37 @@ public:
  static void Draw_Triangles(unsigned,unsigned,unsigned,unsigned);
  static void Set_Material(const VertexMaterialClass*);
  static void Set_Shader(const ShaderClass&);
+static __forceinline void SetUntransposedTransform(D3DTRANSFORMSTATETYPE type,const Matrix4x4&m) { switch(type){case D3DTS_WORLD:render_state.world[0][0]=m[0][0];
+render_state.world[0][1]=m[0][1];
+render_state.world[0][2]=m[0][2];
+render_state.world[0][3]=m[0][3];
+render_state.world[1][0]=m[1][0];
+render_state.world[1][1]=m[1][1];
+render_state.world[1][2]=m[1][2];
+render_state.world[1][3]=m[1][3];
+render_state.world[2][0]=m[2][0];
+render_state.world[2][1]=m[2][1];
+render_state.world[2][2]=m[2][2];
+render_state.world[2][3]=m[2][3];
+render_state.world[3][0]=m[3][0];
+render_state.world[3][1]=m[3][1];
+render_state.world[3][2]=m[3][2];
+render_state.world[3][3]=m[3][3];render_state_changed&=~(unsigned)WORLD_IDENTITY;render_state_changed|=(unsigned)WORLD_CHANGED;break;case D3DTS_VIEW:render_state.view[0][0]=m[0][0];
+render_state.view[0][1]=m[0][1];
+render_state.view[0][2]=m[0][2];
+render_state.view[0][3]=m[0][3];
+render_state.view[1][0]=m[1][0];
+render_state.view[1][1]=m[1][1];
+render_state.view[1][2]=m[1][2];
+render_state.view[1][3]=m[1][3];
+render_state.view[2][0]=m[2][0];
+render_state.view[2][1]=m[2][1];
+render_state.view[2][2]=m[2][2];
+render_state.view[2][3]=m[2][3];
+render_state.view[3][0]=m[3][0];
+render_state.view[3][1]=m[3][1];
+render_state.view[3][2]=m[3][2];
+render_state.view[3][3]=m[3][3];render_state_changed&=~(unsigned)VIEW_IDENTITY;render_state_changed|=(unsigned)VIEW_CHANGED;break;} }
  static void Set_Transform(D3DTRANSFORMSTATETYPE,const Matrix4x4&);
  static void Set_Transform(D3DTRANSFORMSTATETYPE,const Matrix3D&);
  static void Get_Transform(D3DTRANSFORMSTATETYPE,Matrix4x4&);
@@ -1132,10 +1162,10 @@ void StreakRendererClass::RenderStreak
 	DX8Wrapper::Get_Transform(D3DTS_VIEW,view);
 	Matrix4x4 identity(true);
 	DX8Wrapper::Set_Transform(D3DTS_WORLD,identity);
-	DX8Wrapper::Set_Transform(D3DTS_VIEW,identity);
+	DX8Wrapper::SetUntransposedTransform(D3DTS_VIEW,identity);
 	unsigned int delta = WW3D::Get_Sync_Time() - LastUsedSyncTime;
 	float del = (float)delta;
-	Vector2 uv_offset = CurrentUVOffset + UVOffsetDeltaPerMS * del;
+	Vector2 uv_delta=UVOffsetDeltaPerMS; uv_delta *= del; Vector2 uv_offset=CurrentUVOffset + uv_delta;
 	uv_offset.X = uv_offset.X - floorf(uv_offset.X);
 	uv_offset.Y = uv_offset.Y - floorf(uv_offset.Y);
 	CurrentUVOffset = uv_offset;
