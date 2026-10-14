@@ -1,12 +1,12 @@
 #include "Lib/Coord3D.h"
 // cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include
 // ?rva00476D77@HorseHordeContain@@QAEXPAVObject@@PBUCoord3D@@M_N@Z @0x00476D77 647B
-// Evidence: native 476D77..476FF7 RET16 HorseHordeContain motion dispatcher (between 47681F _horseUpdatePosition and HordeTransportContainModuleDataParse); WB1163200 caller/callee graph proves Horse family ABI; original method name unknown. Flag clear at +0x113 via TU-local byte-helper test(61)/clear(61) with barrier between (byte test/and, no lea); '==1' on the rva00469012 &&-operand gives retail cmp al,1. Callees 0x471464 (address-derived pin) and 0x47681F (WB-proven _horseUpdatePosition pin).
+// Evidence: native 476D77..476FF7 RET16 HorseHordeContain motion dispatcher (between 47681F _horseUpdatePosition and HordeTransportContainModuleDataParse); WB1163200 caller/callee graph proves Horse family ABI; original method name unknown. Flag clear at +0x113 via TU-local byte-helper test(61)/clear(61) with barrier between (byte test/and, no lea); '==1' on the rva00469012 &&-operand gives retail cmp al,1. Callees 0x471464 (HordeContain::_updatePosition owner) and 0x47681F (WB-proven _horseUpdatePosition pin).
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 #include <math.h>
 class Object;class Thing;class Locomotor;class Path;
-struct Rva0028AC4EEntry;class Rva001E3591 {public:bool rva001E3591();};class Rva00469012 {public:bool rva00469012(Object*,const Coord3D*);};class Rva0046AFDEReceiver {public:bool rva0046AFDE(Object*);};class Rva00471464 {public:void rva00471464(Object*,const Coord3D*,float);};
+struct Rva0028AC4EEntry;class Rva001E3591 {public:bool rva001E3591();};class Rva00469012 {public:bool rva00469012(Object*,const Coord3D*);};class Rva0046AFDEReceiver {public:bool rva0046AFDE(Object*);};class HordeContain {public:void _updatePosition(Object*,const Coord3D*,float);};
 struct Rva001E4194A;bool __stdcall Rva001E4194Get(Rva001E4194A*);
 float normalizeAngle(float);
 class Rva0008BB38FloatField {public:float get()const;};
@@ -205,7 +205,7 @@ void HorseHordeContain::rva00476D77(Object*obj,const Coord3D*destination,float a
  }
  if(mode!=0){
   if(unitAI->goalType==4 && unitAI->path && ((Rva001E3591*)unitAI->path)->rva001E3591()) {moving=true;return;}
-  ((Rva00471464*)this)->rva00471464(obj,destination,angle);return;
+  ((HordeContain*)this)->_updatePosition(obj,destination,angle);return;
  }
  if(unitAI->goalType==4&&unitAI->path){moving=true;return;}
  if(!((Rva001E46E1*)horde->rva0028AC4E())->rva001E543F(horde)){
