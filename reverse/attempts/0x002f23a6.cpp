@@ -1,5 +1,5 @@
 // ?rva002F23A6@Rva002F23A6@@QAE_NPAVObject@@HHPAUCoord3D@@0@Z
-// partial score=0.7 date=2026-10-12
+// partial score=0.92732 date=2026-10-13
 // cl: /I. /O1 /G7 /arch:SSE /DNDEBUG /MD /EHsc
 #include "Code/Libraries/Include/Lib/Coord3D.h"
 #include "Code/Libraries/Include/Lib/ICoord2D.h"
@@ -23,7 +23,7 @@ class Object: public Thing {public:
  bool rva0028AFBB() const;
 protected: Module *findModule(NameKeyType) const; friend class Rva002F23A6;
 };
-class Rva002CB35CObj {public:bool rva002CB35C(int,void *,void *,void *,float,int);};
+class Rva002C9B80Owner {public:bool isWithinAttackRange(Object*,const Coord3D*,Object*,const Coord3D*,float,bool);};
 class Rva002E7964 {public:void rva002E7964(ICoord2D *,unsigned char,const Coord3D *);};
 class PathfindCell {public:char unknown00[8];unsigned short zone;unsigned short unknown0a;unsigned flags;};
 struct Rva002E8BCFSrc {char unknown00[0x10];int mask;char unknown14;bool flag;};
@@ -45,7 +45,8 @@ class Pathfinder {public:
  unsigned char bfmeWrapE6E90(void *,void *,void *,void *,void *,void *);
  bool rva002EEA8A(const ICoord2D *,int,ICoord2D *,void *,int);
 };
-void Rva002EBCA7Split(void *,int *,unsigned char *);
+int __cdecl Rva002E9B31Get(void *p);
+__declspec(noinline) void Rva002EBCA7Split(void *p,int *outHalf,unsigned char *outOdd){int v=Rva002E9B31Get(p);*outHalf=v;*outOdd=(v%2==1);*outHalf/=2;}
 class TerrainLogic {public:PathfindLayerEnum getLayerForDestination(Object *,const Coord3D *);};
 extern TerrainLogic *TheTerrainLogic;
 class GlobalData {public:char unknown00[0x11ec];int searchLimit;};
@@ -56,15 +57,123 @@ class DynamicPortalBehaviour {public:static Module *rva004608E0(Object *);};
 class Rva004C5772CmpBoolField {public:bool get() const;};
 struct SearchCoordinate:Coord3D {
  SearchCoordinate(const Coord3D &p){x=p.x;y=p.y;z=p.z;}
+ SearchCoordinate(const SearchCoordinate &p){x=p.x;y=p.y;z=p.z;}
+ void zero(){x=0;y=0;z=0;}
  void scale(float f){x*=f;y*=f;z*=f;}
  void add(const Coord3D &p){x+=p.x;y+=p.y;z+=p.z;}
 };
 class Rva002F23A6 {public:bool rva002F23A6(Object *,int,int,Coord3D *,Object *);};
+typedef unsigned char (Pathfinder::*ProbeCall)(Object*,int,int,PathfindLayerEnum,int,bool);
+extern unsigned char g_00E03745; extern void *g_00DFEFF0;
+struct PathfinderLogFile; extern "C" int __cdecl fprintf(PathfinderLogFile*,const char*,...);
+class Rva002EC3CE {public: bool rva002EC3CE(int,int);};
+class Rva002E8D74 {public: float rva002E8D74(int,int);};
+bool Pathfinder::rva002EEA8A(const ICoord2D *searchCenterCell, int maxCells,
+	ICoord2D *foundCell, void *callbackData, int iterationsAfterHit)
+{
+	bool found = false;
+	float best = 0.0f;
+	int remaining = 10000;
+
+	if (g_00E03745 && g_00DFEFF0)
+	{
+		fprintf((PathfinderLogFile *)g_00DFEFF0,
+			"\t\tIterateCircular3 called with center=%d,%d, maxCells=%d",
+			searchCenterCell->x, searchCenterCell->y, maxCells);
+	}
+
+	Rva002EC3CE *info = (Rva002EC3CE *)callbackData;
+	if (info->rva002EC3CE(searchCenterCell->x,searchCenterCell->y))
+	{
+		foundCell->x = searchCenterCell->x;
+		foundCell->y = searchCenterCell->y;
+		found = true;
+		best = ((Rva002E8D74 *)info)->rva002E8D74(searchCenterCell->x,searchCenterCell->y);
+		remaining = iterationsAfterHit;
+	}
+
+	int side=1;
+	int x=0;
+	int y=0;
+	for (; maxCells>0; side+=2)
+	{
+		if (--remaining <= 0)
+			return found;
+		maxCells -= 4 * side + 2;
+
+		for (int i=side; i>0; --i)
+		{
+			++x;
+			int cellX = searchCenterCell->x+x;
+			int cellY = searchCenterCell->y+y;
+			float distance = ((Rva002E8D74 *)info)->rva002E8D74(cellX,cellY);
+			if ((!found || !(distance >= best)) && info->rva002EC3CE(cellX,cellY))
+			{
+				foundCell->x = searchCenterCell->x + x;
+				foundCell->y = searchCenterCell->y + y;
+				found = true;
+				best = distance;
+				remaining = iterationsAfterHit;
+			}
+		}
+
+		for (int j=side; j>0; --j)
+		{
+			++y;
+			int cellX = searchCenterCell->x+x;
+			int cellY = searchCenterCell->y+y;
+			float distance = ((Rva002E8D74 *)info)->rva002E8D74(cellX,cellY);
+			if ((!found || !(distance >= best)) && info->rva002EC3CE(cellX,cellY))
+			{
+				foundCell->x = searchCenterCell->x + x;
+				foundCell->y = searchCenterCell->y + y;
+				found = true;
+				best = distance;
+				remaining = iterationsAfterHit;
+			}
+		}
+
+		for (int k=side+1; k>0; --k)
+		{
+			--x;
+			int cellX = searchCenterCell->x+x;
+			int cellY = searchCenterCell->y+y;
+			float distance = ((Rva002E8D74 *)info)->rva002E8D74(cellX,cellY);
+			if ((!found || !(distance >= best)) && info->rva002EC3CE(cellX,cellY))
+			{
+				foundCell->x = searchCenterCell->x + x;
+				foundCell->y = searchCenterCell->y + y;
+				found = true;
+				best = distance;
+				remaining = iterationsAfterHit;
+			}
+		}
+
+		for (int n=side+1; n>0; --n)
+		{
+			--y;
+			int cellX = searchCenterCell->x+x;
+			int cellY = searchCenterCell->y+y;
+			float distance = ((Rva002E8D74 *)info)->rva002E8D74(cellX,cellY);
+			if ((!found || !(distance >= best)) && info->rva002EC3CE(cellX,cellY))
+			{
+				foundCell->x = searchCenterCell->x + x;
+				foundCell->y = searchCenterCell->y + y;
+				found = true;
+				best = distance;
+				remaining = iterationsAfterHit;
+			}
+		}
+	}
+
+	return found;
+}
+
 bool Rva002F23A6::rva002F23A6(Object *unit,int weapon,int locomotor,Coord3D *dest,Object *victim)
 {
  Pathfinder *path=(Pathfinder *)this;
- Rva002CB35CObj *range=(Rva002CB35CObj *)weapon;
- if(range->rva002CB35C((int)unit,(void*)unit->getPosition(),victim,(void*)victim->getPosition(),0.0f,1) && path->rva002ED313(unit)) {
+ Rva002C9B80Owner *range=(Rva002C9B80Owner *)weapon;
+ if(range->isWithinAttackRange(unit,unit->getPosition(),victim,victim->getPosition(),0.0f,true) && path->rva002ED313(unit)) {
    *dest=*unit->getPosition();return true;
  }
  SearchCoordinate start(*unit->getPosition());
@@ -77,11 +186,11 @@ bool Rva002F23A6::rva002F23A6(Object *unit,int weapon,int locomotor,Coord3D *des
  delta.normalize();delta.scale(10.0f);
  if((victim->definition->has(7)||victim->definition->has(60))&&!victim->definition->has(150))
    path->AdjustMeleeOffset(unit,victim,&delta);
- int radius;unsigned char centered;
- Rva002EBCA7Split(unit,&radius,&centered);
+ int radius;bool centered;
+ Rva002EBCA7Split(unit,&radius,(unsigned char*)&centered);
  for(int attempt=0;attempt<2;++attempt) {
    victim->rva0028C2DD(dest);
-   if(victim->definition->has(150))delta.x=delta.y=delta.z=0;
+   if(victim->definition->has(150))delta.zero();
    dest->x+=delta.x;dest->y+=delta.y;dest->z+=delta.z;
    if(!centered){dest->x+=5.0f;dest->y+=5.0f;}
    ICoord2D cell;
@@ -104,7 +213,7 @@ bool Rva002F23A6::rva002F23A6(Object *unit,int weapon,int locomotor,Coord3D *des
       originZone=zones->rva0053241F(&query,(unsigned short)originZone);
    }
    unsigned destinationZone=zones->rva0053241F(&query,destinationCell->zone);
-   if(originZone==destinationZone && path->bfmeWrapE6E90(unit,(void*)cell.x,(void*)cell.y,(void*)layer,(void*)radius,(void*)centered) && range->rva002CB35C((int)unit,(void*)unit->getPosition(),victim,dest,0.0f,1))return true;
+   if(originZone==destinationZone && (path->*reinterpret_cast<ProbeCall>(&Pathfinder::bfmeWrapE6E90))(unit,cell.x,cell.y,layer,radius,centered) && range->isWithinAttackRange(unit,unit->getPosition(),victim,dest,0.0f,true))return true;
    bool deployed=false;
    if(victim->definition->has(93)) {
       Module *portal=DynamicPortalBehaviour::rva004608E0(victim);
@@ -119,8 +228,7 @@ bool Rva002F23A6::rva002F23A6(Object *unit,int weapon,int locomotor,Coord3D *des
       if(path->rva002EEA8A(&cell,TheWritableGlobalData->searchLimit*2,&output,
          &Gen_003D5670((int)this,(int)&query,(int)unit,(int)victim,weapon,radius,centered,bridge,originZone,LAYER_GROUND,(BfmeTripleRC *)dest,deployed),1))return true;
    }
-   if(delta.y*delta.y+delta.x*delta.x<=1.0f)break;
-   delta.x=delta.y=delta.z=0;
+   if(delta.x*delta.x+delta.y*delta.y>1.0f)delta.zero();else break;
  }
  return false;
 }
