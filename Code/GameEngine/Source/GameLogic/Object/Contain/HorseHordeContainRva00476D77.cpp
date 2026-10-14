@@ -6,7 +6,7 @@ extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 #include <math.h>
 class Object;class Thing;class Locomotor;class Path;
-struct Rva0028AC4EEntry;class Rva001E3591 {public:bool rva001E3591();};class Rva00469012 {public:bool rva00469012(Object*,const Coord3D*);};class Rva0046AFDEReceiver {public:bool rva0046AFDE(Object*);};class Rva00471464 {public:void rva00471464(Object*,const Coord3D*,float);};struct Rva0046E6EAObject;struct Rva0046E6EACoord;class Rva002EF3EEView {public:bool rva002EF3EE(Rva0046E6EAObject*,const Rva0046E6EACoord*,Rva0046E6EACoord*,bool);};
+struct Rva0028AC4EEntry;class Rva001E3591 {public:bool rva001E3591();};class Rva00469012 {public:bool rva00469012(Object*,const Coord3D*);};class Rva0046AFDEReceiver {public:bool rva0046AFDE(Object*);};class Rva00471464 {public:void rva00471464(Object*,const Coord3D*,float);};
 struct Rva001E4194A;bool __stdcall Rva001E4194Get(Rva001E4194A*);
 float normalizeAngle(float);
 class Rva0008BB38FloatField {public:float get()const;};
@@ -177,7 +177,7 @@ void nextPosition(const Coord3D*p){future=*p;futureValid=true;}
 __forceinline void clear11C(unsigned mask){if(model11C&mask){model11C &=~mask;rva0028AE6D();}}
 __forceinline void set11C(unsigned mask){if(!(model11C&mask)){model11C|=mask;rva0028AE6D();}}
 };
-class Pathfinder {public:bool IsValidMovementPositionForObject(const Coord3D*,int,int,const Object*);};
+class Pathfinder {public:bool rva002EF3EE(Object*,Coord3D*,Object*,bool);bool IsValidMovementPositionForObject(const Coord3D*,int,int,const Object*);};
 class AI {public:char pad[0x10];Pathfinder*pathfinder;};extern AI*TheAI;
 class TerrainLogic {public:
 virtual void s00();virtual void s04();virtual void s08();virtual void s0C();virtual void s10();virtual void s14();virtual void s18();virtual float s1C(float,float,int,Coord3D*,bool);
@@ -222,6 +222,6 @@ void HorseHordeContain::rva00476D77(Object*obj,const Coord3D*destination,float a
   if(unitAI->isMoving())unitAI->rva00262AEA();if(obj->flags10C.test(61)){_ReadWriteBarrier();obj->flags10C.clear(61);obj->rva0028AE6D();}unitAI->s220();moving=true;return;
  }
  Coord3D goal;goal.x=destination->x;goal.y=destination->y;goal.z=destination->z;
- ((Rva002EF3EEView*)TheAI->pathfinder)->rva002EF3EE((Rva0046E6EAObject*)obj,(const Rva0046E6EACoord*)&goal,(Rva0046E6EACoord*)horde,!force);
+ TheAI->pathfinder->rva002EF3EE(obj,&goal,horde,!force);
  _horseUpdatePosition(obj,&goal,angle);
 }

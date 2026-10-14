@@ -1,22 +1,29 @@
-// cl: /O1 /arch:SSE /G7 /Oy- /MD
-// Ghidra 46E6EA..46E740 RET16. Original receiver and method identities
-// remain unresolved. Target establishes embedded interface+11C/vslot238 and
-// input definition+4/flags11F. Callee46B05B reads input position floats;
-// fallback2EF3EE uses the third coordinate pointer and returns AL.
+// cl: /O1 /arch:SSE /G7 /Oy- /MD /ICode/Libraries/Include
+#include "Lib/Coord3D.h"
+// Native 46E6EA..46E740 RET16. 46B05B proves the HordeContain receiver and
+// Object / mutable Coord3D / Object arguments. Preserve this already-rowed
+// wrapper's legacy source signature while its 46FA46 caller is claimed by
+// another worker; convert the pointer views at this boundary. The native ABI
+// is unchanged. The third pointer carries an Object in every retail caller.
+class Object;
+class HordeContain {
+public:
+    void rva0046B05B(Object *, Coord3D *, Object *);
+};
 class AI;
 extern AI *TheAI;
 struct Rva0046E6EACoord { float x, y, z; };
 struct Rva0046E6EADefinition { char unknown[0x11f]; unsigned char flags; };
 struct Rva0046E6EAObject { void *unknown; Rva0046E6EADefinition *definition; };
-class Rva002EF3EEView {
+class Pathfinder {
 public:
-    bool rva002EF3EE(Rva0046E6EAObject *, const Rva0046E6EACoord *, Rva0046E6EACoord *, bool);
+    bool rva002EF3EE(Object *, Coord3D *, Object *, bool);
 };
 class Rva0046E6EAAIView {
     char unknown[0x10];
-    Rva002EF3EEView *finder;
+    Pathfinder *finder;
 public:
-    Rva002EF3EEView *pathfinder() { return finder; }
+    Pathfinder *pathfinder() { return finder; }
 };
 #define SLOT(N) virtual void reserved##N();
 #define SLOT8(A,B,C,D,E,F,G,H) SLOT(A) SLOT(B) SLOT(C) SLOT(D) SLOT(E) SLOT(F) SLOT(G) SLOT(H)
@@ -47,7 +54,6 @@ public:
 class Rva0046E6EA {
 public:
     bool rva0046E6EA(Rva0046E6EAObject *, const Rva0046E6EACoord *, Rva0046E6EACoord *, bool);
-    void rva0046B05B(Rva0046E6EAObject *, const Rva0046E6EACoord *, Rva0046E6EACoord *);
 private:
     char unknown[0x11c];
     Rva0046E6EAInterface interface;
@@ -56,8 +62,8 @@ bool Rva0046E6EA::rva0046E6EA(Rva0046E6EAObject *object,
     const Rva0046E6EACoord *position, Rva0046E6EACoord *out, bool flag)
 {
     if (interface.query238() && (object->definition->flags & 1)) {
-        rva0046B05B(object, position, out);
+        reinterpret_cast<HordeContain *>(this)->rva0046B05B(reinterpret_cast<Object *>(object), reinterpret_cast<Coord3D *>(const_cast<Rva0046E6EACoord *>(position)), reinterpret_cast<Object *>(out));
         return true;
     }
-    return reinterpret_cast<Rva0046E6EAAIView *>(TheAI)->pathfinder()->rva002EF3EE(object, position, out, flag);
+    return reinterpret_cast<Rva0046E6EAAIView *>(TheAI)->pathfinder()->rva002EF3EE(reinterpret_cast<Object *>(object), reinterpret_cast<Coord3D *>(const_cast<Rva0046E6EACoord *>(position)), reinterpret_cast<Object *>(out), flag);
 }
