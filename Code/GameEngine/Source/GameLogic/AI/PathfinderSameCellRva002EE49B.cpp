@@ -1,11 +1,13 @@
 // cl: /O1 /Oy- /arch:SSE /G7 /DNDEBUG /MD
-// Native Ghidra 002EE49B..002EE4DE, 67B, RET28; ECX is not an input.
+// Native 002EE49B..002EE4DE, 67B, RET28. The body does not use its receiver.
+// Caller 00471464 loads TheAI->pathfinder into ECX; WB D63210 saves this.
+// Both establish a Pathfinder member despite the unused ECX in retail.
 // Seven stack words: object/footprint handle then two by-value Coord3D records.
 // Existing parity test2EBBFB and world-to-cell2E7875 establish the same
 // handle/bool/Coord3D call roles as rowed cell resolver2EBC14. Both 8B cell
 // outputs feed the rowed ICoord2D equality operator4CAD. Original name unknown.
 
-#include "../../../../Libraries/Include/Lib/Coord3D.h"
+#include "PathfinderPositionValue.h"
 struct ICoord2DBase
 {
     int x, y;
@@ -104,6 +106,7 @@ public:
 class Pathfinder
 {
 public:
+    bool rva002EE49B(Object *object, Rva002EE49BPosition first, Rva002EE49BPosition second);
 	PathfindCell *getCell(PathfindLayerEnum layer, Int x, Int y);
 	Bool rva002EE64A(Object *obj, const Coord3D *oldPos, const Coord3D *newPos);
 	char m_pad00[0x08];
@@ -190,7 +193,7 @@ Bool Pathfinder::rva002EE64A(Object *obj, const Coord3D *oldPos, const Coord3D *
  }
 }
 
-bool __stdcall Rva002EE49BSameCell(void *object, Coord3D first, Coord3D second)
+bool Pathfinder::rva002EE49B(Object *object, Rva002EE49BPosition first, Rva002EE49BPosition second)
 {
     bool odd = Rva002EBBFBIsOdd(object);
     ICoord2D firstCell, secondCell;

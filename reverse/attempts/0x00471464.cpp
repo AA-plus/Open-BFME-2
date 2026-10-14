@@ -1,18 +1,29 @@
 // ?rva00471464@Rva00471464@@QAEXPAVObject@@PBUCoord3D@@M@Z
+// partial score=0.85974 date=2026-10-13
+// ?rva00471464@Rva00471464@@QAEXPAVObject@@PBUCoord3D@@M@Z
 // partial score=0.7790062185 date=2026-10-10
-// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include
+// cl: /O1 /G7 /arch:SSE /DNDEBUG /MD /ICode/Libraries/Include /ICode/GameEngine/Source
 // Native 471464..471FFA / 2966B / RET12; WB10B9A60 names HordeContain::_updatePosition.
 // The existing Rva00471464 pin and native Horse caller476D77 independently establish the primary-object ABI.
 // Standalone complete reconstruction; all accessed layouts/slots come from native, not WB helper-name guesses.
 #include "Lib/Coord3D.h"
+#include "Common/GameLogicObjectLookupView.h"
 #include <math.h>
+struct MovementCoord:Coord3D {
+ MovementCoord(){} MovementCoord(float a,float b,float c){x=a;y=b;z=c;}
+ MovementCoord(const Coord3D&p){x=p.x;y=p.y;z=p.z;}
+ MovementCoord(const MovementCoord&p){x=p.x;y=p.y;z=p.z;}
+ ~MovementCoord(){}
+ void sub(const Coord3D&p){x-=p.x;y-=p.y;z-=p.z;}
+};
+#include "GameLogic/AI/PathfinderPositionValue.h"
 class Object;class Thing;class Locomotor;class Path;
-struct Rva001E4194A;bool __stdcall Rva001E4194Get(Rva001E4194A*);
+
 float normalizeAngle(float);
 class Rva0008BB38FloatField {public:float get()const;};
 class Rva00363D20 {public:double rva00363D20();};
 struct Rva003642DFNode;
-struct Rva003642DFResult {Rva003642DFNode*m_node;Coord3D m_pos;};
+struct Rva003642DFResult {Rva003642DFNode*m_node;Coord3D m_pos;~Rva003642DFResult(){}double remaining(){return ((Rva00363D20*)this)->rva00363D20();}};
 class Path {public:Rva003642DFResult rva00364521(const Rva0008BB38FloatField*);};
 enum CommandSourceType {COMMAND_SOURCE_2=2};
 class AICommandInterface {public:void aiIdle(CommandSourceType);void rva0045003E(int,CommandSourceType);};
@@ -165,7 +176,7 @@ char pad04[0x140-4];Path*path;char pad144[0x1dc-0x144];int movementType;char pad
 AICommandInterface*command(){return (AICommandInterface*)((char*)this+0x20);}
 };
 struct LocoTemplate {char pad[0x70];int appearance;};
-class Locomotor {public:float getMaxTurnRate(Object*)const;char pad[4];const LocoTemplate*data;};
+class Locomotor {public:bool rva001E4194(Object*);float getMaxTurnRate(Object*)const;char pad[4];const LocoTemplate*data;};
 class Rva001E46E1 {public:float rva001E4845(Object*);float rva001E46E1(Object*);};
 class Drawable {public:void rva00272A02(bool);};
 class Rva00373EC6 {public:char pad[0x3C];int state;};
@@ -187,10 +198,10 @@ class Object {public:
 enum Relationship {RELATIONSHIP_ZERO=0};
 class Player {public:Relationship getRelationship(const Object*)const;};
 class PlayerList {public:char pad[0x10];Player*local;};extern PlayerList*ThePlayerList;
-class GameLogic {public:Object*findObjectByID(int);};extern GameLogic*TheGameLogic;
-class Eva {public:void reportEvaEvent(int,const Coord3D*,int);};extern Eva*TheEva;
-bool __stdcall Rva002EE49BSameCell(void*,Coord3D,Coord3D);
-class Pathfinder {public:int CountOverlapHordeGoalUnits(Object*,const Coord3D*);bool rva002EE64A(Object*,const Coord3D*,const Coord3D*);bool IsValidMovementPositionForObject(const Coord3D*,int,int,const Object*);void*rva001E4461(int,int);};
+extern GameLogic*TheGameLogic;
+enum EvaEventID { EVA_EVENT_15=15 }; class Eva {public:bool reportEvaEvent(EvaEventID,const Coord3D*,const Coord3D*);};extern Eva*TheEva;
+
+class Pathfinder {public:bool rva002EE49B(Object*,Rva002EE49BPosition,Rva002EE49BPosition);int CountOverlapHordeGoalUnits(Object*,const Coord3D*);bool rva002EE64A(Object*,const Coord3D*,const Coord3D*);bool IsValidMovementPositionForObject(const Coord3D*,int,int,const Object*);void*rva001E4461(int,int);};
 class AI {public:char pad[0x10];Pathfinder*pathfinder;};extern AI*TheAI;
 class TerrainLogic {public:virtual void s00();virtual void s04();virtual void s08();virtual void s0C();virtual void s10();virtual void s14();virtual float s18(float,float,bool);virtual float s1C(float,float,int,Coord3D*,bool);};extern TerrainLogic*TheTerrainLogic;
 class Rva0046ACF6 {public:int rva0046ACF6(int);};
@@ -349,28 +360,32 @@ void Rva00471464::rva00471464(Object*obj,const Coord3D*destination,float angle)
 {
  Object*horde=owner;
  Coord3D old;old.x=obj->pos.x;old.y=obj->pos.y;old.z=obj->pos.z;
- AIUpdateInterface*unitAI=obj->ai;
  AIUpdateInterface*leaderAI=horde->ai;
+ AIUpdateInterface*unitAI=obj->ai;
  if(!leaderAI||!unitAI)return;
  Coord3D goal;goal.x=destination->x;goal.y=destination->y;goal.z=destination->z;
  Locomotor*unitLoco=unitAI->loco;
  Locomotor*leaderLoco=leaderAI->loco;
  if(!unitLoco||!leaderLoco)return;
- if(Rva001E4194Get((Rva001E4194A*)obj)){
+ if(unitLoco->rva001E4194(obj)){
   if(obj->flags110.test(29)){obj->flags110.clear(29);obj->rva0028AE6D();}
   return;
  }
- if(mode==0){
-  if(!(unitAI->s1BC()&&leaderAI->s1BC()) && (leaderAI->isMoving()||unitAI->s1B8()) && !unitAI->s1C4())
-   unitAI->command()->rva0045003E(0,COMMAND_SOURCE_2);
- }else if(!unitAI->s1B8()&&!unitAI->s1BC())unitAI->command()->aiIdle(COMMAND_SOURCE_2);
+ bool idle=false;
+ bool movementCommand=false;
+ if(mode!=0)idle=true;
+ else {
+  bool both=unitAI->s1BC()&&leaderAI->s1BC();
+  if(!both&&(leaderAI->isMoving()||unitAI->s1B8()))movementCommand=true;
+ }
+ if(idle&&!unitAI->s1B8()&&!unitAI->s1BC())unitAI->command()->aiIdle(COMMAND_SOURCE_2);
+ if(movementCommand&&!unitAI->s1C4())unitAI->command()->rva0045003E(0,COMMAND_SOURCE_2);
  if(unitLoco->data->appearance==9&&iface.s238()){
   obj->rva0028AD22();
-  Coord3D delta;delta.x=goal.x-obj->pos.x;delta.y=goal.y-obj->pos.y;delta.z=0;
-  float dz=goal.z-obj->pos.z;
+  MovementCoord displacement(goal);displacement.sub(obj->pos);MovementCoord delta(displacement);float dz=displacement.z;delta.z=0;
   bool move=delta.length()>0.5f;
-  bool rising=false,falling=false;
-  if(!move){if(dz>0.5f)rising=true;else if(dz < -0.5f)falling=true;}
+  bool rising=!move && dz>0.5f;
+  bool falling=!move && dz < -0.5f;
   float ground=TheTerrainLogic->s18(obj->pos.x,obj->pos.y,false);
   if(ground+0.01f>=obj->pos.z&&move&&(obj->status140&0x08000000)){
    ((unsigned char*)&obj->status140)[3]&=0xF7;obj->rva0028AE6D();
@@ -384,9 +399,9 @@ void Rva00471464::rva00471464(Object*obj,const Coord3D*destination,float angle)
    if(!(obj->status140&0x08000000)){obj->status140|=0x08000000;obj->rva0028AE6D();}
    Rva00373EC6*stealth=obj->rva0028F4BC();
    if(stealth&&stealth->state)((StealthUpdate*)stealth)->markAsDetected(0,1,0,true);
-   Object*eventTarget=TheGameLogic->findObjectByID(eventObject);
+   Object*eventTarget=TheGameLogic->findObjectByID((ObjectID)eventObject);
    if(eventTarget&&eventTarget->isLocallyControlled()&&ThePlayerList->local->getRelationship(obj)==0)
-    TheEva->reportEvaEvent(15,&eventTarget->pos,0);
+    TheEva->reportEvaEvent(EVA_EVENT_15,&eventTarget->pos,0);
   }else if(falling){
    if(drawable)drawable->rva00272A02(false);
    if((obj->model118&0x80)||!(obj->model118&0x200)){
@@ -405,26 +420,24 @@ void Rva00471464::rva00471464(Object*obj,const Coord3D*destination,float angle)
   if(newGround>obj->pos.z)((Rva0030A92C*)obj)->rva0030A92C(newGround);
   moving=true;
   if(iface.s238()){
-   Object*bridge=TheGameLogic->findObjectByID((int)TheAI->pathfinder->rva001E4461(1,(int)&obj->pos));
+   Object*bridge=TheGameLogic->findObjectByID((ObjectID)(int)TheAI->pathfinder->rva001E4461(1,(int)&obj->pos));
    if(bridge){
     const Coord3D*heading=((Thing*)owner)->getUnitDirectionVector2D();Coord3D direction;direction.x=heading->x;direction.y=heading->y;direction.z=heading->z;
     const Coord3D*other=((Thing*)bridge)->getUnitDirectionVector2D();
     float dot=other->z*direction.z+other->y*direction.y+other->x*direction.x;
-    float result=dot>=0?bridge->angle:normalizeAngle(bridge->angle+3.1415927f);
-    ((Thing*)obj)->setOrientation(result);return;
+    if(dot>=0)((Thing*)obj)->setOrientation(bridge->angle);else ((Thing*)obj)->setOrientation(normalizeAngle(bridge->angle+3.1415927f));return;
    }
   }
-  angle=normalizeAngle(angle-obj->angle);
+  float relativeAngle=angle-obj->angle;relativeAngle=normalizeAngle(relativeAngle);
   float turn=unitLoco->getMaxTurnRate(obj);
-  if(angle>turn)angle=turn;else if(angle < -turn)angle=-turn;
-  ((Thing*)obj)->setOrientation(normalizeAngle(angle+obj->angle));return;
+  if(relativeAngle>turn)relativeAngle=turn;else if(relativeAngle < -turn)relativeAngle=-turn;
+  float finalAngle=obj->angle;finalAngle+=relativeAngle;finalAngle=normalizeAngle(finalAngle);((Thing*)obj)->setOrientation(finalAngle);return;
  }
- Coord3D delta;delta.x=goal.x-old.x;delta.y=goal.y-old.y;delta.z=0;
+ MovementCoord delta(goal);delta.sub(old);delta.z=0;
  float distance=delta.length();
  float extra=distance;
  if(leaderAI->path){
-  Rva003642DFResult point=leaderAI->path->rva00364521((Rva0008BB38FloatField*)leaderLoco);
-  extra=((Rva00363D20*)&point)->rva00363D20()+distance;
+  extra=leaderAI->path->rva00364521((Rva0008BB38FloatField*)leaderAI->loco).remaining()+distance;
   extra-=((Rva0008BB38FloatField*)leaderLoco)->get();
  }
  float tolerance=((Rva001E46E1*)unitLoco)->rva001E4845(obj);
@@ -439,7 +452,7 @@ void Rva00471464::rva00471464(Object*obj,const Coord3D*destination,float angle)
    bool found=false;Coord3D best;
    for(int i=-1;i<=1;++i)for(int j=-1;j<=1;++j){
     if(i==0&&j==0)continue;
-    Coord3D test;test.x=candidate.x+(i*direction.x+j*direction.y);test.y=candidate.y+j*direction.y-i*direction.x;test.z=candidate.z;
+    Coord3D test;test.x=candidate.x+(i*direction.x+j*direction.y);test.y=candidate.y+(j*direction.y-i*direction.x);test.z=candidate.z;
     Coord3D difference;difference.x=test.x-goal.x;difference.y=test.y-goal.y;difference.z=test.z-goal.z;
     float cost=difference.GetLength2D();
     if(cost>bestDistance)continue;
@@ -452,7 +465,7 @@ void Rva00471464::rva00471464(Object*obj,const Coord3D*destination,float angle)
    }
    if(!found)break;
    candidate=best;
-   if(Rva002EE49BSameCell(obj,candidate,goal))break;
+   if(TheAI->pathfinder->rva002EE49B(obj,candidate,goal))break;
    Coord3D difference;difference.x=candidate.x-old.x;difference.y=candidate.y-old.y;difference.z=candidate.z-old.z;
    float limit=speed*1.5f;
    if(difference.GetLength2D()>limit*limit)break;
