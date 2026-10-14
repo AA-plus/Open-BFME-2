@@ -433,15 +433,93 @@
       "size": 96,
       "retail_sha256": "df0145611cdf9d98d7936fcc83929ec7c0cddbc3e39bba8633b7ea1469705f98",
       "fields": 5
+    },
+    {
+      "class": "SpecialAbilityUpdateModuleData",
+      "name": "BfmeSpecialAbilityUpdateFields",
+      "symbol": "?BfmeSpecialAbilityUpdateFields@@3QBUFieldParse@@B",
+      "va": 12843000,
+      "size": 944,
+      "retail_sha256": "533ac37c1c08cbb632f32afcedda10acf2857fdbab174aefa866fc1e850da319",
+      "fields": 58
+    },
+    {
+      "class": "AttributeModifierAuraUpdateModuleData",
+      "name": "BfmeAttributeModifierAuraUpdateFields",
+      "symbol": "?BfmeAttributeModifierAuraUpdateFields@@3QBUFieldParse@@B",
+      "va": 12914120,
+      "size": 288,
+      "retail_sha256": "8023415de0d3a7b58c4546cb0526eefc8d014e5dd4503a7d2b1365129401163a",
+      "fields": 17
+    },
+    {
+      "class": "DamageFilteredCreateObjectDieModuleData",
+      "name": "BfmeDamageFilteredCreateObjectDieFields",
+      "symbol": "?BfmeDamageFilteredCreateObjectDieFields@@3QBUFieldParse@@B",
+      "va": 12889056,
+      "size": 80,
+      "retail_sha256": "37acaf318640588b238d101f80e53c9e876abbd58dc470289398fa3024894e26",
+      "fields": 4
+    },
+    {
+      "class": "SupplyCenterDockUpdateModuleData",
+      "name": "BfmeSupplyCenterDockUpdateFields",
+      "symbol": "?BfmeSupplyCenterDockUpdateFields@@3QBUFieldParse@@B",
+      "va": 12917376,
+      "size": 64,
+      "retail_sha256": "26889ee185dee2a113ae38e23c7c372a621cdde6442ee91af942807d27dcda10",
+      "fields": 3
     }
   ],
   "validation": {
     "code_rows_exact": 63,
-    "data_rows_exact": 48,
-    "data_bytes": 4752,
+    "data_rows_exact": 55,
+    "data_bytes": 6172,
     "new_link_variants": 0,
     "data_check_findings": 0,
-    "remaining_literal_tables": 8,
+    "remaining_literal_tables": 4,
     "full_link_status": "Not clean: remaining literal tables and pre-existing shared-definition blockers in the stale census. No LINKED-byte gain claimed."
-  }
+  },
+  "enum_arrays": [
+    {
+      "name": "BfmeSpecialAbilityConditionNames",
+      "va": 14454536,
+      "size": 16,
+      "tokens": [
+        "MOUNTED",
+        "WEAPON_TOGGLE",
+        "MOVING"
+      ],
+      "symbol": "?BfmeSpecialAbilityConditionNames@@3QBQBDB",
+      "retail_sha256": "202d14b1b60a555ce2fb9d94cdecefececb129e9a70ee63d4ad2ede7e07df7fd"
+    },
+    {
+      "name": "BfmeAuraConditionNames",
+      "va": 14464860,
+      "size": 16,
+      "tokens": [
+        "MOUNTED",
+        "TAINT",
+        "ELVEN_WOOD"
+      ],
+      "symbol": "?BfmeAuraConditionNames@@3QBQBDB",
+      "retail_sha256": "8f1bea7f5c4922e576315170ba3442f46081e1d78447f4d4a301cd0e33d2166d"
+    },
+    {
+      "name": "BfmeDamageTriggerNames",
+      "va": 14459888,
+      "size": 12,
+      "tokens": [
+        "NORMAL",
+        "BECOME_UNDEAD"
+      ],
+      "symbol": "?BfmeDamageTriggerNames@@3QBQBDB",
+      "retail_sha256": "1510d12163a169a79e3ec4a3784578870fdb5ec380d4c9c3924b9a258be0a023"
+    }
+  ],
+  "remaining": [
+    "DelayedDeathBody and FreeLifeBody tables run into vtables without a zero sentinel; extent/consumer investigation required.",
+    "MaxHealth ChangeType names run into another enum list without an intervening null; ownership boundaries need proof.",
+    "RandomSoundSelector UnitSpecificSounds callback 33DC9C depends on incomplete sound-map parser 33DBE5."
+  ]
 }

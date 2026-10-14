@@ -74,6 +74,12 @@ public:
 	static void Rva004B6481_ParseAnim(INI *, void *, void *, const void *);
 	static void parseDurationReal(INI *, void *, void *, const void *);
 	static void parseUpgradeTemplate(INI *, void *, void *, const void *);
+	static void Rva0044E6CD_ParseCustomAnimAndDuration(INI *, void *, void *, const void *);
+	static void dup_002F02F(INI *, void *, void *, const void *);
+	static void parseBitString32(INI *, void *, void *, const void *);
+	static void parseIndexList(INI *, void *, void *, const void *);
+	static void parseParticleSystemTemplate(INI *, void *, void *, const void *);
+	static void parseScience(INI *, void *, void *, const void *);
 };
 
 class Rva003B1017
@@ -97,6 +103,40 @@ void Rva00464574Parse(INI *, void *, void *, const void *);
 void iniParseObjectFilter(INI *, void *, void *, const void *);
 void rva004649A1(INI *, void *, void *, const void *);
 void rva004B5293(INI *, void *, void *, const void *);
+
+class Rva0049B8A0
+{
+public:
+	static void parseFromINI(INI *, void *, void *, const void *);
+};
+
+// Retail VA 0x00DC8F08: ordered names consumed by the table parsers below.
+// Complete null-terminated array; global spelling is descriptive.
+extern const char *const BfmeSpecialAbilityConditionNames[] = {
+	"MOUNTED",
+	"WEAPON_TOGGLE",
+	"MOVING",
+	0
+};
+
+// Retail VA 0x00DCB75C: ordered names consumed by the table parsers below.
+// Complete null-terminated array; global spelling is descriptive.
+extern const char *const BfmeAuraConditionNames[] = {
+	"MOUNTED",
+	"TAINT",
+	"ELVEN_WOOD",
+	0
+};
+
+// Retail VA 0x00DCA3F0: ordered names consumed by the table parsers below.
+// Complete null-terminated array; global spelling is descriptive.
+extern const char *const BfmeDamageTriggerNames[] = {
+	"NORMAL",
+	"BECOME_UNDEAD",
+	0
+};
+
+void Rva0049B51EParse(INI *, void *, void *, const void *);
 
 // Retail VA 0x00C550C8 is the GloriousChargeUpdateModuleData FieldParse
 // table: .rdata holds BonusRadius/parseReal at +0xC8, SpeechDuration and
@@ -195,6 +235,71 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C3F7F8: 58 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeSpecialAbilityUpdateFields[] = {
+	{ "SpecialPowerTemplate", &INI::parseSpecialPowerTemplate, 0, 0x38 },
+	{ "StartAbilityRange", &INI::parseReal, 0, 0x4C },
+	{ "AbilityAbortRange", &INI::parseReal, 0, 0x50 },
+	{ "PreparationTime", &INI::parseDurationUnsignedInt, 0, 0x74 },
+	{ "PersistentPrepTime", &INI::parseDurationUnsignedInt, 0, 0x78 },
+	{ "PersistentCount", &INI::parseInt, 0, 0x70 },
+	{ "PackTime", &INI::parseDurationUnsignedInt, 0, 0x84 },
+	{ "UnpackTime", &INI::parseDurationUnsignedInt, 0, 0x88 },
+	{ "PreTriggerUnstealthTime", &INI::parseDurationUnsignedInt, 0, 0x8C },
+	{ "SkipPackingWithNoTarget", &INI::parseBool, 0, 0xA8 },
+	{ "PackUnpackVariationFactor", &INI::parseReal, 0, 0x54 },
+	{ "ParalyzeDurationWhenCompleted", &INI::parseDurationUnsignedInt, 0, 0x90 },
+	{ "ParalyzeDurationWhenAborted", &INI::parseDurationUnsignedInt, 0, 0x94 },
+	{ "SpecialObject", &INI::parseAsciiString, 0, 0x40 },
+	{ "SpecialObjectAttachToBone", &INI::parseAsciiString, 0, 0x44 },
+	{ "MaxSpecialObjects", &INI::parseUnsignedInt, 0, 0x80 },
+	{ "SpecialObjectsPersistent", &INI::parseBool, 0, 0xA9 },
+	{ "EffectDuration", &INI::parseDurationUnsignedInt, 0, 0x7C },
+	{ "EffectValue", &INI::parseInt, 0, 0x5C },
+	{ "EffectRange", &INI::parseReal, 0, 0x60 },
+	{ "UniqueSpecialObjectTargets", &INI::parseBool, 0, 0xAA },
+	{ "SpecialObjectsPersistWhenOwnerDies", &INI::parseBool, 0, 0xAB },
+	{ "AlwaysValidateSpecialObjects", &INI::parseBool, 0, 0xAE },
+	{ "FlipOwnerAfterPacking", &INI::parseBool, 0, 0xAC },
+	{ "FlipOwnerAfterUnpacking", &INI::parseBool, 0, 0xAD },
+	{ "FleeRangeAfterCompletion", &INI::parseReal, 0, 0x58 },
+	{ "DisableFXParticleSystem", &INI::parseParticleSystemTemplate, 0, 0x3C },
+	{ "DoCaptureFX", &INI::parseBool, 0, 0xAF },
+	{ "PackSound", &Rva00339900Parse, 0, 0x8 },
+	{ "UnpackSound", &Rva00339900Parse, 0, 0xC },
+	{ "PrepSoundLoop", &Rva00339900Parse, 0, 0x10 },
+	{ "TriggerSound", &Rva00339900Parse, 0, 0x14 },
+	{ "ActiveLoopSound", &Rva00339900Parse, 0, 0x34 },
+	{ "LoseStealthOnTrigger", &INI::parseBool, 0, 0xB0 },
+	{ "AwardXPForTriggering", &INI::parseInt, 0, 0x64 },
+	{ "SkillPointsForTriggering", &INI::parseInt, 0, 0x68 },
+	{ "ApproachRequiresLOS", &INI::parseBool, 0, 0xB1 },
+	{ "ChargeAttackSpeedBoost", &INI::parseBool, 0, 0xB2 },
+	{ "CustomAnimAndDuration", &INI::Rva0044E6CD_ParseCustomAnimAndDuration, 0, 0x18 },
+	{ "GrabPassengerAnimAndDuration", &INI::Rva0044E6CD_ParseCustomAnimAndDuration, 0, 0x24 },
+	{ "GrabPassengerHealGainPercent", &INI::dup_002F02F, 0, 0x30 },
+	{ "UnpackingVariation", &INI::parseInt, 0, 0x6C },
+	{ "MustFinishAbility", &INI::parseBool, 0, 0xB5 },
+	{ "FreezeAfterTriggerDuration", &INI::parseDurationUnsignedInt, 0, 0x9C },
+	{ "DisableWhenWearingTheRing", &INI::parseBool, 0, 0xB6 },
+	{ "RequiredConditions", &INI::parseBitString32, BfmeSpecialAbilityConditionNames, 0xA0 },
+	{ "RejectedConditions", &INI::parseBitString32, BfmeSpecialAbilityConditionNames, 0xA4 },
+	{ "ContactPointOverride", &INI::parseAsciiString, 0, 0xBC },
+	{ "TriggerAttributeModifier", &INI::parseAsciiString, 0, 0x48 },
+	{ "AttributeModifierDuration", &INI::parseDurationUnsignedInt, 0, 0x98 },
+	{ "KillAttributeModifierOnExit", &INI::parseBool, 0, 0xB3 },
+	{ "KillAttributeModifierOnRejected", &INI::parseBool, 0, 0xB4 },
+	{ "Instant", &INI::parseBool, 0, 0xB7 },
+	{ "NeedCollisionBeforeTrigger", &INI::parseBool, 0, 0xB8 },
+	{ "ChainedButton", &INI::parseAsciiString, 0, 0xC0 },
+	{ "SuppressForHordes", &INI::parseBool, 0, 0xC4 },
+	{ "ApproachUntilMembersInRange", &INI::parseBool, 0, 0xC5 },
+	{ "IgnoreFacingCheck", &INI::parseBool, 0, 0xC6 },
+	{ 0, 0, 0, 0 }
+};
+
 // Retail VA 0x00C702CC: 2 fields and the zero sentinel.
 // Class identity comes from this unit's matched registration function;
 // tokens, callbacks and offsets are read from that retail table.
@@ -281,7 +386,7 @@ public:
 // the anchor keeps the noinline body emitted.
 __declspec(noinline) inline void SpecialAbilityUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C3F7F8), 0);
+	parse.add(BfmeSpecialAbilityUpdateFields, 0);
 }
 
 // ?bfmeAnchorSpecialAbilityUpdateModuleDatabuildFieldParse absent-from-retail
@@ -454,10 +559,34 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C50DC8: 17 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeAttributeModifierAuraUpdateFields[] = {
+	{ "BonusName", &INI::parseAsciiString, 0, 0x8 },
+	{ "RefreshDelay", &INI::parseDurationUnsignedInt, 0, 0x18 },
+	{ "Range", &INI::parseReal, 0, 0x1C },
+	{ "TargetEnemy", &INI::parseBool, 0, 0x21 },
+	{ "AllowPowerWhenAttacking", &INI::parseBool, 0, 0x20 },
+	{ "ObjectFilter", &iniParseObjectFilter, 0, 0x24 },
+	{ "AffectsKindOf", &Rva0049B51EParse, 0, 0x0 },
+	{ "StartsActive", &INI::parseBool, 0, 0x138 },
+	{ "RequiredConditions", &INI::parseBitString32, BfmeAuraConditionNames, 0x13C },
+	{ "AntiCategory", &Rva0049B8A0::parseFromINI, 0, 0x140 },
+	{ "AntiFX", &INI::parseFXList, 0, 0x144 },
+	{ "AffectGood", &INI::parseBool, 0, 0x148 },
+	{ "AffectEvil", &INI::parseBool, 0, 0x149 },
+	{ "RunWhileDead", &INI::parseBool, 0, 0x14A },
+	{ "AllowSelf", &INI::parseBool, 0, 0x14B },
+	{ "AffectContainedOnly", &INI::parseBool, 0, 0x14C },
+	{ "MaxActiveRank", &INI::parseInt, 0, 0x150 },
+	{ 0, 0, 0, 0 }
+};
+
 void AttributeModifierAuraUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE29DGet()), 0x28);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C50DC8), 0);
+	parse.add(BfmeAttributeModifierAuraUpdateFields, 0);
 }
 
 class LevelGrantSpecialPowerModuleData
@@ -708,10 +837,21 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C4ABE0: 4 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeDamageFilteredCreateObjectDieFields[] = {
+	{ "CreationList", &INI::parseObjectCreationList, 0, 0x38 },
+	{ "DamageTypeTriggersInstantly", &INI::parseIndexList, BfmeDamageTriggerNames, 0x3C },
+	{ "DamageTypeTriggersForDuration", &INI::parseIndexList, BfmeDamageTriggerNames, 0x40 },
+	{ "PostFilterTriggeredDuration", &INI::parseDurationUnsignedInt, 0, 0x44 },
+	{ 0, 0, 0, 0 }
+};
+
 void DamageFilteredCreateObjectDieModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	parse.add(reinterpret_cast<const FieldParse *>(Rva004CE52EGet()), 8);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C4ABE0), 0);
+	parse.add(BfmeDamageFilteredCreateObjectDieFields, 0);
 }
 
 class SupplyCenterDockUpdateModuleData
@@ -720,10 +860,20 @@ public:
 	static void buildFieldParse(MultiIniFieldParse &parse);
 };
 
+// Retail VA 0x00C51A80: 3 fields and the zero sentinel.
+// The matched registration proves the class relationship; retail supplies
+// every token, offset and callback. Global spelling is descriptive.
+extern const FieldParse BfmeSupplyCenterDockUpdateFields[] = {
+	{ "ValueMultiplier", &INI::parseReal, 0, 0x10 },
+	{ "BonusScience", &INI::parseScience, 0, 0x14 },
+	{ "BonusScienceMultiplier", &INI::parsePercentToReal, 0, 0x18 },
+	{ 0, 0, 0, 0 }
+};
+
 void SupplyCenterDockUpdateModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	DockUpdateModuleData::buildFieldParse(parse);
-	parse.add(reinterpret_cast<const FieldParse *>(0x00C51A80), 0);
+	parse.add(BfmeSupplyCenterDockUpdateFields, 0);
 }
 
 class CommandPointsUpgradeModuleData
