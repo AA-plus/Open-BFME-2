@@ -11,7 +11,16 @@
 // /EHs retains the native cleanup assumption around extern-C allocation.
 #include "PreRTS.h"
 #include "Common/PartitionSolver.h"
-namespace _STL { template <> int __lg<int>(int); }
+// The pair containers are borrowed here. Leave their out-of-line allocator
+// and base-destruction bodies with the existing providers, whose flags differ.
+namespace _STL {
+template <> int __lg<int>(int);
+template <> _Vector_base<PairObjectIDAndUInt, allocator<PairObjectIDAndUInt> >::~_Vector_base();
+template <> PairObjectIDAndUInt *allocator<PairObjectIDAndUInt>::allocate(size_t, const void *) const;
+template <> void allocator<PairObjectIDAndUInt>::deallocate(PairObjectIDAndUInt *, size_t) const;
+template <> PairObjectIDAndUInt *_STLP_alloc_proxy<PairObjectIDAndUInt *, PairObjectIDAndUInt, allocator<PairObjectIDAndUInt> >::allocate(size_t);
+template <> void _STLP_alloc_proxy<PairObjectIDAndUInt *, PairObjectIDAndUInt, allocator<PairObjectIDAndUInt> >::deallocate(PairObjectIDAndUInt *, size_t);
+}
 struct BfmeE8 { int a, b; };
 struct BfmePod8 { int a[2]; };
 typedef _STL::vector<BfmeE8, _STL::allocator<BfmeE8> > SolverStorage;

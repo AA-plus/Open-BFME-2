@@ -103,7 +103,7 @@ PartitionSolver::PartitionSolver(const EntriesVec& elements, const SpacesVec& sp
 
 // solve lives in PartitionSolverSolve.cpp under its native /O1 /EHs configuration.
 
-// ?getSolution@PartitionSolver@@ present-unmatched
+// Native 0x002A9808: solution-vector address at +0x2C.
 const SolutionVec& PartitionSolver::getSolution( void ) const
 {
 	return m_bestSolution;

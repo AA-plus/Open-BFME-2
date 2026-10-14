@@ -84,7 +84,6 @@ BFME_DISP8_LEA_GETTER(Rva0066E450LeaField, 0x14)
 BFME_DISP8_LEA_GETTER(Rva006BD500LeaField, 0x44)
 BFME_DISP8_LEA_GETTER(Rva006C03B0LeaField, 0x24)
 BFME_DISP8_LEA_GETTER(Rva0071AE40LeaField, 0x58)
-BFME_DISP8_LEA_GETTER(Rva002A9808LeaGetter, 0x2C)
 BFME_DISP8_LEA_GETTER(Rva004F5FA3LeaGetter, 0x20)
 
 // Callers elsewhere reach bodies in this unit through other spellings; retail's
