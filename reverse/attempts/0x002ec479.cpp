@@ -1,18 +1,25 @@
 // ?rva002EC479@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@0@Z
-// partial score=0.741767408786885 date=2026-10-10
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
-// ?rva002EC479@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@0@Z
-// partial score=0.722295 date=2026-10-10
+// partial score=0.76381 date=2026-10-13
 // ?rva002EC479@Pathfinder@@QAE_NPAVObject@@PBUCoord3D@@0@Z
 // cl: /I. /O1 /G7 /arch:SSE /EHsc /DNDEBUG /MD /ICode/Libraries/Include/Lib /I.
+// Crack-M: native1098/frame4C, measured candidate1099/frame48, score0.76381.
+// WB D3A7D0 supplies the nested perimeter loops, radius post-decrement and ABI.
+// Actual visible 2E7875/162 +2EBC14/32 helpers restore native loop-invariant
+// hoisting. Copy-constructed aggregate adapter improves register allocation;
+// source helpers are the home TU at c1bf9419d4, using its proven floor blocker.
+// Division by -2 already matches PUSH -2/POP ECX/CDQ/IDIV ECX; do not retry it.
+// Remaining: base.y stays in ESI instead of stack, frame48 vs4C, different
+// preserved-register roles and inner-switch induction locals; not byte-exact.
+// Full home context, actual hidden-return ABI, empty dtors and loop scopes
+// did not close it. A700-trial permute run produced semantically invalid
+// reordered statements; those variants were discarded, not banked.
 // Native2EC479..2EC8C3 complete1098 RET12; WB D3A7D0 independently
 // corroborates target-footprint perimeter and range query, not a callable name.
 // Native Object/template/cell offsets below are target observations.
 #include "Coord3D.h"
 extern "C" __declspec(dllimport) double __cdecl floor(double);
 extern "C" double __cdecl fabs(double);
-struct ICoord2D {int x,y;};
+#include "Code/Libraries/Include/Lib/ICoord2D.h"
 enum PathfindLayerEnum {OBSERVED_LAYER_1=1};
 enum WeaponSlotType {OBSERVED_SLOT_0=0};
 enum NameKeyType {NAMEKEY_INVALID=0};
@@ -55,11 +62,34 @@ static __forceinline int queryFloor(float f){float v=(float)floor(f);int i;__asm
  fistp [i]
  }return i;}
 class Pathfinder {public:bool rva002EC479(Object*,const Coord3D*,Object*);PathfindCell *getCell(PathfindLayerEnum,int,int);};
+static const float PATHFINDER_CELL_INV = 1.0f / 10.0f;
+__declspec(noinline) ICoord2D* __cdecl Rva002E7875WorldToCell(ICoord2D* out, bool center, const Coord3D* pos)
+{
+	int ix;
+	int iy;
+	if (center) {
+		ix = queryFloor(pos->x * PATHFINDER_CELL_INV);
+		iy = queryFloor(pos->y * PATHFINDER_CELL_INV);
+	} else {
+		ix = queryFloor(pos->x * PATHFINDER_CELL_INV + 0.5f);
+		iy = queryFloor(pos->y * PATHFINDER_CELL_INV + 0.5f);
+	}
+	out->x = ix;
+	out->y = iy;
+	return out;
+}
+
+bool Rva002EBBFBIsOdd(void *);
+__declspec(noinline) ICoord2D *__cdecl Rva002EBC14Cell(ICoord2D *out,void *p,const Coord3D *pos) {
+ Rva002E7875WorldToCell(out,Rva002EBBFBIsOdd(p),pos);return out;
+}
+struct FootprintCell:ICoord2D {FootprintCell(){} FootprintCell(const FootprintCell &p){x=p.x;y=p.y;} };
+static __forceinline FootprintCell footprintCell(void *object,const Coord3D *position){FootprintCell cell;Rva002EBC14Cell(&cell,object,position);return cell;}
 bool Pathfinder::rva002EC479(Object *attacker,const Coord3D *from,Object *target)
 {
  const Weapon *weapon=attacker->getCurrentWeapon(0);
  if(!weapon || !weapon->definition->get())return false;
- ICoord2D base;Rva002EBC14Cell(&base,attacker,from);
+ FootprintCell base=footprintCell(attacker,from);
  int diameter=Rva002E9B31Get(attacker);
  int half=diameter/-2;base.x+=half;base.y+=half;
  float cellRange=weapon->getAttackRange(target)/10.0f;
@@ -68,7 +98,7 @@ bool Pathfinder::rva002EC479(Object *attacker,const Coord3D *from,Object *target
   int layers[2];layers[0]=attacker->rva0028B511();int count=1;
   if(!(unsigned char)Rva002E6E6CGet(layers[0]) && TheTerrainLogic->querySurface(attacker,layers[0])){layers[1]=1;count=2;}
   bool foundWall=false;
-  for(;radius>=0;--radius){
+  while(radius-->=0){
    for(int j=diameter;j>=0;--j){
     for(int side=0;side<4;++side){
      ICoord2D p;
@@ -92,14 +122,14 @@ bool Pathfinder::rva002EC479(Object *attacker,const Coord3D *from,Object *target
   }
   if(target->definition->kindOf(0x3C)){
    float size=attacker->observedSize;
-{_ReadWriteBarrier();    if(target->definition->kindOf(0x96))size=0.0f;}
+if(target->definition->kindOf(0x96))size=0.0f;
    size+=20.0f;
    if(target->rva0028EFB8(&target->position,attacker,from)<size*size && (target->definition->kindOf(0x96)||foundWall))return true;
   }
   return false;
  }
  if(target->definition->kindOf(0xB8) && target->rva002957FC())return attacker->rva00263763(target)<5.0;
- ICoord2D targetBase;Rva002EBC14Cell(&targetBase,target,&target->position);
+ FootprintCell targetBase=footprintCell(target,&target->position);
  int targetDiameter=Rva002E9B31Get(target);
  int targetHalf=targetDiameter/-2;targetBase.x+=targetHalf;targetBase.y+=targetHalf;
  int targetHiX=targetBase.x+targetDiameter,targetHiY=targetBase.y+targetDiameter;
