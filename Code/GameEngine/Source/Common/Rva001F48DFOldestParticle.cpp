@@ -1,7 +1,3 @@
-// ?rva001F48DF@Rva001F48DF@@QAEHIH@Z
-// partial score=0.9363 date=2026-10-13
-// ?rva001F48DF@Rva001F48DF@@QAEHIH@Z
-// partial score=0.9363 date=2026-10-09
 // cl: /O1 /G7 /arch:SSE /MD /EHsc
 class ParticleSystem;
 ParticleSystem *Make001FCBD7();
@@ -16,7 +12,7 @@ int Rva001F48DF::rva001F48DF(unsigned count,int priorityCap) {
  int original=count;
  while(count-- && particleCount) {
   for(int i=1;i<priorityCap;++i) {
-   if(heads[i]) {
+   if((count ? heads[i] : heads[i])) {
     if((unsigned char)((Rva0004CABDSevenEight*)heads[i]->system.operator->())->get())continue;
     OldestParticle191 *particle=heads[i];
     void *allocation=0;
