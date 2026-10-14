@@ -587,6 +587,7 @@ class HierarchicalPath;
 class Pathfinder
 {
 public:
+ Bool adjustToMeleeDestination(Object*,const LocomotorSet&,Coord3D*);
  Bool CheckForAdjust(Object *,const LocomotorSet &,Bool,Int,Int,PathfindLayerEnum,Int,Bool,Coord3D *,const Coord3D *,float,Int *,Int);
  Bool QuickDoesPathExist(Object *,const Coord3D *,const Coord3D *,Int);
  Bool IsValidMovementPositionForObject(const Coord3D *,Int,Int,const Object *);
@@ -3826,4 +3827,52 @@ Int Pathfinder::ExamineNeighboringCellsForSidewaysAttack(PathfindCell *parentCel
 		if(!(unsigned char)((Rva002E6AF3 *)goalCell)->get()&&!(unsigned char)((Rva002E6B06 *)goalCell)->rva002E6B06())goalCell->ReleaseInfo();
 	}
 	return count;
+}
+
+
+// Native 0x002ED7F7..0x002EDCF7 (1280 bytes), RET 12; WorldBuilder D45C80
+// names AdjustToMeleeDestination in pathfinder.cpp:4872. The destination-cell
+// zone must agree with the mover before the direct placement is tried. Failing
+// that, the four-leg square spiral accepts only a closer reachable placement.
+// Keep one counter across all four legs: its lifetime reuses the dead Object
+// parameter slot. Natural cell/step and destination-cell/budget lifetimes
+// reproduce the native frame without the old bank's forced storage unions.
+// Initialize the walk budget before x/y to retain the native load scheduling.
+struct Rva002ED7F7Budget{char pad[0x1200];int maxSteps;};
+class Rva002EC3CEProbes{public:bool rva002EAA41(int,int,int,int,int,bool);bool rva002E7BF0(int,int,bool,int,int,int,void*,bool);};
+static __forceinline void subtractMelee(Coord3D &a,const Coord3D&b){a.x-=b.x;a.y-=b.y; a.z-=b.z;}
+static __forceinline float distanceMelee(const Coord3D&a){return a.z*a.z+a.y*a.y+a.x*a.x;}
+bool Pathfinder::adjustToMeleeDestination(Object*obj,const LocomotorSet&set,Coord3D*dest){
+ int i;
+ int radius;Bool center;Rva002EBCA7Split(obj,&radius,(unsigned char*)&center);
+ ICoord2D cell;((Rva002E7964*)this)->rva002E7964(&cell,center,dest);if(cell.x<0)return false;
+ PathfindLayerEnum layer=TheTerrainLogic->getLayerForDestination(obj,dest);PathfindCell *destinationCell=getCell(layer,cell.x,cell.y);
+ Coord3D from;from.x=obj->position[0];from.y=obj->position[1];from.z=obj->position[2];Coord3D delta;delta.x=from.x;delta.y=from.y;delta.z=from.z;subtractMelee(delta,*dest);float bestDist=distanceMelee(delta);
+ ICoord2D start;Rva002E7875WorldToCell(&start,true,&from);PathfindLayerEnum fromLayer=(PathfindLayerEnum)obj->rva0028B511();PathfindCell *fromCell=rva002E8BF8(fromLayer,&from);if(!fromCell)return false;
+ int width=obj->m_template->priority;bool centerOff=obj->m_template->flag;
+ Rva002E8BCF query((const Rva002E8BCFSrc*)&set,!centerOff,width-1,obj->rva0028AFBB());
+ Rva002E99F9Sub460 *zoneView=(Rva002E99F9Sub460*)&m_zoneManager;
+ unsigned zone=zoneView->rva0053241F(&query,fromCell->quickZone());bool bridge=false;
+ if(fromCell->getType()==4){bridge=true;unsigned ground=zoneView->rva00531FD4(&query,zone);zone=zoneView->rva0053241F(&query,ground);}
+ if(zone==zoneView->rva0053241F(&query,destinationCell->quickZone())&&((Rva002EC3CEProbes*)this)->rva002EAA41((int)obj,cell.x,cell.y,layer,radius,center))return true;
+ int left=((const Rva002ED7F7Budget*)TheWritableGlobalData)->maxSteps;int x=cell.x;int y=cell.y;int steps=1;
+ while(left>0){
+ for(i=steps;i>0;--i){++x;--left;if(((Rva002EC3CEProbes*)this)->rva002E7BF0((int)&query,zone,center,x,y,layer,dest,bridge)){
+  delta=from;subtractMelee(delta,*dest);if(bestDist>distanceMelee(delta)&&((Rva002EC3CEProbes*)this)->rva002EAA41((int)obj,x,y,layer,radius,center))return true;
+ }}
+
+ for(i=steps;i>0;--i){++y;--left;if(((Rva002EC3CEProbes*)this)->rva002E7BF0((int)&query,zone,center,x,y,layer,dest,bridge)){
+  delta=from;subtractMelee(delta,*dest);if(bestDist>distanceMelee(delta)&&((Rva002EC3CEProbes*)this)->rva002EAA41((int)obj,x,y,layer,radius,center))return true;
+ }}
+++steps;
+ for(i=steps;i>0;--i){--x;--left;if(((Rva002EC3CEProbes*)this)->rva002E7BF0((int)&query,zone,center,x,y,layer,dest,bridge)){
+  delta=from;subtractMelee(delta,*dest);if(bestDist>distanceMelee(delta)&&((Rva002EC3CEProbes*)this)->rva002EAA41((int)obj,x,y,layer,radius,center))return true;
+ }}
+
+ for(i=steps;i>0;--i){--y;--left;if(((Rva002EC3CEProbes*)this)->rva002E7BF0((int)&query,zone,center,x,y,layer,dest,bridge)){
+  delta=from;subtractMelee(delta,*dest);if(bestDist>distanceMelee(delta)&&((Rva002EC3CEProbes*)this)->rva002EAA41((int)obj,x,y,layer,radius,center))return true;
+ }}
+++steps;
+ }
+ return false;
 }
